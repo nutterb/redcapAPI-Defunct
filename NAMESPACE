@@ -1,0 +1,13 @@
+export(redcapConnection)
+
+export(exportMetaData)
+S3method(exportMetaData, redcapDbConnection)
+S3method(exportMetaData, redcapApiConnection)
+
+export(exportRecords)
+S3method(exportRecords, redcapDbConnection)
+S3method(exportRecords, redcapApiConnection)
+
+export(fieldToVar)
+
+useDynLib(redcap,.registration=TRUE)
