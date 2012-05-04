@@ -314,6 +314,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 
 .onLoad <- function(libname,pkgname)
 {
+   require(RCurl)
    options(redcap.dataTable='redcap_data')
    options(redcap.metaDataTable='redcap_metadata')
 }
