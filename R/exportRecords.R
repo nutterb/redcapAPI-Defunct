@@ -206,7 +206,7 @@ order by abs(record), record, event_id
 }
 
 exportRecords <-
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,raw=FALSE)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
