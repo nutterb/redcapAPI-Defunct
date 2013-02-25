@@ -210,7 +210,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,raw=F
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,raw=FALSE)
 {
    meta_data <- exportMetaData(rcon)
    if (!is.null(fields))
