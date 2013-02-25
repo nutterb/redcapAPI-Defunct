@@ -182,203 +182,203 @@ exportRecords.redcapApiConnection <-
            bundle = getOption("redcap_bundle"),
            error_handling = getOption("redcap_error_handling"),
            form_complete_auto = TRUE)
-{
-  if (!is.na(match("proj", names(list(...)))))
   {
-    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
-    bundle <- list(...)[["proj"]]
-  }
-
-  if (is.numeric(records)) records <- as.character(records)
-
-  #* Error Collection Object
-  coll <- checkmate::makeAssertCollection()
-
-  checkmate::assert_class(x = rcon,
-                          classes = "redcapApiConnection",
-                          add = coll)
-
-  massert(~ factors + labels + dates + survey + dag + checkboxLabels +
-            form_complete_auto,
-          fun = checkmate::assert_logical,
-          fixed = list(len = 1,
-                       add = coll))
-
-  massert(~ fields + forms + records + events,
-          fun = checkmate::assert_character,
-          fixed = list(null.ok = TRUE,
-                       add = coll))
-
-  checkmate::assert_integerish(x = batch.size,
-                               len = 1,
-                               add = coll)
-
-  error_handling <- checkmate::matchArg(x = error_handling,
-                                        choices = c("null", "error"),
-                                        add = coll)
-
-  checkmate::reportAssertions(coll)
-
-  #* Secure the meta data.
-  meta_data <-
-    if (is.null(bundle$meta_data))
-      exportMetaData(rcon)
+    if (!is.na(match("proj", names(list(...)))))
+    {
+      message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+      bundle <- list(...)[["proj"]]
+    }
+    
+    if (is.numeric(records)) records <- as.character(records)
+    
+    #* Error Collection Object
+    coll <- checkmate::makeAssertCollection()
+    
+    checkmate::assert_class(x = rcon,
+                            classes = "redcapApiConnection",
+                            add = coll)
+    
+    massert(~ factors + labels + dates + survey + dag + checkboxLabels +
+              form_complete_auto,
+            fun = checkmate::assert_logical,
+            fixed = list(len = 1,
+                         add = coll))
+    
+    massert(~ fields + forms + records + events,
+            fun = checkmate::assert_character,
+            fixed = list(null.ok = TRUE,
+                         add = coll))
+    
+    checkmate::assert_integerish(x = batch.size,
+                                 len = 1,
+                                 add = coll)
+    
+    error_handling <- checkmate::matchArg(x = error_handling,
+                                          choices = c("null", "error"),
+                                          add = coll)
+    
+    checkmate::reportAssertions(coll)
+    
+    #* Secure the meta data.
+    meta_data <-
+      if (is.null(bundle$meta_data))
+        exportMetaData(rcon)
     else
       bundle$meta_data
-
-  #* for purposes of the export, we don't need the descriptive fields.
-  #* Including them makes the process more error prone, so we'll ignore them.
-  meta_data <- meta_data[!meta_data$field_type %in% "descriptive", ]
-
-  #* Secure the events table
-  events_list <-
-    if (is.null(bundle$events))
-      exportEvents(rcon)
+    
+    #* for purposes of the export, we don't need the descriptive fields.
+    #* Including them makes the process more error prone, so we'll ignore them.
+    meta_data <- meta_data[!meta_data$field_type %in% "descriptive", ]
+    
+    #* Secure the events table
+    events_list <-
+      if (is.null(bundle$events))
+        exportEvents(rcon)
     else
       bundle$events
-
-  #* Secure the REDCap version
-  version <-
-    if (is.null(bundle$version))
-      exportVersion(rcon)
+    
+    #* Secure the REDCap version
+    version <-
+      if (is.null(bundle$version))
+        exportVersion(rcon)
     else
       bundle$version
-
-  form_complete_fields <-
-    sprintf("%s_complete",
-            unique(meta_data$form_name))
-  form_complete_fields <-
-    form_complete_fields[!is.na(form_complete_fields)]
-
-  #* Check that all fields exist in the meta data
-  if (!is.null(fields))
-  {
-    bad_fields <- fields[!fields %in% c(meta_data$field_name,
-                                        form_complete_fields)]
-    if (length(bad_fields))
-      coll$push(paste0("The following are not valid field names: ",
-                       paste0(bad_fields, collapse = ", ")))
-  }
-
-  #* Check that all form names exist in the meta data
-  if (!is.null(forms))
-  {
-    bad_forms <- forms[!forms %in% meta_data$form_name]
-    if (length(bad_forms))
-      coll$push(paste0("The following are not valid form names: ",
-                       paste0(bad_forms, collapse = ", ")))
-  }
-
-  #* Check that all event names exist in the events list
-  if (!is.null(events) && inherits(events_list, "data.frame"))
-  {
-    bad_events <- events[!events %in% events_list$unique_event_name]
-    if (length(bad_events))
-      coll$push(paste0("The following are not valid event names: ",
-                       paste0(bad_events, collapse = ", ")))
-  }
-
-  checkmate::reportAssertions(coll)
-
-  #* Create the vector of field names
-  if (!is.null(fields)) #* fields were provided
-  {
-    # redcap_event_name is automatically included in longitudinal projects
-    field_names <- fields[!fields %in% "redcap_event_name"]
-  }
-  else if (!is.null(forms))
-  {
-    field_names <- meta_data$field_name[meta_data$form_name %in% forms]
-  }
-  else
-    #* fields were not provided, default to all fields.
-    field_names <- meta_data$field_name
-
-  #* Expand 'field_names' to include fields from specified forms.
-  if (!is.null(forms))
-    field_names <-
-    unique(c(field_names,
-             meta_data$field_name[meta_data$form_name %in% forms]))
-
-
-  suffixed <-
-    checkbox_suffixes(
-      # The subset prevents `[form]_complete` fields from
-      # being included here.
-      fields = field_names[field_names %in% meta_data$field_name],
-      meta_data = meta_data,
-      version = version)
-
-  # Identify the forms from which the chosen fields are found
-  included_form <-
-    unique(
-      meta_data$form_name[meta_data$field_name %in% field_names]
-    )
-
-  # Add the form_name_complete column to the export
-  if (form_complete_auto){
-    field_names <- c(field_names,
-                     sprintf("%s_complete", included_form))
-  }
-
-  body <- list(token = rcon$token,
-               content = 'record',
-               format = 'csv',
-               type = 'flat',
-               exportSurveyFields = tolower(survey),
-               exportDataAccessGroups = tolower(dag),
-               returnFormat = 'csv')
-
-  body[['fields']] <- paste0(field_names, collapse=",")
-  if (!is.null(forms)) body[['forms']] <- paste0(forms, collapse=",")
-  if (!is.null(events)) body[['events']] <- paste0(events, collapse=",")
-  if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
-
-  if (batch.size < 1){
-    x <- unbatched(rcon = rcon,
+    
+    form_complete_fields <-
+      sprintf("%s_complete",
+              unique(meta_data$form_name))
+    form_complete_fields <-
+      form_complete_fields[!is.na(form_complete_fields)]
+    
+    #* Check that all fields exist in the meta data
+    if (!is.null(fields))
+    {
+      bad_fields <- fields[!fields %in% c(meta_data$field_name,
+                                          form_complete_fields)]
+      if (length(bad_fields))
+        coll$push(paste0("The following are not valid field names: ",
+                         paste0(bad_fields, collapse = ", ")))
+    }
+    
+    #* Check that all form names exist in the meta data
+    if (!is.null(forms))
+    {
+      bad_forms <- forms[!forms %in% meta_data$form_name]
+      if (length(bad_forms))
+        coll$push(paste0("The following are not valid form names: ",
+                         paste0(bad_forms, collapse = ", ")))
+    }
+    
+    #* Check that all event names exist in the events list
+    if (!is.null(events) && inherits(events_list, "data.frame"))
+    {
+      bad_events <- events[!events %in% events_list$unique_event_name]
+      if (length(bad_events))
+        coll$push(paste0("The following are not valid event names: ",
+                         paste0(bad_events, collapse = ", ")))
+    }
+    
+    checkmate::reportAssertions(coll)
+    
+    #* Create the vector of field names
+    if (!is.null(fields)) #* fields were provided
+    {
+      # redcap_event_name is automatically included in longitudinal projects
+      field_names <- fields[!fields %in% "redcap_event_name"]
+    }
+    else if (!is.null(forms))
+    {
+      field_names <- meta_data$field_name[meta_data$form_name %in% forms]
+    }
+    else
+      #* fields were not provided, default to all fields.
+      field_names <- meta_data$field_name
+    
+    #* Expand 'field_names' to include fields from specified forms.
+    if (!is.null(forms))
+      field_names <-
+      unique(c(field_names,
+               meta_data$field_name[meta_data$form_name %in% forms]))
+    
+    
+    suffixed <-
+      checkbox_suffixes(
+        # The subset prevents `[form]_complete` fields from
+        # being included here.
+        fields = field_names[field_names %in% meta_data$field_name],
+        meta_data = meta_data,
+        version = version)
+    
+    # Identify the forms from which the chosen fields are found
+    included_form <-
+      unique(
+        meta_data$form_name[meta_data$field_name %in% field_names]
+      )
+    
+    # Add the form_name_complete column to the export
+    if (form_complete_auto){
+      field_names <- c(field_names,
+                       sprintf("%s_complete", included_form))
+    }
+    
+    body <- list(token = rcon$token,
+                 content = 'record',
+                 format = 'csv',
+                 type = 'flat',
+                 exportSurveyFields = tolower(survey),
+                 exportDataAccessGroups = tolower(dag),
+                 returnFormat = 'csv')
+    
+    body[['fields']] <- paste0(field_names, collapse=",")
+    if (!is.null(forms)) body[['forms']] <- paste0(forms, collapse=",")
+    if (!is.null(events)) body[['events']] <- paste0(events, collapse=",")
+    if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
+    
+    if (batch.size < 1){
+      x <- unbatched(rcon = rcon,
+                     body = body,
+                     id = meta_data$field_name[1],
+                     colClasses = colClasses,
+                     error_handling = error_handling)
+    }
+    else
+    {
+      x <- batched(rcon = rcon,
                    body = body,
+                   batch.size = batch.size,
                    id = meta_data$field_name[1],
                    colClasses = colClasses,
                    error_handling = error_handling)
+    }
+    
+    #* synchronize underscore codings between records and meta data
+    #* Only affects calls in REDCap versions earlier than 5.5.21
+    if (utils::compareVersion(version, "6.0.0") == -1)
+      meta_data <- syncUnderscoreCodings(x, meta_data)
+    
+    x <- fieldToVar(records = x,
+                    meta_data = meta_data,
+                    factors = factors,
+                    dates = dates,
+                    checkboxLabels = checkboxLabels,
+                    ...)
+    
+    if (labels){
+      x[,suffixed$name_suffix] <-
+        mapply(nm = suffixed$name_suffix,
+               lab = suffixed$label_suffix,
+               FUN = function(nm, lab){
+                 if(is.null(x[[nm]])){
+                   warning("Missing field for suffix ", nm)
+                 } else {
+                   labelVector::set_label(x[[nm]], lab)
+                 }
+               },
+               SIMPLIFY = FALSE)
+    }
+    
+    x
   }
-  else
-  {
-    x <- batched(rcon = rcon,
-                 body = body,
-                 batch.size = batch.size,
-                 id = meta_data$field_name[1],
-                 colClasses = colClasses,
-                 error_handling = error_handling)
-  }
-
-  #* synchronize underscore codings between records and meta data
-  #* Only affects calls in REDCap versions earlier than 5.5.21
-  if (utils::compareVersion(version, "6.0.0") == -1)
-    meta_data <- syncUnderscoreCodings(x, meta_data)
-
-  x <- fieldToVar(records = x,
-                  meta_data = meta_data,
-                  factors = factors,
-                  dates = dates,
-                  checkboxLabels = checkboxLabels,
-                  ...)
-
-  if (labels){
-    x[,suffixed$name_suffix] <-
-      mapply(nm = suffixed$name_suffix,
-             lab = suffixed$label_suffix,
-             FUN = function(nm, lab){
-               if(is.null(x[[nm]])){
-                  warning("Missing field for suffix ", nm)
-               } else {
-                  labelVector::set_label(x[[nm]], lab)
-               }
-             },
-             SIMPLIFY = FALSE)
-  }
-
-  x
-}
 
 
 
@@ -460,7 +460,7 @@ batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
   #* Make a list to hold each of the batched calls
   #* Borrowed from http://stackoverflow.com/a/8099431/1017276
   batch_list <- vector("list", max(batch.number))
-
+  
   #* 5. Read batches
   for (i in unique(batch.number))
   {
