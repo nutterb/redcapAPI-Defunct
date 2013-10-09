@@ -12,7 +12,7 @@ downloadRedcap <- function(APIKEY, url=options()$redcap_api_url,
   clean <- function(x) { str_replace_all(rmq(x), '[\n]', ' ') }
   
   # remove quote characters, replace line breaks
-  gg$field_label <- str_replace_all(clean(gg$field_label), '[\x80-\x9f]', '', useBytes=TRUE)
+  gg$field_label <- str_replace_all(clean(gg$field_label), '[\x80-\x9f]', '')
   
   if (!is.null(fields)) gg <- subset(gg, field_name %in% fields)
   
