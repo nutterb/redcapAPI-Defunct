@@ -1,4 +1,4 @@
-downloadRedcap <- function(APIKEY, url=options('redcap_api_url'), 
+downloadRedcap <- function(APIKEY, url=options()$redcap_api_url, 
                           fields=NULL, forms=NULL, records=NULL, events=NULL, 
                           raw=FALSE, label=TRUE) {
   require(Hmisc)
