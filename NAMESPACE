@@ -10,4 +10,6 @@ S3method(exportRecords, redcapApiConnection)
 
 export(fieldToVar)
 
+export(downloadRedcap)
+
 useDynLib(redcap,.registration=TRUE)
