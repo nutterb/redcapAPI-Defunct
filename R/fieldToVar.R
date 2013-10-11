@@ -12,7 +12,7 @@ function(m,d,factors=TRUE)
 
    # Ordinal or Categorical variable with a label
    } 
-   else if (m$field_type %in% c('select','radio','dropdown'))
+   else if (m$field_type %in% c('select','radio','dropdown', 'yesno', 'truefalse'))
    {
       # parses the string "0, Birth \\n 1, Death \\n 2, Unknown" into a
       # character vector for creating a factor
