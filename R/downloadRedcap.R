@@ -68,7 +68,7 @@ downloadRedcap <- function(APIKEY, url=options()$redcap_api_url,
   
   
   #info <- c(if (!raw) unlist(levels) else "", if (label) unlist(labels) else "")
-  info <- unlist(labels)
+  info <- labels
   # download data
   data <- exportRecords(rcon, factors=!raw, fields=fields, forms=forms, records=records, events=events)
   # apply labels and levels
