@@ -55,19 +55,25 @@ fieldToVar <-
     }
     else if (m$field_type %in% c('yesno'))
     {
-      d <- factor(d, 0:1, c('No', 'Yes'))
-      attr(d, 'redcapLabels') <- c('No', 'Yes')
-      attr(d, 'redcapLevels') <- 0:1
+      if (factors){
+        d <- factor(d, 0:1, c('No', 'Yes'))
+        attr(d, 'redcapLabels') <- c('No', 'Yes')
+        attr(d, 'redcapLevels') <- 0:1
+      }
     }
     else if (m$field_type %in% c('truefalse'))
     {
-      d <- as.logical(d)
+      if (factors){
+        d <- as.logical(d)
+      }
     }
     else if (m$field_type %in% c('checkbox'))
     {
-      d <- factor(d, 0:1, c('Unchecked', 'Checked'))
-      attr(d, 'redcapLabels') <- c('Unchecked', 'Checked')
-      attr(d, 'redcapLevels') <- 0:1
+      if (factors){
+        d <- factor(d, 0:1, c('Unchecked', 'Checked'))
+        attr(d, 'redcapLabels') <- c('Unchecked', 'Checked')
+        attr(d, 'redcapLevels') <- 0:1
+      }
     }
     
     d
