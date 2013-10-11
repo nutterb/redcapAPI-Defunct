@@ -3,7 +3,7 @@
 \title{Connect to a REDCap Database}
 \description{Creates an object of class \code{redcapApiConnection} for using the REDCap API [or a direct 
 connection through an SQL server]}
-\usage{redcapConnection(url, token, conn, project)}
+\usage{redcapConnection(token, url=getOption('redcap_api_url'), conn, project)}
 
 
 \arguments{
@@ -15,6 +15,8 @@ connection through an SQL server]}
 }
 
 \details{
+For convenience, you may consider using \code{options(redcap_api_url=[your URL here])} in your RProfile.
+
 To obtain an API token for a project, do the following:\cr
 Enter the 'User Right' section of a project\cr
 Select a user\cr
