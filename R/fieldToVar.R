@@ -63,6 +63,12 @@ fieldToVar <-
     {
       d <- as.logical(d)
     }
+    else if (m$field_type %in% c('checkbox'))
+    {
+      d <- factor(d, 0:1, c('Unchecked', 'Checked'))
+      attr(d, 'redcapLabels') <- c('Unchecked', 'Checked')
+      attr(d, 'redcapLevels') <- 0:1
+    }
     
     d
   }
