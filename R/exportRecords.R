@@ -238,6 +238,17 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    else
       field_names <- meta_data$field_name
 
+   field_names <- lapply(field_names, identity)#field_names[!field_names %in% check]
+   checkvars <- function(x){
+     if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
+       opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
+       opts <- as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1)))
+       x <- paste(x, opts, sep="___")
+     }
+     return(x)
+   }
+   field_names <- unlist(sapply(field_names, checkvars))
+
    if (!is.null(forms)) .params[['forms']] = paste(forms, collapse=",")
    if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
    if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
@@ -250,8 +261,8 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    lapply(field_names,
           function(i) 
           {
-            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==i,]), 
-                            x[[i]],factors)
+            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___\\d{1,10}", "", i),]), 
+                                   x[[i]],factors)
           }
    )
 
