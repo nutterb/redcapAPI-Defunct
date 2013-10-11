@@ -149,7 +149,7 @@ order by abs(record), record, event_id
 }
 
 exportRecords <-
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
@@ -217,7 +217,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 }
 
 exportRecords.redcapApiConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 {
    .params <- list(token=rcon$token, content='record',
                    format='csv', type='flat')
