@@ -223,6 +223,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
                    format='csv', type='flat')
 
    meta_data <- exportMetaData(rcon)
+   meta_data <- subset(meta_data, !field_type %in% "descriptive")
 
    if (!is.null(fields))
    {
@@ -237,8 +238,23 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    }
    else
       field_names <- meta_data$field_name
+      
+   field_names <- field_names[field_names %in% meta_data$field_name]    
+    
+    checklabs <- function(x){
+      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
+        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
+        opts <- sub("[[:space:]]+$", "", unlist(sapply(strsplit(opts, ","), '[', 2)))
+         opts <- sub("[[:space:]]+", ": ", opts)
+        return(opts)
+      }
+      return("")
+    }
+    field_labels_suffix <- unlist(sapply(field_names, checklabs))
+    
+    field_names <- lapply(field_names, identity)
+    field_labels <- sapply(field_names, function(x) meta_data$field_label[meta_data$field_name %in% x])
 
-   field_names <- lapply(field_names, identity)#field_names[!field_names %in% check]
    checkvars <- function(x){
      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
@@ -247,7 +263,12 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
      }
      return(x)
    }
-   field_names <- unlist(sapply(field_names, checkvars))
+    field_names <- sapply(field_names, checkvars)
+
+    field_labels <- rep(field_labels, sapply(field_names, length))
+    field_labels <- paste(field_labels, field_labels_suffix, sep="")
+    
+    field_names <- unlist(field_names)
 
    if (!is.null(forms)) .params[['forms']] = paste(forms, collapse=",")
    if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
@@ -265,7 +286,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
                                    x[[i]],factors)
           }
    )
-
+   if (labels) label(x[, field_names], self=FALSE) <- field_labels
    x
 }
 
