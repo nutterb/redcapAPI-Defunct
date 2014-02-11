@@ -16,8 +16,6 @@ importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}
-  \item{records}{A vector of study id's to be returned. If \code{NULL}, all subjects are returned.}
-  \item{events}{Specifies the format of returned content or error messages..}
 }
 
 \details{A record of imports through the API is recorded in the Logging section of the project.}
