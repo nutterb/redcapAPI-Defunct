@@ -1,9 +1,14 @@
 fieldToVar <- 
-  function(m,d,factors=TRUE)
+  function(m,d,factors=TRUE, dates=TRUE)
   {
+  
+    # Date variables
+    if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
+      d <- as.POSIXlt(d, format="%Y-%m-%d")  
+    }
     
     # Continuous variables
-    if ((!is.na(m$text_validation_type_or_show_slider_number) && 
+    else if ((!is.na(m$text_validation_type_or_show_slider_number) && 
            m$text_validation_type_or_show_slider_number %in% c('float','int') ) || 
           (m$field_type %in% c('calc')) )
     {
