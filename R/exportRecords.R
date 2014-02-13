@@ -217,7 +217,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 }
 
 exportRecords.redcapApiConnection <- 
-function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 {
    .params <- list(token=rcon$token, content='record',
                    format='csv', type='flat')
@@ -287,7 +287,7 @@ function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,event
           function(i) 
           {
             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___(\\d{1,10}|\\w{1,10})", "", i),]), 
-                                   x[[i]],factors)
+                                   x[[i]],factors,dates)
           }
    )
    if (labels) label(x[, field_names], self=FALSE) <- field_labels
