@@ -26,7 +26,7 @@ importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
 \references{
 http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389\cr
 https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R\cr
-See also the REDCap API documentation
+See also the REDCap API documentation}
 
 \examples{}
 
