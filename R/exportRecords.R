@@ -258,7 +258,11 @@ function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,event
    checkvars <- function(x){
      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-       opts <- as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1)))
+       opts <- tryCatch(as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1))),
+                         warning = function(cond){ nm <- as.character(unlist(sapply(strsplit(opts, ","), '[', 1)))
+                                                   nm <- gsub('^\\s*','',nm,perl=TRUE)
+                                                   nm <- gsub('\\s*$','',nm,perl=TRUE)
+                                                   return(nm)})
        x <- paste(x, opts, sep="___")
      }
      return(x)
@@ -282,7 +286,7 @@ function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,event
    lapply(field_names,
           function(i) 
           {
-            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___\\d{1,10}", "", i),]), 
+            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___(\\d{1,10}|\\w{1,10})", "", i),]), 
                                    x[[i]],factors)
           }
    )
