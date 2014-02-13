@@ -12,4 +12,6 @@ export(fieldToVar)
 
 export(importRecords)
 
+export(recodeCheck)
+
 useDynLib(redcap,.registration=TRUE)
