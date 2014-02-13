@@ -7,7 +7,7 @@
 
 \usage{
 \method{.redcapDbConnection}{exportRecords}(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
-\method{.redcapApiConnection}{exportRecords}(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+\method{.redcapApiConnection}{exportRecords}(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 } 
 
 
@@ -16,6 +16,7 @@
   \item{factors}{Logical.  Determines if categorical data from the database is returned as numeric codes or labelled 
     factors.}
   \item{labels}{Logical.  Determines if the variable labels are applied to the data frame.}
+  \item{dates}{Logical. Determines if date variables are converted to POSIXlt format during the download.}
   \item{fields}{A character vector of fields to be returned.  If \code{NULL}, all fields are returned.}
   \item{forms}{A character vector of forms to be returned.  If \code{NULL}, all forms are returned.}
   \item{records}{A vector of study id's to be returned.  If \code{NULL}, all subjects are returned.}
