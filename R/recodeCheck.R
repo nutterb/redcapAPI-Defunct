@@ -24,8 +24,11 @@ recodeCheck <- function(df, vars,
     checkbox <- vars[vars_are_check]
   }
   
+  var.label <- label(df[checkbox])
+  
   #* Apply the new labels
   df[checkbox] <- lapply(df[checkbox], factor, levels=levels, labels=labels)
+  label(df[, checkbox], self=FALSE) <- var.label
   return(df)
 }
   
