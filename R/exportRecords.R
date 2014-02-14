@@ -286,7 +286,7 @@ function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records
    lapply(field_names,
           function(i) 
           {
-            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___(\\d{1,10}|\\w{1,10})", "", i),]), 
+            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
                                    x[[i]],factors,dates)
           }
    )
