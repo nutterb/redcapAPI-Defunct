@@ -219,6 +219,9 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 exportRecords.redcapApiConnection <- 
 function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 {
+   Hlabel <- require(Hmisc)
+   if (!Hlabel) stop("Please install the 'Hmisc' package.")
+   
    .params <- list(token=rcon$token, content='record',
                    format='csv', type='flat')
 
