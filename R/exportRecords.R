@@ -149,11 +149,11 @@ order by abs(record), record, event_id
 }
 
 exportRecords <-
-function(rcon,factors=TRUE,labels=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 {
    meta_data <- exportMetaData(rcon)
    if (!is.null(fields))
@@ -180,7 +180,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
           function(i) 
           {
             d <- fieldToVar(as.list(meta_data[meta_data$field_name==field_names[i],]), 
-                         character(num_rows),factors)
+                         character(num_rows),factors,dates)
             if (!is.null(attr(d,'redcapLevels')) && factors){
                # REDCap allows any integer as a level for their factors, so
                # we need to transform for R.
