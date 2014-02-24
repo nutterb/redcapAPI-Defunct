@@ -4,7 +4,7 @@ fieldToVar <-
   
     # Date variables
     if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
-      d <- as.POSIXlt(d, format="%Y-%m-%d")  
+      d <- as.POSIXct(d, format="%Y-%m-%d")  
     }
     
     # Continuous variables
