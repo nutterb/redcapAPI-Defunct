@@ -9,9 +9,8 @@ S3method(exportRecords, redcapDbConnection)
 S3method(exportRecords, redcapApiConnection)
 
 export(fieldToVar)
-
 export(importRecords)
-
 export(recodeCheck)
+export(syncUnderscoreCodings)
 
 useDynLib(redcap,.registration=TRUE)
