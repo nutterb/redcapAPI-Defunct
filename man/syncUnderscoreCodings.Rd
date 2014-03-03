@@ -1,41 +1,33 @@
-\name{recodeCheck}
-\alias{recodeCheck}
-\title{Change labelling of \code{checkbox} variables}
-\description{Rewrites the labelling of \code{checkbox} variables from Checked/Unchecked to Yes/No 
-             (or some other user-specified labelling).}
+\name{syncUnderscoreCodings}
+\alias{syncUnderscoreCodings}
+\title{Sychronize coding of checkbox variables between meta data and records field names.}
+\description{Due to a bug in the REDCap export module, underscores in checkbox codings are not retained in the suffixes 
+             of the field names in the exported records.  For example, if variable \code{chk} is a checkbox with a 
+             coding 'a_b, A and B', the field name in the data export becomes \code{chk___ab}.  The loss of the 
+             underscore causes \code{fieldToVar} to fail as it can't match variable names to the meta data.  
+             \code{syncUnderscoreCodings} rectifies this problem by searching the suffixes and meta data for 
+             underscores.  If a discrepancy is found, the underscores are removed from the metadata codings, restoring
+             harmony to the universe.}
 
 \usage{
-recodeCheck(df, vars, 
-            levels=c("Unchecked", "Checked"), labels=c("No", "Yes"), 
-            reverse=FALSE)
+recodeCheck(records, meta_data)
 }
 
 
 \arguments{
-  \item{df}{A data frame, presumably retrieved from REDCap, though not a strict requirement.}
-  \item{vars}{Optional character vector of variables to convert.  If left missing, all of the variables in \code{df}
-              that are identified as \code{checkbox} variables are relabelled.  See 'Details' for more about identifying
-              \code{checkbox} variables.}
-  \item{levels}{A character vector to be passed to \code{factor}.  This indicates the levels to be replaced and 
-                their order.}
-  \item{labels}{A character vector of labels to replace the values in \code{levels}.  The first value becomes the 
-                reference value.}
-  \item{reverse}{For convenience, if the user would prefer to reverse the order of the elements in \code{levels} and 
-                 \code{labels}, simply set this to \code{TRUE}.}
+  \item{records}{The data frame object returned from the API export prior to applying factors, labels, and dates via
+                 the \code{fieldToVar} function.}
+  \item{meta_data}{Metadata export from \code{exportMetaData}}
 }
 
-\details{\code{checkbox} variables are \emph{not} identified using the metadata from the REDCap database.  Instead,
-         variables are scanned, and those variables in which every value is in \code{levels} are assumed to be 
-         \code{checkbox} variables.  
+\details{\code{syncUnderscoreCodings} performs a series of evaluations.  First, it determines if any underscores are found
+         in the checkbox codings.  If none are found, the function terminates without changing anything.
          
-         Realistically, this could be used to relabel any set of factors with identical labels, 
-         regardless of the data source.  The number of labels is not limited, but \code{levels} and \code{labels} 
-         should have the same length.
+         If the checkbox codings have underscores, the next evaluation is to determine if the variable names suffixes have
+         matching underscores.  If they do, then the function terminates with no changes to the meta data.
          
-         The actual code to perform this is not particularly difficult 
-         (\code{df[checkbox] <- lapply(df[checkbox], factor, levels=levels, labels=labels)}), but 
-         \code{checkbox} variables are common enough in REDCap (and the Checked/Unchecked scheme so unpalatable) 
-         that a quick way to replace the labels was highly desirable.}
+         If the prior two checks find underscores in the meta data and no underscores in the suffixes, the underscores
+         are removed from the meta data and the new meta data returned.}
 
 \author{Benjamin Nutter}
 
