@@ -286,6 +286,8 @@ function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records
 
    x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
 
+   meta_data <- syncUnderscoreCodings(x, meta_data)
+
    lapply(field_names,
           function(i) 
           {
