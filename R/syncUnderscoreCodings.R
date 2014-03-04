@@ -27,13 +27,18 @@ syncUnderscoreCodings <- function(records, meta_data){
   #* If the function reaches this point, the meta_data codings do not match the record suffixes.
   #* This will remove underscores from the meta_data codings and return the 
   #* meta_data so that it matches the records suffixes.
-  newCoding <- strsplit(.checkbox$select_choices_or_calculations, "[|]")
-  newCoding <- lapply(newCoding, function(x) do.call("rbind", strsplit(x, ", ")))
+  oldCoding <- strsplit(.checkbox$select_choices_or_calculations, " [|] ")
+  newCoding <- lapply(oldCoding, function(x) do.call("rbind", strsplit(x, ", ")))
   newCoding <- lapply(newCoding, function(x){ x[, 1] <- gsub("_", "", x[,1]); return(x)})
   newCoding <- lapply(newCoding, apply, 1, paste, collapse=", ")
-  newCoding <- sapply(newCoding, paste, collapse = "|")
-  meta_data$select_choices_or_calculations[meta_data$field_type == "checkbox"] <- newCoding
+  newCodingStr <- sapply(newCoding, paste, collapse = " | ")
+  meta_data$select_choices_or_calculations[meta_data$field_type == "checkbox"] <- newCodingStr
+  
+  field_names <- cbind(rep(meta_data$field_name[meta_data$field_type == "checkbox"], sapply(oldCoding, length)), 
+                       gsub(",[[:print:]]+", "", unlist(oldCoding)), 
+                       gsub(",[[:print:]]+", "", unlist(newCoding)))
+  field_names <- cbind(paste(field_names[, 1], field_names[, 2], sep="___"),
+                       paste(field_names[, 1], field_names[, 3], sep="___"))
+  attr(meta_data, "checkbox_field_name_map") <- field_names
   return(meta_data)
 }
-    
-  
