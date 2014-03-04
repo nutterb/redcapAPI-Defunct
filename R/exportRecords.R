@@ -217,38 +217,38 @@ function(rcon,factors=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events
 }
 
 exportRecords.redcapApiConnection <- 
-function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
-{
-   Hlabel <- require(Hmisc)
-   if (!Hlabel) stop("Please install the 'Hmisc' package.")
-   
-   .params <- list(token=rcon$token, content='record',
-                   format='csv', type='flat')
-
-   meta_data <- exportMetaData(rcon)
-   meta_data <- subset(meta_data, !field_type %in% "descriptive")
-
-   if (!is.null(fields))
-   {
+  function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+  {
+    Hlabel <- require(Hmisc)
+    if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    
+    .params <- list(token=rcon$token, content='record',
+                    format='csv', type='flat')
+    
+    meta_data <- exportMetaData(rcon)
+    meta_data <- subset(meta_data, !field_type %in% "descriptive")
+    
+    if (!is.null(fields))
+    {
       if (is.character(fields) && 
-          length(which(meta_data$field_name %in% fields)) == length(fields))
+            length(which(meta_data$field_name %in% fields)) == length(fields))
       {
-         field_names <- unique(c(fields))
-         .params[['fields']] = paste(fields,collapse=',')
+        field_names <- unique(c(fields))
+        .params[['fields']] = paste(fields,collapse=',')
       }
       else
-         stop("Non-existent fields")
-   }
-   else
+        stop("Non-existent fields")
+    }
+    else
       field_names <- meta_data$field_name
-      
-   field_names <- field_names[field_names %in% meta_data$field_name]    
+    
+    field_names <- field_names[field_names %in% meta_data$field_name]    
     
     checklabs <- function(x){
       if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
         opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
         opts <- sub("[[:space:]]+$", "", unlist(sapply(strsplit(opts, ","), '[', 2)))
-         opts <- sub("[[:space:]]+", ": ", opts)
+        opts <- sub("[[:space:]]+", ": ", opts)
         return(opts)
       }
       return("")
@@ -257,48 +257,54 @@ function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records
     
     field_names <- lapply(field_names, identity)
     field_labels <- sapply(field_names, function(x) meta_data$field_label[meta_data$field_name %in% x])
-
-   checkvars <- function(x){
-     if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
-       opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-       opts <- tryCatch(as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1))),
+    
+    checkvars <- function(x){
+      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
+        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
+        opts <- tryCatch(as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1))),
                          warning = function(cond){ nm <- as.character(unlist(sapply(strsplit(opts, ","), '[', 1)))
                                                    nm <- gsub('^\\s*','',nm,perl=TRUE)
                                                    nm <- gsub('\\s*$','',nm,perl=TRUE)
                                                    return(nm)})
-       x <- paste(x, opts, sep="___")
-     }
-     return(x)
-   }
+        x <- paste(x, opts, sep="___")
+      }
+      return(x)
+    }
     field_names <- sapply(field_names, checkvars)
-
+    
     field_labels <- rep(field_labels, sapply(field_names, length))
     field_labels <- paste(field_labels, field_labels_suffix, sep="")
     
     field_names <- unlist(field_names)
-
-   if (!is.null(forms)) .params[['forms']] = paste(forms, collapse=",")
-   if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
-   if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
-
-   x <- postForm(uri=rcon$url,.params=.params,
-                 .opts=curlOptions(ssl.verifyhost=FALSE))
-
-   x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
-
-   meta_data <- syncUnderscoreCodings(x, meta_data)
-
-   lapply(field_names,
-          function(i) 
-          {
-            x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
+    
+    if (!is.null(forms)) .params[['forms']] = paste(forms, collapse=",")
+    if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
+    if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
+    
+    x <- postForm(uri=rcon$url,.params=.params,
+                  .opts=curlOptions(ssl.verifyhost=FALSE))
+    
+    x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
+    
+    #* synchronize underscore codings between records and meta data
+    meta_data <- syncUnderscoreCodings(x, meta_data)
+    
+    #* Change field_names to match underscore codings
+    if (!is.null(attributes(meta_data)$checkbox_field_name_map)){
+      field_names[field_names %in%  attributes(meta_data)$checkbox_field_name_map[, 1]] <- 
+            attributes(meta_data)$checkbox_field_name_map[, 2]
+    }
+    
+    lapply(field_names,
+           function(i) 
+           {
+             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
                                    x[[i]],factors,dates)
-          }
-   )
-   if (labels) label(x[, field_names], self=FALSE) <- field_labels
-   x
-}
-
+           }
+    )
+    if (labels) label(x[, field_names], self=FALSE) <- field_labels
+    x
+  }
 .onLoad <- function(libname,pkgname)
 {
    require(RCurl)
