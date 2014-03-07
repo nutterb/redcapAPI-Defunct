@@ -10,14 +10,15 @@
              harmony to the universe.}
 
 \usage{
-recodeCheck(records, meta_data)
+syncUnderscoreCodings(records, meta_data, export)
 }
 
 
 \arguments{
   \item{records}{The data frame object returned from the API export prior to applying factors, labels, and dates via
                  the \code{fieldToVar} function.}
-  \item{meta_data}{Metadata export from \code{exportMetaData}}
+  \item{meta_data}{Metadata export from \code{exportMetaData}}\
+  \item{export}{Logical.  Specifies if data are being synchronized for import or export}
 }
 
 \details{\code{syncUnderscoreCodings} performs a series of evaluations.  First, it determines if any underscores are found
@@ -26,8 +27,12 @@ recodeCheck(records, meta_data)
          If the checkbox codings have underscores, the next evaluation is to determine if the variable names suffixes have
          matching underscores.  If they do, then the function terminates with no changes to the meta data.
          
-         If the prior two checks find underscores in the meta data and no underscores in the suffixes, the underscores
-         are removed from the meta data and the new meta data returned.}
+         For data exports, if the prior two checks find underscores in the meta data and no underscores in the suffixes, the underscores
+         are removed from the meta data and the new meta data returned.
+         
+         For data imports, the meta data are not altered and the \code{checkbox_field_name_map} attribute is used to
+         synchronize field names to the meta data and the expectations of REDCap (for import, REDCap expects the 
+         underscore codings to be used.}
 
 \author{Benjamin Nutter}
 
