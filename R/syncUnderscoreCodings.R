@@ -1,4 +1,4 @@
-syncUnderscoreCodings <- function(records, meta_data){
+syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
   #* Deterimine if there are any underscores in checkbox codings
   .checkbox <- subset(meta_data, field_type %in% c('checkbox'))
   codings <- strsplit(.checkbox$select_choices_or_calculations, "[|]")
@@ -32,7 +32,7 @@ syncUnderscoreCodings <- function(records, meta_data){
   newCoding <- lapply(newCoding, function(x){ x[, 1] <- gsub("_", "", x[,1]); return(x)})
   newCoding <- lapply(newCoding, apply, 1, paste, collapse=", ")
   newCodingStr <- sapply(newCoding, paste, collapse = " | ")
-  meta_data$select_choices_or_calculations[meta_data$field_type == "checkbox"] <- newCodingStr
+  if (export) meta_data$select_choices_or_calculations[meta_data$field_type == "checkbox"] <- newCodingStr
   
   field_names <- cbind(rep(meta_data$field_name[meta_data$field_type == "checkbox"], sapply(oldCoding, length)), 
                        gsub(",[[:print:]]+", "", unlist(oldCoding)), 
