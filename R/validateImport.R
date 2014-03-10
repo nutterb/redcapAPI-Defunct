@@ -42,7 +42,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* Date variables
   else if (grepl("date_", meta_data$text_validation_type_or_show_slider_number)){
     if (is.character(x)){
-      w <- which(!grepl("(\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2}|\\d{4}\\d{2}\\d{2})", x))
+      w <- which(!grepl("(\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2}|\\d{4}\\d{2}\\d{2})", x) & !is.na(x))
       if (length(w) > 0){
         date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
         date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
@@ -63,7 +63,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_min)){
-      w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d"))
+      w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d") & !is.na(x))
       if (length(w) > 0){
         date_min_msg <- records[w, c(ids, field), drop=FALSE]
         date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
@@ -72,7 +72,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d"))
+      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
         date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
@@ -90,7 +90,7 @@ validateImport <- function(field, meta_data, records, ids,
   else if (grepl("(float|integer|number|number_1dp)", meta_data$text_validation_type_or_show_slider_number) || 
              grepl("calc", meta_data$field_type)){
     if (grepl("integer", meta_data$text_validation_type_or_show_slider_number)){
-      w <- which(!is.integer(x))
+      w <- which(!is.integer(x) & !is.na(x))
       if (length(w) > 0){
         not_int_msg <- records[w, c(ids, field), drop=FALSE]
         not_int_msg$msg <- paste("Entry for '", field, "' is not an integer and was coerced to an integer.", sep="")
@@ -98,7 +98,7 @@ validateImport <- function(field, meta_data, records, ids,
         x <- as.integer(x)
       }
     }
-    w <- which(!is.numeric(x))
+    w <- which(!is.numeric(x) & !is.na(x))
     if (length(w) > 0){
       not_num_msg <- records[w, c(ids, field), drop=FALSE]
       not_num_msg$msg <- paste("Entry for '", field, "' was not numeric and was coerced to a numeric.", sep="")
@@ -116,7 +116,7 @@ validateImport <- function(field, meta_data, records, ids,
   #*****************************************
   #** ZIP codes
   else if (grepl("zipcode", meta_data$text_validation_type_or_show_slider_number)){
-    w <- which(!grepl("(\\d{5}|\\d{5}-\\d{4})", x))
+    w <- which(!grepl("(\\d{5}|\\d{5}-\\d{4})", x) & !is.na(x))
     bad_zip_msg <- records[w, c(ids, field), drop=FALSE]
     bad_zip_msg$msg <- paste("Entry for '", field, "' is not a valid ZIP code and was not imported.")
     suppressWarnings(printLog(bad_zip_msg, logfile))
@@ -128,7 +128,7 @@ validateImport <- function(field, meta_data, records, ids,
   #********************************************************
   #* yesno fields
   else if (grepl("yesno", meta_data$field_type)){
-    if (is.character(x) || is.factor(x)){
+    if (is.character(x) || is.factor(x) & !is.na(x)){
       x <- as.character(x)
       x <- tolower(x)
       w <- which(!x %in% c("no", "yes"))
@@ -140,7 +140,7 @@ validateImport <- function(field, meta_data, records, ids,
       }
     }
     else if (is.numeric(x)){
-      w <- which(!x %in% 0:1)
+      w <- which(!x %in% 0:1 & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
@@ -158,7 +158,7 @@ validateImport <- function(field, meta_data, records, ids,
     if (is.character(x) || is.factor(x)){
       x <- as.character(x)
       x <- tolower(x)
-      w <- which(!x %in% c("true", "false"))
+      w <- which(!x %in% c("true", "false") & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
@@ -167,7 +167,7 @@ validateImport <- function(field, meta_data, records, ids,
       }
     }
     else if (is.numeric(x)){
-      w <- which(!x %in% 0:1)
+      w <- which(!x %in% 0:1 & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
@@ -188,7 +188,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
     mapping <- do.call("rbind", strsplit(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", "))
     
-    w <- which(!x %in% mapping[, 2])
+    w <- which(!x %in% mapping[, 2] & !is.na(x))
     if (length(w) > 0){
       radio_msg <- records[w, c(ids, field), drop=FALSE]
       radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(mapping[, 1], collapse=", "), ".", sep="")
@@ -207,7 +207,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
 
     
-    w <- which(!x %in% c("Checked", "Unchecked", "0", "1"))
+    w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
       check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked.", sep="")
