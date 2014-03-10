@@ -7,7 +7,7 @@
 importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
-              returnData=FALSE, logfile=NULL)
+              returnData=FALSE, logfile="")
 }
 
 
@@ -22,7 +22,7 @@ importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
                     data frame can be written to a csv and uploaded using the interactive tools to troubleshoot the
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
-                 If \code{NULL}, the log is printed to the console.}
+                 If \code{""}, the log is printed to the console.}
 }
 
 \details{A record of imports through the API is recorded in the Logging section of the project.
