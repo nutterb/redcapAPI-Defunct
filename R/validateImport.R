@@ -134,13 +134,15 @@ validateImport <- function(field, meta_data, records, ids,
     if (is.character(x) || is.factor(x)){
       x <- as.character(x)
       x <- tolower(x)
-      w <- which(!x %in% c("no", "yes") & !is.na(x))
+      w <- which(!x %in% c("no", "yes", "0", "1") & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
         suppressWarnings(printLog(bad_yn_msg, logfile))
-        x <- as.character(factor(x, c("no", "yes"), 0:1))
+        x[w] <- NA
       }
+      x[x %in% "no"] <- "0"
+      x[x %in% "yes"] <- "1"
     }
     else if (is.numeric(x)){
       w <- which(!x %in% 0:1 & !is.na(x))
