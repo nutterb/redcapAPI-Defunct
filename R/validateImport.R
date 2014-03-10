@@ -131,10 +131,10 @@ validateImport <- function(field, meta_data, records, ids,
   #********************************************************
   #* yesno fields
   else if (grepl("yesno", meta_data$field_type)){
-    if (is.character(x) || is.factor(x) & !is.na(x)){
+    if (is.character(x) || is.factor(x)){
       x <- as.character(x)
       x <- tolower(x)
-      w <- which(!x %in% c("no", "yes"))
+      w <- which(!x %in% c("no", "yes") & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
