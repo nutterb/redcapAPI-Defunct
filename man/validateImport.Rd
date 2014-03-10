@@ -1,50 +1,56 @@
-\name{importRecords}
-\alias{importRecords}
-\title{Import Records to a REDCap Database}
-\description{Imports records from a \code{data.frame} to a REDCap Database.}
+\name{validateImport}
+\alias{validateImport}
+\title{Validate Data Frames for Import}
+\description{Validates the variables in a data frame prior to attempting an import to REDCap.}
 
 \usage{
-importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
-              returnContent=c('count', 'ids', 'nothing'),
-              returnFormat=c('xml', 'csv', 'json'),
-              returnData=FALSE, logfile=NULL)
+validateImport(field, meta_data, records, ids,
+               logfile=NULL)
 }
 
 
 \arguments{
-  \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
-  \item{data}{A \code{data.frame} to be imported to the REDCap project.}
-  \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
-  \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
-  \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}
-  \item{returnData}{Logical.  Prevents the REDCap import and instead returns the data frame that would have been given
-                    for import.  This is sometimes helpful if the API import fails with message "Bad Request."  The
-                    data frame can be written to a csv and uploaded using the interactive tools to troubleshoot the
-                    problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
-  \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
-                 If \code{NULL}, the log is printed to the console.}
+  \item{field}{Character(1) naming the variable to be validated.}
+  \item{meta_data}{REDCap database meta data.}
+  \item{records}{The data frame to be validated.}
+  \item{ids}{Character vector giving the names of fields that uniquely identify a record.  Usually the study id and
+             \code{redcap_event_name}.}
+  \item{logfile}{A character string giving the filepath to which the results of the validation are printed.  If 
+                 \code{NULL}, the results are printed in the console.}
 }
 
-\details{A record of imports through the API is recorded in the Logging section of the project.
+\details{Each variable is validated by matching they type of variable with the type listed in the REDCap database.  
 
-  \code{importRecords} prevents the most common import errors by testing the data before attempting the import.  Namely
-  \begin{itemize}
-    \item Check that all variables in \code{data} exist in the REDCap data dictionary.
-    \item Check that the study id variable exists
-    \item Force the study id variable to the first position in the data frame
-    \item Verify that REDCap date fields are represented in the data frame as either character, POSIXct, or Date class
-          objects.
-  \end{itemize}
+Although the log messages will indicate a preference for dates to be in mm/dd/yyyy format, the function will accept
+mm/dd/yy, yyyy-mm-dd, yyyy/mm/dd, and yyyymmdd formats as well.  When possible, pass dates as Date objects or POSIXct 
+objects to avoid confusion.  Dates are also compared to minimum and maximum values listed in the data dictionary.  
+Records where a date is found out of range are allowed to import and a message is printed in the log.
+
+For continuous variables, the values are checked against the minimum and maximum allowed in the data dictionary. 
+Records where a date is found out of range are allowed to import and a message is printed in the log.
+
+ZIP codes are tested to see if they fit either the 5 digit or 5 digit + 4 format.  When these conditions are not met, 
+the data point is deleted and a message printed in the log.
+
+YesNo fields permit any of the values 'yes', 'no', '0', '1' to be imported to REDCap with 0=No, and 1=Yes.  The values 
+are converted to lower case for validation, so any combination of lower and upper case values will pass (ie, the data
+frame is not case-sensitive).
+
+TrueFalse fields will accept TRUE, FALSE, 0, 1, and logical values and are also not case-sensitive.
+
+Radio and dropdown fields may have either the coding in the data dictionary or the labels in the data dictionary. 
+The validation will use the meta data to convert any matching values to the appropriate coding before importing to 
+REDCap.  Values that cannot be reconciled are deleted with a message printed in the log.  Currently, these variable
+\emph{are} case-sensitive.
+
+Checkbox fields require a value of "Checked", "Unchecked", "0", or "1".  These are currently case sensitive.  Values 
+that do not match these are deleted with a warning printed in the log.
 
 }
 
-\author{Benjamin Nutter\cr
-        with thanks to Josh O'Brien and etb (see references)}
+\author{Benjamin Nutter}
 
-\references{
-http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389\cr
-https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R\cr
-See also the REDCap API documentation}
+\references{}
 
 \examples{}
 
