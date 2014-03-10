@@ -66,7 +66,7 @@ importRecords <- function(rcon, data,
   idvars <- if ("redcap_event_name" %in% names(data)) c(meta_data$field_name[1], "redcap_event_name") else meta_data$field_name[1]
   
   msg <- paste("REDCap Data Import Log: ", Sys.time(), 
-               "\nThe following (if any) conditions were noted about the data.", sep="")
+               "\nThe following (if any) conditions were noted about the data.\n\n\n\n", sep="")
   if (is.null(logfile)) cat(msg) else write(msg, logfile)
 
   data[, names(data)] <- lapply(names(data), validateImport, meta_data, data, idvars, logfile)
