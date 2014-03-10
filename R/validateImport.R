@@ -6,7 +6,7 @@ validateImport <- function(field, meta_data, records, ids,
   
   printLog <- function(x, file=logfile){
     if (is.null(file)){
-      names(x) <- rep("", length(x))
+      names(x) <- c(" ", "  ", "   ")
       print(x, row.names=FALSE)
     }
     else{
