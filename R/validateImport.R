@@ -121,8 +121,9 @@ validateImport <- function(field, meta_data, records, ids,
       bad_zip_msg <- records[w, c(ids, field), drop=FALSE]
       bad_zip_msg$msg <- paste("Entry for '", field, "' is not a valid ZIP code and was not imported.")
       suppressWarnings(printLog(bad_zip_msg, logfile))
+      x[w] <- ""
     }
-    x[w] <- ""
+
     return(x)
   }
   
