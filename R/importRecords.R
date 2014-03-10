@@ -2,7 +2,7 @@ importRecords <- function(rcon, data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnFormat=c('xml', 'csv', 'json'),
-                          returnData=FALSE, logfile=NULL){
+                          returnData=FALSE, logfile=""){
   
   warn.flag <- 0
   warn.msg <- NULL
