@@ -5,7 +5,7 @@
 
 \usage{
 validateImport(field, meta_data, records, ids,
-               logfile=NULL)
+               logfile="")
 }
 
 
@@ -16,7 +16,7 @@ validateImport(field, meta_data, records, ids,
   \item{ids}{Character vector giving the names of fields that uniquely identify a record.  Usually the study id and
              \code{redcap_event_name}.}
   \item{logfile}{A character string giving the filepath to which the results of the validation are printed.  If 
-                 \code{NULL}, the results are printed in the console.}
+                 \code{""}, the results are printed in the console.}
 }
 
 \details{Each variable is validated by matching they type of variable with the type listed in the REDCap database.  
