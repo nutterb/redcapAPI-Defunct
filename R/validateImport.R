@@ -1,13 +1,19 @@
 validateImport <- function(field, meta_data, records, ids,
-                           logfile="REDCap_Import_Log.txt"){
+                           logfile=NULL){
   x <- records[, field]
   field_meta <- sub("___[a-z,A-Z,0-9,_]+", "", field)
   meta_data <- subset(meta_data, field_name == field_meta)
   
-  write(paste("REDCap Data Import Log: ", Sys.time(), 
-              "\nThe following (if any) conditions were noted about the data.\n\n\n"),
-        logfile)
-  
+  printLog <- function(x, file=logfile){
+    if (is.null(file)){
+      names(x) <- ""
+      print(x, row.names=FALSE)
+    }
+    else{
+      write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE)
+    }
+  }
+    
   #*** Form complete fields
   if (nrow(meta_data) == 0){
     if (is.character(x) | is.factor(x)){
@@ -41,7 +47,7 @@ validateImport <- function(field, meta_data, records, ids,
         date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
         date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
                                   "or character class with format mm/dd/YYYY, YYYY/mm/dd, YYYY-mm-dd, or YYYYmmdd.", sep="")
-        suppressWarnings(write(date_fmt_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(date_fmt_msg, logfile))
         x[w] <- NA
       }
       x <- ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4}", x), as.POSIXct(x, format="%m/%d/%Y"),
@@ -61,7 +67,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         date_min_msg <- records[w, c(ids, field), drop=FALSE]
         date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
-        suppressWarnings(write.table(date_min_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(date_min_msg, logfile))
       }
     }
     
@@ -70,7 +76,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
         date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
-        suppressWarnings(write.table(date_max_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(date_max_msg, logfile))
       }
     }
     
@@ -88,7 +94,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         not_int_msg <- records[w, c(ids, field), drop=FALSE]
         not_int_msg$msg <- paste("Entry for '", field, "' is not an integer and was coerced to an integer.", sep="")
-        suppressWarnings(write.table(not_int_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(not_int_msg, logfile))
         x <- as.integer(x)
       }
     }
@@ -96,7 +102,7 @@ validateImport <- function(field, meta_data, records, ids,
     if (length(w) > 0){
       not_num_msg <- records[w, c(ids, field), drop=FALSE]
       not_num_msg$msg <- paste("Entry for '", field, "' was not numeric and was coerced to a numeric.", sep="")
-      suppressWarnings(write.table(not_num_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+      suppressWarnings(printLog(not_num_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
       x <- as.numeric(x)
     }
     if (grepl("number_1dp", meta_data$text_validation_type_or_show_slider_number)){
@@ -113,7 +119,7 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!grepl("(\\d{5}|\\d{5}-\\d{4})", x))
     bad_zip_msg <- records[w, c(ids, field), drop=FALSE]
     bad_zip_msg$msg <- paste("Entry for '", field, "' is not a valid ZIP code but was uploaded anyway.")
-    suppressWarnings(write.table(bad_zip_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+    suppressWarnings(printLog(bad_zip_msg, logfile))
   }
   
   
@@ -127,7 +133,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
-        suppressWarnings(write.table(bad_yn_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(bad_yn_msg, logfile))
         x <- as.character(factor(x, c("no", "yes"), 0:1))
       }
     }
@@ -136,7 +142,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
-        suppressWarnings(write.table(bad_yn_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(bad_yn_msg, ))
         x[!x %in% 0:1] <- NA
       }
     }
@@ -154,7 +160,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
-        suppressWarnings(write.table(bad_yn_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(bad_yn_msg, ))
         x <- as.character(factor(x, c("no", "yes"), 0:1))
       }
     }
@@ -163,7 +169,7 @@ validateImport <- function(field, meta_data, records, ids,
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
         bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
-        suppressWarnings(write.table(bad_yn_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+        suppressWarnings(printLog(bad_yn_msg, ))
         x[!x %in% 0:1] <- NA
       }
     }
@@ -184,7 +190,7 @@ validateImport <- function(field, meta_data, records, ids,
     if (length(w) > 0){
       radio_msg <- records[w, c(ids, field), drop=FALSE]
       radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(mapping[, 1], collapse=", "), ".", sep="")
-      suppressWarnings(write.table(radio_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+      suppressWarnings(printLog(radio_msg, ))
       x[w] <- NA
     }
     
@@ -203,7 +209,7 @@ validateImport <- function(field, meta_data, records, ids,
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
       check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked.", sep="")
-      suppressWarnings(write.table(check_msg, logfile, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+      suppressWarnings(printLog(check_msg, ))
     }
     x[x %in% "Checked"] <- "1"
     x[x %in% "Unchecked"] <- "0"
@@ -214,3 +220,4 @@ validateImport <- function(field, meta_data, records, ids,
   return(x)
   
 }
+
