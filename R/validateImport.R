@@ -6,7 +6,6 @@ validateImport <- function(field, meta_data, records, ids,
   
   printLog <- function(x, file=logfile){
     if (is.null(file)){
-      names(x) <- c(" ", "  ", "   ")
       print(x, row.names=FALSE)
     }
     else{
@@ -116,6 +115,7 @@ validateImport <- function(field, meta_data, records, ids,
   #*****************************************
   #** ZIP codes
   else if (grepl("zipcode", meta_data$text_validation_type_or_show_slider_number)){
+    x <- as.character(x)
     w <- which(!grepl("(\\d{5}|\\d{5}-\\d{4})", x) & !is.na(x))
     if (length(w) > 0){
       bad_zip_msg <- records[w, c(ids, field), drop=FALSE]
