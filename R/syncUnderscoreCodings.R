@@ -1,6 +1,7 @@
 syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
   #* Deterimine if there are any underscores in checkbox codings
   .checkbox <- subset(meta_data, field_type %in% c('checkbox'))
+  if (nrow(.checkbox) == 0) return(meta_data)
   codings <- strsplit(.checkbox$select_choices_or_calculations, "[|]")
   codings <- lapply(codings, function(x) gsub(",[[:print:]]+", "", x))
   codings <- lapply(codings, function(x) sub(" ", "", x))
