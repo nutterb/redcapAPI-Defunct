@@ -47,7 +47,7 @@ importRecords <- function(rcon, data,
                   paste(warn.flag, ": The variable'", meta_data$field_name[1], "' was not in the first column. ",
                         "It has been moved to the first column."))
     w <- which(names(data) == meta_data$field_name[1])
-    data <- data[, c(w, 1:(w-1), (w+1):length(w))]
+    data <- data[, c(w, (1:length(data))[-w])]
   }
 
   #** Confirm that date fields are either character, Date class, or POSIXct
