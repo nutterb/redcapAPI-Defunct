@@ -12,5 +12,6 @@ export(fieldToVar)
 export(importRecords)
 export(recodeCheck)
 export(syncUnderscoreCodings)
+export(validateImport)
 
 useDynLib(redcap,.registration=TRUE)
