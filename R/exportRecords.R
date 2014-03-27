@@ -149,11 +149,11 @@ order by abs(record), record, event_id
 }
 
 exportRecords <-
-function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
 {
    meta_data <- exportMetaData(rcon)
    if (!is.null(fields))
@@ -217,7 +217,7 @@ function(rcon,factors=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events
 }
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,labels=TRUE,dates=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
