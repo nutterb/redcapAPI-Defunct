@@ -3,7 +3,7 @@
 \title{Connect to a REDCap Database}
 \description{Creates an object of class \code{redcapApiConnection} for using the REDCap API [or a direct 
 connection through an SQL server]}
-\usage{redcapConnection(token, url=getOption('redcap_api_url'), conn, project)}
+\usage{redcapConnection(url=getOption('redcap_api_url'), token, conn, project)}
 
 
 \arguments{
