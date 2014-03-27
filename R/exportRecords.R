@@ -242,8 +242,6 @@ exportRecords.redcapApiConnection <-
     else
       field_names <- meta_data$field_name
     
-    field_names <- field_names[field_names %in% meta_data$field_name]    
-    
     checklabs <- function(x){
       if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
         opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
