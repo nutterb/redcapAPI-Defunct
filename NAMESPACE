@@ -13,6 +13,6 @@ export(importRecords)
 export(recodeCheck)
 export(syncUnderscoreCodings)
 export(validateImport)
-export(exportRecords)
+export(exportUsers)
 
 useDynLib(redcap,.registration=TRUE)
