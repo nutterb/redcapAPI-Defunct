@@ -14,3 +14,6 @@ KNOWN ISSUES:
   practice to not choose 'number' validation for numbers, it is probably very difficult to distinguish between 
   numeric and character data when the field can be represented as a numeric.  I am guessing it is easier to give 
   a character vector of the fields we want forced as characters and let the user dictate the appropriate behavior.
+
+- exportUsers only as an API interface.  This should probably written as a method such as exportUsers.ApiConnection and
+  exportUsers.DbConnection
