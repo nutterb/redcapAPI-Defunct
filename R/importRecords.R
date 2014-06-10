@@ -15,6 +15,7 @@ importRecords <- function(rcon, data,
   returnFormat <- match.arg(returnFormat, c('xml', 'csv', 'json'))
   
   meta_data <- syncUnderscoreCodings(data, exportMetaData(rcon), export=FALSE)
+  form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
   meta_data <- subset(meta_data, field_name %in% sub("___[a-z,A-Z,0-9,_]+", "", names(data)))
   
@@ -23,8 +24,8 @@ importRecords <- function(rcon, data,
   .opts <- sapply(.checkbox$select_choices_or_calculations, function(x) strsplit(x, " [|] "))
   .opts <- lapply(.opts, function(x) gsub(",[[:print:]]+", "", x))
   check_var <- paste(rep(.checkbox$field_name, sapply(.opts, length)), unlist(.opts), sep="___")
-  with_complete_fields <- c(unique(meta_data$field_name), paste(unique(meta_data$form_name), "_complete", sep=""), check_var)
- 
+  with_complete_fields <- c(unique(meta_data$field_name), paste(form_names, "_complete", sep=""), check_var)
+  
   if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg, 
