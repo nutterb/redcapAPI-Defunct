@@ -237,7 +237,7 @@ exportRecords.redcapApiConnection <-
         .params[['fields']] = paste(fields,collapse=',')
       }
       else
-        stop("Non-existent fields")
+        stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
     }
     else
       field_names <- meta_data$field_name
