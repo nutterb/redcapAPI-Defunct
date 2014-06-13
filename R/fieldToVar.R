@@ -1,16 +1,36 @@
 fieldToVar <- 
   function(m,d,factors=TRUE, dates=TRUE)
   {
-  
+    
     # Date variables
     if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
       d <- as.POSIXct(d, format="%Y-%m-%d")  
     }
     
+    #* Date time variables (no seconds)
+    if (grepl("datetime_dmy", m$text_validation_type_or_show_slider_number) && dates){
+      d <- as.POSIXct(d, format="%Y-%m-%d %H:%M")
+    }
+    
+    #* Date time variables (with seconds)
+    if (grepl("datetime_seconds_dmy", m$text_validation_type_or_show_slider_number) && dates){
+      d <- as.POSIXct(d, format="%Y-%m-%d %H:%M:%S")
+    }
+    
+    #* Time (HH:MM)
+    if (grepl("time_mm_ss", m$text_validation_type_or_show_slider_number) && dates){
+      d <- times(paste("00:", d, sep=""), format=c(times="h:m:s"))
+    }
+    
+    #* Time (HH:MM)
+    if ("time" %in% m$text_validation_type_or_show_slider_number && dates){
+      d <- times(paste(d, ":00", sep=""), format=c(times="h:m:s"))
+    }
+    
     # Continuous variables
     else if ((!is.na(m$text_validation_type_or_show_slider_number) && 
-           m$text_validation_type_or_show_slider_number %in% c('float','int') ) || 
-          (m$field_type %in% c('calc')) )
+                m$text_validation_type_or_show_slider_number %in% c('float','int') ) || 
+               (m$field_type %in% c('calc')) )
     {
       
       suppressWarnings(d <- as.numeric(d))
