@@ -241,6 +241,10 @@ exportRecords.redcapApiConnection <-
     }
     else
       field_names <- meta_data$field_name
+      
+   if (!is.null(forms)) 
+     field_names <- field_names[field_names %in% c(fields, 
+                                                   meta_data$field_name[meta_data$form_name %in% forms])]
     
     checklabs <- function(x){
       if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
