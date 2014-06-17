@@ -5,6 +5,8 @@ R interface to REDCap (http://www.project-redcap.org/)
 
 KNOWN ISSUES:
 
+- Validate import doesn't know how to handle time (HH:MM and MM:SS) formats
+
 - I may need to add an additional argument to exportRecords, such as 'forceAsCharacter.'  In some applications, 
   such as ICD-9 codes, xxx.00 is not the same as xxx or xxx.0 and the characters after the decimal are informative 
   and must be retained.  Since REDCap doesn't have a 'character' validation and I believe it is fairly common
