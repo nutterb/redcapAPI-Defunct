@@ -28,7 +28,5 @@
 
 \author{Jeffrey Horner}
 
-\examples{}
-
 \keyword{ methods }
 
