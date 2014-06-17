@@ -22,6 +22,4 @@ the database.}
 
 \author{Jeffrey Horner}
 
-\examples{}
-
 \keyword{ methods }
