@@ -15,11 +15,9 @@
                returns dates as character strings by default in YYYY-MM-DD format.}
 }
 
-\details{}
 
 \author{Jeffrey Horner}
 
-\examples{}
 
 \keyword{ methods }
 
