@@ -28,13 +28,13 @@ importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
 \details{A record of imports through the API is recorded in the Logging section of the project.
 
   \code{importRecords} prevents the most common import errors by testing the data before attempting the import.  Namely
-  \begin{itemize}
+  \enumerate{
     \item Check that all variables in \code{data} exist in the REDCap data dictionary.
     \item Check that the study id variable exists
     \item Force the study id variable to the first position in the data frame
     \item Verify that REDCap date fields are represented in the data frame as either character, POSIXct, or Date class
           objects.
-  \end{itemize}
+  }
 
 }
 
@@ -46,6 +46,5 @@ http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/
 https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R\cr
 See also the REDCap API documentation}
 
-\examples{}
 
 \keyword{ methods }
