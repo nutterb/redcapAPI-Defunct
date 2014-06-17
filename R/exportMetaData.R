@@ -1,4 +1,4 @@
-exportMetaData <- function(x) UseMethod("exportMetaData")
+exportMetaData <- function(rcon) UseMethod("exportMetaData")
 
 exportMetaData.redcapDbConnection <- 
 function(rcon)
