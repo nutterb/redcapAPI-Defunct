@@ -6,8 +6,8 @@
 \description{Exports records from a REDCap Database, allowing for subsets of subjects, fields, records, and events.}
 
 \usage{
-\method{.redcapDbConnection}{exportRecords}(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
-\method{.redcapApiConnection}{exportRecords}(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+\method{exportRecords}{redcapDbConnection}(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+\method{exportRecords}{redcapApiConnection}(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
 } 
 
 
