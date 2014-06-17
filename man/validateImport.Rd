@@ -50,8 +50,4 @@ that do not match these are deleted with a warning printed in the log.
 
 \author{Benjamin Nutter}
 
-\references{}
-
-\examples{}
-
 \keyword{ methods }
