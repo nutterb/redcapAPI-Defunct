@@ -27,6 +27,4 @@ Export Users API functionality in future versions of REDCap.)}
 
 \author{Benjamin Nutter}
 
-\examples{}
-
 \keyword{ methods }
