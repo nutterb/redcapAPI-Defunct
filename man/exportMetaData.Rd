@@ -8,8 +8,8 @@ file can be used to parse levels of factors, apply labels, and other data manage
 retrieved.}
 
 \usage{
-\method{redcapDbConnection}{exportMetaData}(rcon)
-\method{redcapApiConnection}{exportMetaData}(rcon)
+\method{exportMetaData}{redcapDbConnection}(rcon)
+\method{exportMetaData}{redcapApiConnection}(rcon)
 }
 
 
