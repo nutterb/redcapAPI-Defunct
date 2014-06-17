@@ -36,8 +36,5 @@ syncUnderscoreCodings(records, meta_data, export)
 
 \author{Benjamin Nutter}
 
-\references{}
-
-\examples{}
 
 \keyword{ methods }
