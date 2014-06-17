@@ -1,7 +1,7 @@
 \name{exportMetaData}
 \alias{exportMetaData}
 \alias{exportMetaData.redcapDbConnection}
-\alias{exportMetData.ApiConnection}
+\alias{exportMetaData.redcapApiConnection}
 \title{Export Meta Data from a REDCap Database}
 \description{Retrieves the meta data for a REDcap database, including field names, labels, types, formulas, etc.  This
 file can be used to parse levels of factors, apply labels, and other data management tasks once the data are 
