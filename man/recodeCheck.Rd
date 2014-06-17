@@ -39,8 +39,4 @@ recodeCheck(df, vars,
 
 \author{Benjamin Nutter}
 
-\references{}
-
-\examples{}
-
 \keyword{ methods }
