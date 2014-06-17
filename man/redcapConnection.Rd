@@ -28,7 +28,5 @@ Tokens are specific to a project, and a token must be created for each project f
 
 \author{Jeffrey Horner}
 
-\examples{}
-
 \keyword{ methods }
 
