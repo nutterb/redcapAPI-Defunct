@@ -17,10 +17,10 @@ importRecords <- function(rcon, data,
   meta_data <- syncUnderscoreCodings(data, exportMetaData(rcon), export=FALSE)
   form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
-  meta_data <- subset(meta_data, field_name %in% sub("___[a-z,A-Z,0-9,_]+", "", names(data)))
+  meta_data <- subset(meta_data, meta_data$field_name %in% sub("___[a-z,A-Z,0-9,_]+", "", names(data)))
   
   #** Check that all of the variable names in 'data' exist in REDCap Database
-  .checkbox <- subset(meta_data, field_type == "checkbox")
+  .checkbox <- subset(meta_data, meta_data$field_type == "checkbox")
   .opts <- sapply(.checkbox$select_choices_or_calculations, function(x) strsplit(x, " [|] "))
   .opts <- lapply(.opts, function(x) gsub(",[[:print:]]+", "", x))
   check_var <- paste(rep(.checkbox$field_name, sapply(.opts, length)), unlist(.opts), sep="___")
