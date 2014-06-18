@@ -3,7 +3,7 @@ exportMetaData <- function(rcon) UseMethod("exportMetaData")
 exportMetaData.redcapDbConnection <- 
 function(rcon)
 {
-
+  require(DBI)
 .SQL_PROJECT_META_DATA <- "
 SELECT 
    field_name, 
