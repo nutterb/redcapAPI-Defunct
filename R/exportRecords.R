@@ -1,4 +1,4 @@
-.queryRecords <-
+queryRecords <-
 function(rcon,fields=NULL,forms=NULL,records=NULL,events=NULL)
 {
 
@@ -77,7 +77,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 
    field_lookup <- new.env(hash=TRUE,size=length(field_names))
 
-   raw_data <- .queryRecords(rcon,fields,forms,records,events)
+   raw_data <- queryRecords(rcon,fields,forms,records,events)
    if (nrow(raw_data)>0)
       num_rows <- length(unique(sort(raw_data$record)))
    else
