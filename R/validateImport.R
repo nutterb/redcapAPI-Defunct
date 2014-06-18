@@ -2,7 +2,7 @@ validateImport <- function(field, meta_data, records, ids,
                            logfile=""){
   x <- records[, field]
   field_meta <- sub("___[a-z,A-Z,0-9,_]+", "", field)
-  meta_data <- subset(meta_data, field_name == field_meta)
+  meta_data <- subset(meta_data, meta_data$field_name == field_meta)
   
   printLog <- function(x, file=logfile){
     suppressWarnings(write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
