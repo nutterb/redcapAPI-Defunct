@@ -15,4 +15,6 @@ export(syncUnderscoreCodings)
 export(validateImport)
 export(exportUsers)
 
+import(RCurl, chron)
+
 useDynLib(redcap,.registration=TRUE)
