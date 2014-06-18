@@ -134,7 +134,7 @@ exportRecords.redcapApiConnection <-
                     format='csv', type='flat')
     
     meta_data <- exportMetaData(rcon)
-    meta_data <- subset(meta_data, !field_type %in% "descriptive")
+    meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
     
     if (!is.null(fields))
     {
