@@ -1,8 +1,8 @@
-\name{.queryRecords}
-\alias{.queryRecords}
+\name{queryRecords}
+\alias{queryRecords}
 \title{Query a REDCap Database}
 \description{Allows for selection of fields, forms, records, and events from a REDCap database.}
-\usage{.queryRecords(rcon,fields=NULL,forms=NULL,records=NULL,events=NULL)}
+\usage{queryRecords(rcon,fields=NULL,forms=NULL,records=NULL,events=NULL)}
 
 
 \arguments{
@@ -14,11 +14,9 @@
   \item{events}{A character vector of events from a longitudinal database to be chosen from the database.}
 }
 
-\details{}
+\details{This function is called internally by \code{exportRecords.redcapDbConnection} and is not available to the user.}
 
 \author{Jeffrey Horner}
-
-\examples{}
 
 \keyword{ methods }
 
