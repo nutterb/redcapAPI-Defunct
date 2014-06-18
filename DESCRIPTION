@@ -9,5 +9,5 @@ Description: The redcap package uses the REDCap API to export and import
  records.
 License: GPL-2
 Depends: RCurl, chron
-Suggests: Hmisc
+Suggests: Hmisc, DBI
 LazyLoad: yes
