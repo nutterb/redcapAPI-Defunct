@@ -5,8 +5,6 @@ R interface to REDCap (http://www.project-redcap.org/)
 
 KNOWN ISSUES:
 
-- Validate import does not check the ranges on numeric values
-
 - Validate import doesn't know how to handle time (HH:MM and MM:SS) formats
 
 - I may need to add an additional argument to exportRecords, such as 'forceAsCharacter.'  In some applications, 
