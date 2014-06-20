@@ -32,7 +32,7 @@
 
 \examples{
 \dontrun{
-> #*** Note: for security purposes, I cannot provide working examples
+> #*** Note: I cannot provide working examples
 > #*** without compromising security.  Instead, I will try to 
 > #*** offer up sample code with the matching results
 > 
