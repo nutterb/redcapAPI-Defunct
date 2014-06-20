@@ -28,5 +28,14 @@ Tokens are specific to a project, and a token must be created for each project f
 
 \author{Jeffrey Horner}
 
+\examples{
+\dontrun{
+rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+
+options(redcap_api_url=[YOUR_REDCAP_URL])
+rcon <- redcapConnection(token=[API_TOKEN])
+}
+}
+
 \keyword{ methods }
 
