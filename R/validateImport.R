@@ -7,7 +7,7 @@ validateImport <- function(field, meta_data, records, ids,
   printLog <- function(x, file=logfile){
     suppressWarnings(write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
   }
-    
+  
   #*** Form complete fields
   if (nrow(meta_data) == 0){
     if (is.character(x) | is.factor(x)){
@@ -45,10 +45,10 @@ validateImport <- function(field, meta_data, records, ids,
         x[w] <- NA
       }
       x <- ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4}", x), as.POSIXct(x, format="%m/%d/%Y"),
-            ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2}", x), as.POSIXct(x, format="%m/%d/%y"),
-             ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2}", x), as.POSIXct(x, format="%Y/%m/%d"),
-              ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2}", x), as.POSIXct(x, format="%Y-%m-%d"),
-               ifelse(grepl("\\d{4}\\d{2}\\d{2}", x), as.POSIXct(x, format="%Y%m%d"), NA)))))
+                  ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2}", x), as.POSIXct(x, format="%m/%d/%y"),
+                         ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2}", x), as.POSIXct(x, format="%Y/%m/%d"),
+                                ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2}", x), as.POSIXct(x, format="%Y-%m-%d"),
+                                       ifelse(grepl("\\d{4}\\d{2}\\d{2}", x), as.POSIXct(x, format="%Y%m%d"), NA)))))
       x <- as.POSIXct(x, origin=as.POSIXct("1/1/1970", format="%m/%d/%Y"))
     }
     
@@ -103,6 +103,24 @@ validateImport <- function(field, meta_data, records, ids,
       x <- round(x, 1)
     }
     
+    if (!is.na(meta_data$text_validation_min)){
+      w <- which(x < meta_data$text_validation_min & !is.na(x))
+      if (length(w) > 0){
+        num_min_msg <- records[w, c(ids, field), drop=FALSE]
+        num_min_msg$msg <- paste("Entry for '", field, "' is smaller than the acceptable minimum.  Please confirm.", sep="")
+        printLog(num_min_msg, logfile)
+      }
+    }
+    
+    if (!is.na(meta_data$text_validation_max)){
+      w <- which(x > meta_data$text_validation_max & !is.na(x))
+      if (length(w) > 0){
+        num_max_msg <- records[w, c(ids, field), drop=FALSE]
+        num_max_msg$msg <- paste("Entry for '", field, "' is larger than the acceptable maximum.  Please confirm.", sep="")
+        printLog(num_max_msg, logfile)
+      }
+    }
+    
     return(x)
   }
   
@@ -118,7 +136,7 @@ validateImport <- function(field, meta_data, records, ids,
       printLog(bad_zip_msg, logfile)
       x[w] <- ""
     }
-
+    
     return(x)
   }
   
@@ -205,7 +223,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* checkbox fields
   else if (grepl("checkbox", meta_data$field_type)){
     x <- as.character(x)
-
+    
     
     w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
     if (length(w) > 0){
@@ -222,4 +240,3 @@ validateImport <- function(field, meta_data, records, ids,
   return(x)
   
 }
-
