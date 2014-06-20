@@ -27,4 +27,51 @@ Export Users API functionality in future versions of REDCap.)}
 
 \author{Benjamin Nutter}
 
+\examples{
+\dontrun{
+> #*** Note: I cannot provide working examples without
+> #*** compromising security.  Instead, I will try to 
+> #*** offer up sample code with the matching results
+> 
+> 
+> #*** Create the connection object
+> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> 
+> exportUsers(rcon)
+> #*** Note: I cannot provide working examples without
+> #*** compromising security.  Instead, I will try to 
+> #*** offer up sample code with the matching results
+> 
+> 
+> #*** Create the connection object
+> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> 
+> exportUsers(rcon)
+  username            email firstname lastname expiration data_access_group
+1    user1 user1@domain.org     Name1 Surname1       <NA>                NA
+2    user2             <NA>      <NA>     <NA>       <NA>                NA
+3    user3 user3@domain.org     Name3 Surname3       <NA>                NA
+4    user4             <NA>      <NA>     <NA>       <NA>                NA
+5    user5 user5@domain.org     Name5 Surname5       <NA>                NA
+6    user6             <NA>      <NA>     <NA>       <NA>                NA
+7    user7 user6@domain.org     Name7 Surname7       <NA>                NA
+    data_export                 patient_characteristics
+1 Full data set view records/responses and edit records
+2 De-identified view records/responses and edit records
+3 De-identified view records/responses and edit records
+4 De-identified view records/responses and edit records
+5 Full data set view records/responses and edit records
+6 De-identified view records/responses and edit records
+7 Full data set view records/responses and edit records
+                         dxa_scan_summary
+1 view records/responses and edit records
+2 view records/responses and edit records
+3 view records/responses and edit records
+4 view records/responses and edit records
+5 view records/responses and edit records
+6 view records/responses and edit records
+7 view records/responses and edit records
+}
+}
+
 \keyword{ methods }
