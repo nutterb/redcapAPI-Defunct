@@ -38,7 +38,7 @@
 > 
 > 
 > #*** Create the connection object
-> rcon <- redcapConnection(url=REDCAP_API_ADDRESS, token=NutterAccess$REDCap_R_Essentials)
+> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
 > 
 > 
 > #*** Export the full data set
