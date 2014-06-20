@@ -114,7 +114,8 @@
 > 
 > 
 > #*** Retrieve the first scan for patients 38 and 103
-> BMD <- exportRecords(rcon, records=c(38, 103), forms="dxa_scan_summary", events="dxa_scan_1_arm_1")
+> BMD <- exportRecords(rcon, records=c(38, 103), 
+           forms="dxa_scan_summary", events="dxa_scan_1_arm_1")
 > BMD
   patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
 1         38  dxa_scan_1_arm_1   2008-05-07           NA              NA
