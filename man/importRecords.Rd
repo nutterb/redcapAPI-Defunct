@@ -86,7 +86,8 @@ REDCap Data Import Log: 2014-06-20 16:08:33
 The following (if any) conditions were noted about the data.
 
 
-1022   entry_arm_1   244.689   Entry for 'bmi' is larger than the acceptable maximum.  Please confirm.
+1022   entry_arm_1   244.689   Entry for 'bmi' is larger than 
+       the acceptable maximum.  Please confirm.
 1
 > ## One condition was noted.  Notice that the BMI value was still
 > ## uploaded to REDCap.  
