@@ -22,4 +22,18 @@ the database.}
 
 \author{Jeffrey Horner}
 
+\examples{
+\dontrun{
+#*** Note: I cannot provide working examples without
+#*** compromising security.  Instead, I will try to 
+#*** offer up sample code with the matching results
+
+
+#*** Create the connection object
+rcon <- redcapConnection(url=REDCAP_API_ADDRESS, token=NutterAccess$REDCap_R_Essentials)
+
+exportMetaData(rcon)
+}
+}
+
 \keyword{ methods }
