@@ -21,4 +21,4 @@ KNOWN ISSUES:
 
 - Factors created during exportRecords() have additional attributes 'redcapLevels' and 'redcapLabels' which correspond to the coded and labeled values for the factors, respectively.  These would be useful for coding and uncoding factors, as desired.  For example, uncoding Alive/Dead as 0/1.  A utility function should be written to access the attributes for recoding, simplifying the work for the user.
 
-- the attribute 'redcapLevels' is not assigned to vectors created in exportRecords() where factors=TRUE. 
+- the attribute 'redcapLevels' is not assigned to vectors created in exportRecords() where factors=TRUE. This seems to only apply to the drop down variable type.
