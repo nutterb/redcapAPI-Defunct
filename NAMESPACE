@@ -14,5 +14,6 @@ export(exportUsers)
 
 import(RCurl)
 importFrom("chron", times)
+importFrom("plyr", round_any)
 
 useDynLib(redcap,.registration=TRUE)
