@@ -22,3 +22,9 @@ KNOWN ISSUES:
 - Factors created during exportRecords() have additional attributes 'redcapLevels' and 'redcapLabels' which correspond to the coded and labeled values for the factors, respectively.  These would be useful for coding and uncoding factors, as desired.  For example, uncoding Alive/Dead as 0/1.  A utility function should be written to access the attributes for recoding, simplifying the work for the user.
 
 - the attribute 'redcapLevels' is not assigned to vectors created in exportRecords() where factors=TRUE. This seems to only apply to the drop down variable type.
+
+- Calculated fields are not recalculated when exported.  They should be recalculated after export.  I hope to automate this process soon.
+
+- All calls to the API are made in a single call.  If your server is small, it could tie up the server from other users.  I hope to incorporate some of REDCapR's features for breaking an export into smaller batches in the future.
+
+- The current design of the package results in many API calls, especially to retrieve the meta data.  Including an argument that allows the meta data to be passed to the function in place of an additional call to the API could reduce the number of records in the audit log, if you care about that sort of thing.
