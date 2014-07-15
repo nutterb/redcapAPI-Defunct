@@ -12,6 +12,7 @@ export(importRecords)
 export(recodeCheck)
 export(exportUsers)
 
-import(RCurl, chron)
+import(RCurl)
+importFrom("chron", times)
 
 useDynLib(redcap,.registration=TRUE)
