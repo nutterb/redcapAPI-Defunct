@@ -63,6 +63,7 @@ fieldToVar <-
                           levels=w[seq(1,length(w),2)],
                           labels=w[seq(2,length(w),2)])
             )
+            attr(d,'redcapLabels') <- w[seq(2,length(w),2)]
             attr(d,'redcapLevels') <- tryCatch(as.integer(w[seq(1, length(w),2)]),
                                                warning = function(cond) as.character(w[seq(1,length(w),2)]))
           }
