@@ -26,7 +26,12 @@
     events are returned.}
 }
 
-\details{A record of exports through the API is recorded in the Logging section of the project.}
+\details{A record of exports through the API is recorded in the Logging section of the project.
+
+It is unnecessary to include "redcap_event_name" in the fields argument.  This field is automatically exported for any
+longitudinal database.  If the user does include it in the fields argument, it is removed quietly in the parameter checks.
+}
+
 
 \author{Jeffrey Horner}
 
