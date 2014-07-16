@@ -80,6 +80,162 @@ validateImport <- function(field, meta_data, records, ids,
   }
   
   #****************************************************
+  #* Date Time Variables
+  else if (grepl("datetime_dmy", meta_data$text_validation_type_or_show_slider_number)){
+    if (is.character(x)){
+      w <- which(!grepl(paste("(\\d{1,2}/\\d{1,2}/\\d{2,4} \\d{2}[:]\\d{2}",
+                               "\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2} \\d{2}[:]\\d{2}",
+                               "\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2}", 
+                               "\\d{1,2}/\\d{1,2}/\\d{2,4} \\d{2}[:]\\d{2} \\w{2}",
+                               "\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2} \\d{2}[:]\\d{2} \\w{2}",
+                               "\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2} \\w{2})",  sep="|"),                       
+                              x) & !is.na(x))
+      if (length(w) > 0){
+        date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
+        date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
+                                  "or character class with format mm/dd/YYYY HH:MM, YYYY/mm/dd HH:MM, YYYY-mm-dd HH:MM, or YYYYmmdd HH:MM",
+                                  "with an optional AM/PM on the end.", sep="")
+        printLog(date_fmt_msg, logfile)
+        x[w] <- NA
+      }
+      x <- ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4} \\d{2}[:]\\d{2}", x), as.POSIXct(x, format="%m/%d/%Y %I:%M"),
+             ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2} \\d{2}[:]\\d{2}", x), as.POSIXct(x, format="%m/%d/%y %I:%M"),
+               ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2} \\d{2}[:]\\d{2}", x), as.POSIXct(x, format="%Y/%m/%d %I:%M"),
+                 ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}[:]\\d{2}", x), as.POSIXct(x, format="%Y-%m-%d %I:%M"),
+                   ifelse(grepl("\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2}", x), as.POSIXct(x, format="%Y%m%d %I:%M"), 
+                     ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4} \\d{2}[:]\\d{2} \\w{2}", x), as.POSIXct(x, format="%m/%d/%Y %H:%M %p"),
+                       ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2} \\d{2}[:]\\d{2} \\w{2}", x), as.POSIXct(x, format="%m/%d/%y %H:%M %p"),
+                         ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2} \\d{2}[:]\\d{2} \\w{2}", x), as.POSIXct(x, format="%Y/%m/%d %H:%M %p"),
+                           ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}[:]\\d{2} \\w{2}", x), as.POSIXct(x, format="%Y-%m-%d %H:%M %p"),
+                             ifelse(grepl("\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2} \\w{2}", x), as.POSIXct(x, format="%Y%m%d %H:%M %p"),
+                                    NA))))))))))
+      x <- as.POSIXct(x, origin=as.POSIXct("1/1/1970", format="%m/%d/%Y %I:%M"))
+    }
+    
+    if ("Date" %in% class(x)){
+      x <- as.POSIXct(format(x, format="%m/%d/%Y %I:%M"), format="%m/%d/%Y %I:%M") 
+    }
+    
+    if (!is.na(meta_data$text_validation_min)){
+      w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d %I:%M") & !is.na(x))
+      if (length(w) > 0){
+        date_min_msg <- records[w, c(ids, field), drop=FALSE]
+        date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        printLog(date_min_msg, logfile)
+      }
+    }
+    
+    if (!is.na(meta_data$text_validation_max)){
+      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M") & !is.na(x))
+      if (length(w) > 0){
+        date_max_msg <- records[w, c(ids, field), drop=FALSE]
+        date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        printLog(date_max_msg, logfile)
+      }
+    }
+    
+    x <- format(x, format="%Y-%m-%d %I:%M")
+    
+    return(x)
+  }
+  
+  #****************************************************
+  #* Date Time Variables with Seconds
+  else if (grepl("datetime_seconds", meta_data$text_validation_type_or_show_slider_number)){
+    if (is.character(x)){
+      w <- which(!grepl(paste("(\\d{1,2}/\\d{1,2}/\\d{2,4} \\d{2}[:]\\d{2}",
+                              "\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2} \\d{2}[:]\\d{2}",
+                              "\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2}", 
+                              "\\d{1,2}/\\d{1,2}/\\d{2,4} \\d{2}[:]\\d{2} \\w{2}",
+                              "\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2} \\d{2}[:]\\d{2} \\w{2}",
+                              "\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2} \\w{2})",  sep="|"),                       
+                        x) & !is.na(x))
+      if (length(w) > 0){
+        date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
+        date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
+                                  "or character class with format mm/dd/YYYY HH:MM:SS, YYYY/mm/dd HH:MM:SS, YYYY-mm-dd HH:MM:SS, or YYYYmmdd HH:MM:SS",
+                                  "with an optional AM/PM on the end.", sep="")
+        printLog(date_fmt_msg, logfile)
+        x[w] <- NA
+      }
+      x <- ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4} \\d{2}[:]\\d{2}:\\{2}", x), as.POSIXct(x, format="%m/%d/%Y %I:%M:%S"),
+             ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2} \\d{2}[:]\\d{2}:\\{2}", x), as.POSIXct(x, format="%m/%d/%y %I:%M:%S"),
+               ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2} \\d{2}[:]\\d{2}:\\{2}", x), as.POSIXct(x, format="%Y/%m/%d %I:%M:%S"),
+                 ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}[:]\\d{2}:\\{2}", x), as.POSIXct(x, format="%Y-%m-%d %I:%M:%S"),
+                   ifelse(grepl("\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2}:\\{2}", x), as.POSIXct(x, format="%Y%m%d %I:%M:%S"), 
+                     ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{4} \\d{2}[:]\\d{2}:\\{2} \\w{2}", x), as.POSIXct(x, format="%m/%d/%Y %H:%M:%S %p"),
+                       ifelse(grepl("\\d{1,2}/\\d{1,2}/\\d{2} \\d{2}[:]\\d{2}:\\{2} \\w{2}", x), as.POSIXct(x, format="%m/%d/%y %H:%M:%S %p"),
+                         ifelse(grepl("\\d{4}/\\d{1,2}/\\d{1,2} \\d{2}[:]\\d{2}:\\{2} \\w{2}", x), as.POSIXct(x, format="%Y/%m/%d %H:%M:%S %p"),
+                           ifelse(grepl("\\d{4}-\\d{1,2}-\\d{1,2} \\d{2}[:]\\d{2}:\\{2} \\w{2}", x), as.POSIXct(x, format="%Y-%m-%d %H:%M:%S %p"),
+                             ifelse(grepl("\\d{4}\\d{2}\\d{2} \\d{2}[:]\\d{2}:\\{2} \\w{2}", x), as.POSIXct(x, format="%Y%m%d %H:%M:%S %p"),
+                                                                                 NA))))))))))
+      x <- as.POSIXct(x, origin=as.POSIXct("1/1/1970", format="%m/%d/%Y %I:%M:%S"))
+    }
+    
+    if ("Date" %in% class(x)){
+      x <- as.POSIXct(format(x, format="%m/%d/%Y %I:%M:%S"), format="%m/%d/%Y %I:%M:%S") 
+    }
+    
+    if (!is.na(meta_data$text_validation_min)){
+      w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
+      if (length(w) > 0){
+        date_min_msg <- records[w, c(ids, field), drop=FALSE]
+        date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        printLog(date_min_msg, logfile)
+      }
+    }
+    
+    if (!is.na(meta_data$text_validation_max)){
+      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
+      if (length(w) > 0){
+        date_max_msg <- records[w, c(ids, field), drop=FALSE]
+        date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        printLog(date_max_msg, logfile)
+      }
+    }
+    
+    x <- format(x, format="%Y-%m-%d %I:%M:%S")
+    
+    return(x)
+  }
+  
+  #****************************************************
+  #* Time variables (MM:SS)
+  else if (grepl("time_mm_ss", meta_data$text_validation_type_or_show_slider_number)){
+    x <- as.character(x)
+    w <- which(!grepl("(00:\\d{2}:\\d{2}|\\d{2}:\\d{2})", x) & !is.na(x))
+    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- sapply(x, paste, collapse=":")
+    if (length(w) > 0){
+      not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
+      not_time_mmss_msg$msg <- paste("Entry for '", field, "' is not in 00:MM:SS or MM:SS format.", sep="")
+      printLog(not_time_mmss_msg, logfile)
+      x[w] <- NA
+    }
+    x[x == "NA"] <- NA
+
+    return(x)
+  }
+  
+  #****************************************************
+  #* Time variables (HH:MM)
+  else if ("time" %in% meta_data$text_validation_type_or_show_slider_number){
+    x <- as.character(x)
+    w <- which(!grepl("(\\d{2}:\\d{2}:00|\\d{2}:\\d{2})", x) & !is.na(x))
+    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- sapply(x, paste, collapse=":")
+    if (length(w) > 0){
+      not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
+      not_time_mmss_msg$msg <- paste("Entry for '", field, "' is not in HH:MM:00 or HH:MM format.", sep="")
+      printLog(not_time_mmss_msg, logfile)
+      x[w] <- NA
+    }
+    x[x == "NA"] <- NA
+    
+    return(x)
+  }
+  
+  #****************************************************
   #* Continuous variables
   else if (grepl("(float|integer|number|number_1dp)", meta_data$text_validation_type_or_show_slider_number) || 
              grepl("calc", meta_data$field_type)){
