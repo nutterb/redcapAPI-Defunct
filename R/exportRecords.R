@@ -139,6 +139,7 @@ exportRecords.redcapApiConnection <-
     
     if (!is.null(fields))
     {
+      fields <- fields[!fields %in% "redcap_event_name"]
       if (is.character(fields) && 
             length(which(meta_data$field_name %in% fields)) == length(fields))
       {
