@@ -17,12 +17,12 @@ fieldToVar <-
       d <- as.POSIXct(d, format="%Y-%m-%d %H:%M:%S")
     }
     
-    #* Time (HH:MM)
+    #* Time (MM:SS)
     if (grepl("time_mm_ss", m$text_validation_type_or_show_slider_number) && dates){
       d <- times(ifelse(!is.na(d), paste("00:", d, sep=""), d), format=c(times="h:m:s"))
     }
     
-    #* Time (MM:SS)
+    #* Time (HH:MM)
     if ("time" %in% m$text_validation_type_or_show_slider_number && dates){
       d <- times(ifelse(!is.na(d), paste(d, ":00", sep=""), d), format=c(times="h:m:s"))
     }
