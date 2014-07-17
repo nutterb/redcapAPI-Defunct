@@ -240,6 +240,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
     x <- sapply(strsplit(x, ":"), tail, 2)
     x <- sapply(x, paste, collapse=":")
+    x[x == "NA"] <- NA
     
     return(x)
   }
@@ -285,6 +286,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
     x <- sapply(strsplit(x, ":"), head, 2)
     x <- sapply(x, paste, collapse=":")
+    x[x == "NA"] <- NA
     
     return(x)
   }
