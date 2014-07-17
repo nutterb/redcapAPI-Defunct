@@ -261,7 +261,7 @@ validateImport <- function(field, meta_data, records, ids,
     x[x == "NA"] <- NA
     
     # reconvert to times objects to compare to meta data
-    x <- times(paste("00", x, sep=":"), format=c(times="h:m:s"))
+    x <- times(paste(x, "00", sep=":"), format=c(times="h:m:s"))
     
     if (!is.na(meta_data$text_validation_min)){
       w <- which(x < times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
