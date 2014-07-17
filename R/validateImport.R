@@ -66,7 +66,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d") & !is.na(x))
+      w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
         date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
@@ -126,7 +126,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M") & !is.na(x))
+      w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
         date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
@@ -186,7 +186,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x < as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
+      w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
         date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
@@ -202,6 +202,7 @@ validateImport <- function(field, meta_data, records, ids,
   #****************************************************
   #* Time variables (MM:SS)
   else if (grepl("time_mm_ss", meta_data$text_validation_type_or_show_slider_number)){
+  #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(00:\\d{2}:\\d{2}|\\d{2}:\\d{2})", x) & !is.na(x))
     x <- sapply(strsplit(x, ":"), tail, 2)
@@ -214,12 +215,40 @@ validateImport <- function(field, meta_data, records, ids,
     }
     x[x == "NA"] <- NA
 
+    # reconvert to times objects to compare to meta data
+    x <- suppressWarnings(times(paste("00", x, sep=":"), format=c(times="h:m:s")))
+    
+    if (!is.na(meta_data$text_validation_min)){
+      w <- which(x < times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
+      if (length(w) > 0){
+        time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
+        time_mmss_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        printLog(time_mmss_msg, logfile)
+      }
+    }
+    
+    if (!is.na(meta_data$text_validation_max)){
+      w <- which(x > times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
+      if (length(w) > 0){
+        time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
+        time_mmss_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        printLog(time_mmss_msg, logfile)
+      }
+    }
+    
+    # Convert to character again for upload.
+    x <- as.character(x)
+    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- sapply(x, paste, collapse=":")
+    x[x == "NA"] <- NA
+    
     return(x)
   }
   
   #****************************************************
   #* Time variables (HH:MM)
   else if ("time" %in% meta_data$text_validation_type_or_show_slider_number){
+    #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(\\d{2}:\\d{2}:00|\\d{2}:\\d{2})", x) & !is.na(x))
     x <- sapply(strsplit(x, ":"), head, 2)
@@ -230,6 +259,33 @@ validateImport <- function(field, meta_data, records, ids,
       printLog(not_time_mmss_msg, logfile)
       x[w] <- NA
     }
+    x[x == "NA"] <- NA
+    
+    # reconvert to times objects to compare to meta data
+    x <- suppressWarnings(times(paste(x, "00", sep=":"), format=c(times="h:m:s")))
+    
+    if (!is.na(meta_data$text_validation_min)){
+      w <- which(x < times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
+      if (length(w) > 0){
+        time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
+        time_hhmm_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        printLog(time_hhmm_msg, logfile)
+      }
+    }
+    
+    if (!is.na(meta_data$text_validation_max)){
+      w <- which(x > times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
+      if (length(w) > 0){
+        time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
+        time_hhmm_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        printLog(time_hhmm_msg, logfile)
+      }
+    }
+    
+    # Convert to character again for upload.
+    x <- as.character(x)
+    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- sapply(x, paste, collapse=":")
     x[x == "NA"] <- NA
     
     return(x)
