@@ -207,7 +207,7 @@ exportRecords.redcapApiConnection <-
       ID <- postForm(uri=rcon$url, .params=batch.params,
                      .opts=curlOptions(ssl.verifyhost=FALSE))
       ID <- unique(ID)
-      n.batch <- ceiling(nrow(D) / batch.size)
+      n.batch <- ceiling(nrow(ID) / batch.size)
       ID$batch.number <- rep(1:n.batch, rep(batch.size, n.batch))[1:nrow(ID)]
       batch.records <- lapply(unique(ID$batch.number), function(x) ID[ID$batch.number == x, 1])
       
