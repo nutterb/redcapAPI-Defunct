@@ -126,7 +126,8 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 }
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1)
+  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1,
+           meta_data=NULL)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -134,7 +135,7 @@ exportRecords.redcapApiConnection <-
     .params <- list(token=rcon$token, content='record',
                     format='csv', type='flat')
     
-    meta_data <- exportMetaData(rcon)
+    if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
     
     if (!is.null(fields))
