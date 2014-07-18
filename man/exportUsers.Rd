@@ -1,9 +1,14 @@
 \name{exportUsers}
 \alias{exportUsers}
+\alias{exportUsers.redcapDbConnection}
+\alias{exportUsers.redcapApiConnection}
 \title{Exports the Users for a Project}
 \description{Retrieve a data frame giving the users, expiration dates, and data access privileges for each user.}
 
-\usage{exportUsers(rcon, date=TRUE, label=TRUE)}
+\usage{
+\method{exportUsers}{redcapDbConnection}(rcon, date=TRUE, label=TRUE)
+\method{exportUsers}{redcapApiConnection}(rcon, date=TRUE, label=TRUE)
+}
 
 
 \arguments{
