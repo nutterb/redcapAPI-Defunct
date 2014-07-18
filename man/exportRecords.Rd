@@ -7,9 +7,9 @@
 
 \usage{
 \method{exportRecords}{redcapDbConnection}(rcon, factors=TRUE, fields=NULL,
-    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
-    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, batch.size=-1, meta_data=NULL)
+    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, ..., batch.size=-1, meta_data=NULL)
 } 
 
 
@@ -30,6 +30,7 @@
   \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
     providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
     multiple calls to export data (for instance, if downloading each event individually).}
+  \item{...}{Additional arguments to be passed between methods.}
 }
 
 \details{A record of exports through the API is recorded in the Logging section of the project.
