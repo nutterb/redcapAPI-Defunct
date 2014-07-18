@@ -17,6 +17,9 @@
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
   \item{data}{A \code{data.frame} to be imported to the REDCap project.}
+  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
+    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
+    multiple calls to export data (for instance, if downloading each event individually).}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}
@@ -26,9 +29,7 @@
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
                  If \code{""}, the log is printed to the console.}
-  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
-    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
-    multiple calls to export data (for instance, if downloading each event individually).}
+
 }
 
 \details{A record of imports through the API is recorded in the Logging section of the project.
