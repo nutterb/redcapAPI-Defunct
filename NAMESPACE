@@ -8,9 +8,15 @@ export(exportRecords)
 S3method(exportRecords, redcapDbConnection)
 S3method(exportRecords, redcapApiConnection)
 
-export(importRecords)
-export(recodeCheck)
 export(exportUsers)
+S3method(exportUsers, redcapDbConnection)
+S3method(exportUsers, redcapApiConnection)
+
+export(importRecords)
+S3method(importRecords, redcapDbConnection)
+S3method(importRecords, redcapApiConnection)
+
+export(recodeCheck)
 
 import(RCurl)
 importFrom("chron", times)
