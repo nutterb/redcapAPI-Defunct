@@ -1,10 +1,13 @@
 \name{importRecords}
 \alias{importRecords}
+\alias{importRecords.redcapDbConnection}
+\alias{importRecords.redcapApiConnection}
 \title{Import Records to a REDCap Database}
 \description{Imports records from a \code{data.frame} to a REDCap Database.}
 
 \usage{
-importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
+\method{importRecords}{redcapDbConnection}(rcon, data)
+\method{importRecords}{redcapApiConnection}(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
               returnData=FALSE, logfile="")
