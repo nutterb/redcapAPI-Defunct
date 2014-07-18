@@ -1,4 +1,4 @@
-exportUsers <- function(rcon, ...) useMethod("exportUsers")
+exportUsers <- function(rcon, ...) UseMethod("exportUsers")
 
 exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE){
   message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
