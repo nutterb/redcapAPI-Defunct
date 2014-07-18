@@ -193,7 +193,7 @@ exportRecords.redcapApiConnection <-
     if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
     if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
     
-    if (batch.size > 0){
+    if (batch.size < 1){
       x <- postForm(uri=rcon$url,.params=.params,
                     .opts=curlOptions(ssl.verifyhost=FALSE))
     
