@@ -1,4 +1,4 @@
-importRecords <- function(rcon, data, 
+importRecords <- function(rcon, data, meta_data=NULL
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnFormat=c('xml', 'csv', 'json'),
@@ -14,7 +14,8 @@ importRecords <- function(rcon, data,
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
   returnFormat <- match.arg(returnFormat, c('xml', 'csv', 'json'))
   
-  meta_data <- syncUnderscoreCodings(data, exportMetaData(rcon), export=FALSE)
+  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+  meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
   form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
   meta_data <- subset(meta_data, meta_data$field_name %in% sub("___[a-z,A-Z,0-9,_]+", "", names(data)))
