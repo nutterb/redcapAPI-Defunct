@@ -1,6 +1,6 @@
 importRecords <- function(rcon, data, ...) UseMethod("importRecords")
 
-importRecords.redcapDbConnection <- function(rcon, data){
+importRecords.redcapDbConnection <- function(rcon, data, ...){
   message("Please accept my apologies.  The importRecords method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -9,7 +9,7 @@ importRecords.redcapApiConnection <- function(rcon, data, meta_data=NULL,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnFormat=c('xml', 'csv', 'json'),
-                          returnData=FALSE, logfile=""){
+                          returnData=FALSE, logfile="", ...){
   
   warn.flag <- 0
   warn.msg <- NULL
