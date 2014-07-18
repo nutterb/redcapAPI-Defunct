@@ -7,9 +7,10 @@
 
 \usage{
 \method{exportRecords}{redcapDbConnection}(rcon, factors=TRUE, fields=NULL,
-    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
-    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,  
+    batch.size=-1, meta_data=NULL, ...)
 } 
 
 
@@ -24,12 +25,29 @@
   \item{records}{A vector of study id's to be returned.  If \code{NULL}, all subjects are returned.}
   \item{events}{A character vector of events to be returned from a longitudinal database.  If \code{NULL}, all
     events are returned.}
+  \item{batch.size}{Integer.  Specifies the number of subjects to be included in each batch of a batched export.  
+    Non-positive numbers export the entire project in a single batch.  Batching the export may be beneficial to prevent
+    tying up smaller servers.  See details for more explanation.}
+  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
+    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
+    multiple calls to export data (for instance, if downloading each event individually).}
+  \item{...}{Additional arguments to be passed between methods.}
 }
 
 \details{A record of exports through the API is recorded in the Logging section of the project.
 
 It is unnecessary to include "redcap_event_name" in the fields argument.  This field is automatically exported for any
 longitudinal database.  If the user does include it in the fields argument, it is removed quietly in the parameter checks.
+
+A 'batched' export is one where the export is performed over a series of API calls rather than one large call.  For large
+projects on small servers, this may prevent a single user from tying up the server and forcing others to wait on a larger 
+job.  The batched export is performed by first calling the API to export the subject identifier field (the first field
+in the meta data).  The unique ID's are then assigned a batch number with no more than \code{batch.size} ID's in any 
+single batch.  The batches are exported from the API and stacked together.
+
+In longitudinal projects, \code{batch.size} may not necessarily be the number of records exported in each batch.  If 
+\code{batch.size} is 10 and there are four records per patient, each batch will consist of 40 records.  Thus, if you are
+concerned about tying up the server with a large, longitudinal project, it would be prudent to use a smaller batch size.
 }
 
 

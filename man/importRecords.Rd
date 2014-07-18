@@ -1,19 +1,25 @@
 \name{importRecords}
 \alias{importRecords}
+\alias{importRecords.redcapDbConnection}
+\alias{importRecords.redcapApiConnection}
 \title{Import Records to a REDCap Database}
 \description{Imports records from a \code{data.frame} to a REDCap Database.}
 
 \usage{
-importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
+\method{importRecords}{redcapDbConnection}(rcon, data, ...)
+\method{importRecords}{redcapApiConnection}(rcon, data, meta_data=NULL, overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
-              returnData=FALSE, logfile="")
+              returnData=FALSE, logfile="", ...)
 }
 
 
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
   \item{data}{A \code{data.frame} to be imported to the REDCap project.}
+  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
+    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
+    multiple calls to export data (for instance, if downloading each event individually).}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}
@@ -23,6 +29,8 @@ importRecords(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
                  If \code{""}, the log is printed to the console.}
+  \item{...}{Arguments to be passed to other methods.}
+
 }
 
 \details{A record of imports through the API is recorded in the Logging section of the project.
