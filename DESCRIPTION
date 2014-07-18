@@ -8,6 +8,7 @@ Maintainer: Jeffrey Horner <jeffrey.horner@vanderbilt.edu>
 Description: The redcap package uses the REDCap API to export and import
  records.
 License: GPL-2
-Depends: RCurl, chron, plyr
+Depends: RCurl, 
+Imports: chron, plyr
 Suggests: Hmisc, DBI
 LazyLoad: yes
