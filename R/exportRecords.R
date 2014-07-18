@@ -206,6 +206,7 @@ exportRecords.redcapApiConnection <-
       if (!is.null(records)) batch.params[['records']] = paste(records, collapse=",")
       ID <- postForm(uri=rcon$url, .params=batch.params,
                      .opts=curlOptions(ssl.verifyhost=FALSE))
+      ID <- read.csv(textConnection(ID), stringsAsFactors=FALSE, na.strings="")
       ID <- unique(ID)
       n.batch <- ceiling(nrow(ID) / batch.size)
       ID$batch.number <- rep(1:n.batch, rep(batch.size, n.batch))[1:nrow(ID)]
