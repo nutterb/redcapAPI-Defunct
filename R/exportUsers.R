@@ -1,11 +1,11 @@
 exportUsers <- function(rcon, ...) UseMethod("exportUsers")
 
-exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE){
+exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE){
+exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   #* parameters for the Users File Export
   .params <- list(token=rcon$token, content='user', format='csv')
   
