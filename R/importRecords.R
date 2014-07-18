@@ -1,4 +1,4 @@
-importRecords <- function(rcon, data, ...) UseMethod("exportRecords")
+importRecords <- function(rcon, data, ...) UseMethod("importRecords")
 
 importRecords.redcapDbConnection(rcon, data){
   message("Please accept my apologies.  The importRecords method for redcapDbConnection objects\n",
