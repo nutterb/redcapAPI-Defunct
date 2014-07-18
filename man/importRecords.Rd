@@ -26,6 +26,9 @@
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
                  If \code{""}, the log is printed to the console.}
+  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
+    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
+    multiple calls to export data (for instance, if downloading each event individually).}
 }
 
 \details{A record of imports through the API is recorded in the Logging section of the project.
