@@ -7,7 +7,7 @@
 
 \usage{
 \method{importRecords}{redcapDbConnection}(rcon, data)
-\method{importRecords}{redcapApiConnection}(rcon, data, overwriteBehavior=c('normal', 'overwrite'),
+\method{importRecords}{redcapApiConnection}(rcon, data, meta_data=NULL, overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
               returnData=FALSE, logfile="")
