@@ -1,6 +1,6 @@
 importRecords <- function(rcon, data, ...) UseMethod("importRecords")
 
-importRecords.redcapDbConnection(rcon, data){
+importRecords.redcapDbConnection <- function(rcon, data){
   message("Please accept my apologies.  The importRecords method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
