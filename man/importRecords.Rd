@@ -29,6 +29,7 @@
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
                  If \code{""}, the log is printed to the console.}
+  \item{...}{Arguments to be passed to other methods.}
 
 }
 
