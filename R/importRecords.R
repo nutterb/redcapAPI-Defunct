@@ -1,4 +1,4 @@
-importRecords <- function(rcon, data, meta_data=NULL
+importRecords <- function(rcon, data, meta_data=NULL,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnFormat=c('xml', 'csv', 'json'),
