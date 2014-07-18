@@ -6,11 +6,11 @@
 \description{Imports records from a \code{data.frame} to a REDCap Database.}
 
 \usage{
-\method{importRecords}{redcapDbConnection}(rcon, data)
+\method{importRecords}{redcapDbConnection}(rcon, data, ...)
 \method{importRecords}{redcapApiConnection}(rcon, data, meta_data=NULL, overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
-              returnData=FALSE, logfile="")
+              returnData=FALSE, logfile="", ...)
 }
 
 
