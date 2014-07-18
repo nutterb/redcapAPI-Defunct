@@ -9,8 +9,8 @@
 \method{exportRecords}{redcapDbConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
-    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, ..., 
-    batch.size=-1, meta_data=NULL)
+    forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,  
+    batch.size=-1, meta_data=NULL, ...)
 } 
 
 
