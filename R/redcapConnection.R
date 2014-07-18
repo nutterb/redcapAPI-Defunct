@@ -1,9 +1,9 @@
 redcapConnection <-
 function(url=getOption('redcap_api_url'),token,conn,project)
 {
-   if (is.na(url) && missing(conn))
+   if (is.null(url) && missing(conn))
       stop("Need one of url or conn")
-   if (!is.na(url))
+   if (!is.null(url))
    {
       if (missing(token))
          stop("Need an API token")
