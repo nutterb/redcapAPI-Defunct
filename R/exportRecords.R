@@ -126,8 +126,8 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 }
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,...,batch.size=-1,
-           meta_data=NULL)
+  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1,
+           meta_data=NULL, ...)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
