@@ -61,7 +61,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,...)
 {
   require(DBI)
    meta_data <- exportMetaData(rcon)
@@ -126,7 +126,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 }
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1,
+  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,...,batch.size=-1,
            meta_data=NULL)
   {
     Hlabel <- require(Hmisc)
