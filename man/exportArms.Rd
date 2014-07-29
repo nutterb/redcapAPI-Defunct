@@ -2,7 +2,7 @@
 \alias{exportArms}
 \alias{exportArms.redcapDbConnection}
 \alias{exportArms.redcapApiConnection}
-\title{Exports the Events for a Project}
+\title{Exports the Arms for a Project}
 \description{Retrieve a data frame giving the events, event names, and offsets for the events in a project.}
 
 \usage{
