@@ -29,16 +29,6 @@ unique event name.}
 > #*** compromising security.  Instead, I will try to 
 > #*** offer up sample code with the matching results
 > 
-> 
-> #*** Create the connection object
-> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-> 
-> exportUsers(rcon)
-> #*** Note: I cannot provide working examples without
-> #*** compromising security.  Instead, I will try to 
-> #*** offer up sample code with the matching results
-> 
-> 
 > #*** Create the connection object
 > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
 > 
