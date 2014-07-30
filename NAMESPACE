@@ -1,5 +1,17 @@
 export(redcapConnection)
 
+export(exportArms)
+S3method(exportArms, redcapDbConnection)
+S3method(exportArms, redcapApiConnection)
+
+export(exportEvents)
+S3method(exportEvents, redcapDbConnection)
+S3method(exportEvents, redcapApiConnection)
+
+export(exportMappings)
+S3method(exportMappings, redcapDbConnection)
+S3method(exportMappings, redcapApiConnection)
+
 export(exportMetaData)
 S3method(exportMetaData, redcapDbConnection)
 S3method(exportMetaData, redcapApiConnection)
