@@ -1,6 +1,6 @@
 \name{exportMappings}
 \alias{exportMappings}
-\alias{exportArms.redcapDbConnection}
+\alias{exportMappings.redcapDbConnection}
 \alias{exportMappings.redcapApiConnection}
 \title{Exports the Event-Form Mappings for a Project}
 \description{Retrieve a data frame giving the events-form mapping for a project.}
