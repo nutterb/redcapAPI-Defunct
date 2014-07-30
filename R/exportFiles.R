@@ -1,12 +1,12 @@
-exportFiles <- function(rcon, record, field, event, dir, filePrefix, ...)
+exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...)
   UseMethod("exportFiles")
 
-exportFiles.redcapDbConnection <- function(rcon, record, field, event=NULL, dir, filePrefix){
+exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE){
+exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...){
   #* Use working directory if 'dir' is not specified
   if (missing(dir)) dir <- getwd()
   
