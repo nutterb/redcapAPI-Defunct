@@ -6,7 +6,7 @@ redcapProjectInfo.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ..
 }
 
 redcapProjectInfo.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE){
-  options(redcapProjectInfo = list(meta_data = exportMetaData(rcon),
+  options(redcap_project_info = list(meta_data = exportMetaData(rcon),
                                users = exportUsers(rcon, date, label),
                                events = exportEvents(rcon),
                                arms = exportArms(rcon),
