@@ -30,8 +30,11 @@ S3method(importRecords, redcapApiConnection)
 
 export(recodeCheck)
 
+export(redcapProjectInfo)
+S3method(redcapProjectInfo, redcapDbConnection)
+S3method(redcapProjectInfo, redcapApiConnection)
+
 import(RCurl)
 importFrom("chron", times)
-importFrom("plyr", round_any)
 
 useDynLib(redcap,.registration=TRUE)
