@@ -1,11 +1,11 @@
-redcapProject <- function(rcon, ...) UseMethod("redcapProject")
+redcapProject <- function(rcon, date=TRUE, label=TRUE, ...) UseMethod("redcapProject")
 
-redcapProject.redcapDbConnection <- function(rcon, ...){
+redcapProject.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   message("Please accept my apologies.  The redcapProject method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-redcapProject.redcapApiConnection <- function(rcon, date, label){
+redcapProject.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE){
   options(redcapProject = list(meta_data = exportMetaData(rcon),
                                users = exportUsers(rcon, date, label),
                                events = exportEvents(rcon),
