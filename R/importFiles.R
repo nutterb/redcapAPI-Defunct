@@ -1,16 +1,16 @@
-importFiles <- function(rcon, file, record, field, event, 
+importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, 
                         meta_data=getOption('redcap_project_info')$meta_data,
                         events_list=getOption('redcap_project_info')$events, ...)
   UseMethod("importFiles")
 
-importFiles.redcapDbConnection <- function(rcon, file, record, field, event, 
+importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, 
                                            meta_data=getOption('redcap_project_info')$meta_data,
                                            events_list=getOption('redcap_project_info')$events, ...){
   message("Please accept my apologies.  The importFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-importFiles.redcapApiConnection <- function(rcon, file, record, field, event, 
+importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE,
                                             meta_data=getOption('redcap_project_info')$meta_data,
                                             events_list=getOption('redcap_project_info')$events, ...){
   #* Use working directory if 'dir' is not specified
@@ -33,6 +33,11 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event,
   if (!is.null(events_list)){
     if (!event %in% events_list$unique_event_name) 
       stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
+  }
+  
+  if (!overwrite){
+    fileThere <- exportRecords(rcon, records=record, fields=field, events=event)
+    if (!is.na(fileThere[field])) stop("A file exists and overwrite=FALSE")
   }
   
   .params <- list(token=rcon$token, content='file',
