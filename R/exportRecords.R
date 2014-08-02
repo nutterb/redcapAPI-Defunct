@@ -57,11 +57,13 @@ order by abs(record), record, event_id
 }
 
 exportRecords <-
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,...)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
+         survey=TRUE, dag=TRUE, ...)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,...)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
+         survey=TRUE, dag=TRUE...)
 {
   require(DBI)
    meta_data <- exportMetaData(rcon)
@@ -126,7 +128,8 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 }
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1,
+  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
+           survey=TRUE, dag=TRUE, batch.size=-1,
            meta_data=getOption('redcap_project_info')$meta_data, 
            events_list=getOption('redcap_project_info')$events, 
            mappings = getOption('redcap_project_info')$mappings, ...)
@@ -151,7 +154,9 @@ exportRecords.redcapApiConnection <-
     }
     
     .params <- list(token=rcon$token, content='record',
-                    format='csv', type='flat')
+                    format='csv', type='flat',
+                    exportSurveyFields=tolower(survey),
+                    exportDataAccessGroups=tolower(dag))
     
     if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
