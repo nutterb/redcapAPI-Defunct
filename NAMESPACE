@@ -30,6 +30,10 @@ export(exportUsers)
 S3method(exportUsers, redcapDbConnection)
 S3method(exportUsers, redcapApiConnection)
 
+export(importFiles)
+S3method(importFiles, redcapDbConnection)
+S3method(importFiles, redcapApiConnection)
+
 export(importRecords)
 S3method(importRecords, redcapDbConnection)
 S3method(importRecords, redcapApiConnection)
