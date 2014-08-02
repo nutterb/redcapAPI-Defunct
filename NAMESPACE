@@ -1,4 +1,6 @@
-export(redcapConnection)
+export(deleteFiles)
+S3method(deleteFiles, redcapDbConnection)
+S3method(deleteFiles, redcapApiConnection)
 
 export(exportArms)
 S3method(exportArms, redcapDbConnection)
@@ -7,6 +9,10 @@ S3method(exportArms, redcapApiConnection)
 export(exportEvents)
 S3method(exportEvents, redcapDbConnection)
 S3method(exportEvents, redcapApiConnection)
+
+export(exportFiles)
+S3method(exportFiles, redcapDbConnection)
+S3method(exportFiles, redcapApiConnection)
 
 export(exportMappings)
 S3method(exportMappings, redcapDbConnection)
@@ -29,6 +35,10 @@ S3method(importRecords, redcapDbConnection)
 S3method(importRecords, redcapApiConnection)
 
 export(recodeCheck)
+
+export(redcapConnection)
+
+export(redcapFactorFlip)
 
 export(redcapProjectInfo)
 S3method(redcapProjectInfo, redcapDbConnection)
