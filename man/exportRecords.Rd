@@ -14,7 +14,7 @@
     survey=TRUE, dag=TRUE,
     batch.size=-1, 
     meta_data=getOption("redcap_project_info")$meta_data, 
-    events_list=getOption("redcap_project_info")$events_list, ...)
+    events_list=getOption("redcap_project_info")$events, ...)
 } 
 
 
