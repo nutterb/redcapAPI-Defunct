@@ -131,8 +131,7 @@ exportRecords.redcapApiConnection <-
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
            survey=TRUE, dag=TRUE, batch.size=-1,
            meta_data=getOption('redcap_project_info')$meta_data, 
-           events_list=getOption('redcap_project_info')$events, 
-           mappings = getOption('redcap_project_info')$mappings, ...)
+           events_list=getOption('redcap_project_info')$events, ...)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -145,14 +144,6 @@ exportRecords.redcapApiConnection <-
       }
     }
     
-    if (is.null(mappings)) mappings <- exportMappings(rcon)
-    if (class(mappings) == "data.frame"){
-      if (any(!forms %in% unique(mappings$form_name))){
-        stop(paste("'", paste(forms[!forms %in% unique(mappings$form_name)], collapse="', '"),
-                   " are not valid form names"), sep="")
-      }
-    }
-    
     .params <- list(token=rcon$token, content='record',
                     format='csv', type='flat',
                     exportSurveyFields=tolower(survey),
@@ -160,6 +151,12 @@ exportRecords.redcapApiConnection <-
     
     if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
+    
+    #* Check that stated forms exist
+    if (any(!forms %in% unique(meta_data$form_name))){
+        stop(paste("'", paste(forms[!forms %in% unique(meta_data$form_name)], collapse="', '"),
+                   " are not valid form names"), sep="")
+      }
     
     if (!is.null(fields))
     {
