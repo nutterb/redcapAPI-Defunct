@@ -15,4 +15,4 @@
   options(redcap.dataTable=NULL)
   options(redcap.metaDataTable=NULL)
   options(redcap_api_url=NULL)
-}
+  options(redcap_project_info = NULL) }
