@@ -38,7 +38,7 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   .params <- list(token=rcon$token, content='file',
                   action='export', record=record,
                   field=field)
-  if (event == "") .params[['event']] <- event
+  if (event != "") .params[['event']] <- event
   
   #* Export the file
   file <- tryCatch(postForm(uri=rcon$url, .params=.params,
