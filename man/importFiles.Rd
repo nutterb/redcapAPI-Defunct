@@ -7,10 +7,10 @@
     behavior of the API, which only allows one file to be uploaded at a time.}
 
 \usage{
-\method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, 
+\method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE,
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
-\method{importFiles}{redcapApiConnection}(rcon, record, field, event, 
+\method{importFiles}{redcapApiConnection}(rcon, record, field, event, overwrite=TRUE,
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
 }
@@ -24,6 +24,8 @@
   \item{event}{The event name for the file.  Must be length 1.  This applies only to longitudinal projects.  
     If the event is not
     supplied for a longitudinal project, the API will return the message "Error: Bad Request"}
+  \item{overwrite}{Logical.  When \code{FALSE}, the function checks if a file already exists.  If a file exists,
+    the function terminates to prevent overwriting.  When \code{TRUE}, no additional check is performed.}
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
     the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
     records.  If necessary, an API call will be made to retrieve this table.}
