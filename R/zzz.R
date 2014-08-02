@@ -17,4 +17,3 @@
    options(redcap_api_url=NULL)
    options(redcap_project_info=NULL)
 }
-
