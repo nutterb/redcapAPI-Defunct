@@ -8,8 +8,10 @@ exportEvents.redcapDbConnection <- function(rcon, arms, ...){
 exportEvents.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='event', format='csv')
   if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
-  x <- postForm(uri=rcon$url,.params=.params,
-                .opts=curlOptions(ssl.verifyhost=FALSE))
-  x <- read.csv(textConnection(x), stringsAsFactors=FALSE)
+  x <- tryCatch(postForm(uri=rcon$url,.params=.params,
+                    .opts=curlOptions(ssl.verifyhost=FALSE)),
+                error = function(cond) if (grepl("Bad Request", cond[1])) return("Not a longitudinal project"))
+  if (x != "Not a longitudinal project")
+    x <- read.csv(textConnection(x), stringsAsFactors=FALSE)  
   return(x)
 }
