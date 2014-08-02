@@ -5,7 +5,8 @@ importRecords.redcapDbConnection <- function(rcon, data, ...){
           "has not yet been written.  Please consider using the API.")
 }
 
-importRecords.redcapApiConnection <- function(rcon, data, meta_data=NULL,
+importRecords.redcapApiConnection <- function(rcon, data, 
+                          meta_data=getOption('redcap_project_info')$meta_data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnFormat=c('xml', 'csv', 'json'),
