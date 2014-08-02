@@ -29,7 +29,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...){
   .params <- list(token=rcon$token, content='file',
                   action='delete', record=record,
                   field=field)
-  if (event == "") .params[['event']] <- event
+  if (event != "") .params[['event']] <- event
   
   #* Delete the file
   noFile <- tryCatch(postForm(uri=rcon$url, .params=.params,
