@@ -45,14 +45,15 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
                             .opts=curlOptions(ssl.verifyhost=FALSE)),
                    error = function(cond) if (grepl("Bad Request", cond[1])) return("No file was found"))
   
-  if (class(file) == "character") return(file)
-                   
-  #* Get the filename
-  filename <- gsub("\"", "", attributes(file)$'Content-Type'['name'])
-  if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
+  if (class(file) == "character") message(file)
+  else{                 
+    #* Get the filename
+    filename <- gsub("\"", "", attributes(file)$'Content-Type'['name'])
+    if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
   
-  #* Write the file to a directory
-  writeBin(as.vector(file), file.path(dir, filename), 
-           useBytes=TRUE)
-  message(paste("The file was saved to '", filename, "'", sep=""))
+    #* Write the file to a directory
+    writeBin(as.vector(file), file.path(dir, filename), 
+             useBytes=TRUE)
+    message(paste("The file was saved to '", filename, "'", sep=""))
+  }
 }
