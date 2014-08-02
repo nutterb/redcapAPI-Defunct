@@ -10,7 +10,9 @@
 \method{exportFiles}{redcapDbConnection}(rcon, record, field, event, dir, filePrefix=TRUE, 
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
-\method{exportFiles}{redcapApiConnection}(rcon, record, field, event, dir, filePrefix=TRUE, ...)
+\method{exportFiles}{redcapApiConnection}(rcon, record, field, event, dir, filePrefix=TRUE, 
+    meta_data=getOption("redcap_project_info")$meta_data,
+    events_list = getOption("redcap_project_info")$events, ...)
 }
 
 
