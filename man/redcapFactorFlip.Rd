@@ -1,0 +1,21 @@
+\name{redcapFactorFlip}
+\alias{redcapFactorFlip}
+\title{Convert REDCap factors between labelled and coded}
+\description{Factors exported from REDCap can be toggled between the coded and labelled values with the use of the 
+  attributes assigned to the factors during export.}
+  
+\usage{redcapFactorFlip(v)}
+
+
+\arguments{
+ \item{v}{A factor exported from REDCap.  The REDCap type may be radio, dropdown, check, yesno, etc.}
+}
+
+\details{
+Each factor type variable in REDCap is given the attributes \code{redcapLabels} and \code{redcapLevels}.  With these
+attached to the vector, switching between the coded and labelled values can be done with ease.  This may be helpful when
+the coded value has importance, such as 0/1 for death, or if a yes is worth 6 points (instead of 1).}
+
+\author{Benjamin Nutter}
+
+\keyword{ methods }

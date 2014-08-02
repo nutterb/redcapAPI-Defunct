@@ -6,7 +6,7 @@
 
 \usage{
 recodeCheck(df, vars, 
-            levels=c("Unchecked", "Checked"), labels=c("No", "Yes"), 
+            old=c("Unchecked", "Checked"), new=c("No", "Yes"), 
             reverse=FALSE)
 }
 
@@ -16,9 +16,9 @@ recodeCheck(df, vars,
   \item{vars}{Optional character vector of variables to convert.  If left missing, all of the variables in \code{df}
               that are identified as \code{checkbox} variables are relabelled.  See 'Details' for more about identifying
               \code{checkbox} variables.}
-  \item{levels}{A character vector to be passed to \code{factor}.  This indicates the levels to be replaced and 
+  \item{old}{A character vector to be passed to \code{factor}.  This indicates the levels to be replaced and 
                 their order.}
-  \item{labels}{A character vector of labels to replace the values in \code{levels}.  The first value becomes the 
+  \item{new}{A character vector of labels to replace the values in \code{levels}.  The first value becomes the 
                 reference value.}
   \item{reverse}{For convenience, if the user would prefer to reverse the order of the elements in \code{levels} and 
                  \code{labels}, simply set this to \code{TRUE}.}

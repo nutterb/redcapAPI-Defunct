@@ -2,29 +2,27 @@
 \alias{redcap-package}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+Access data, meta data, and files from REDCap using the API
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+REDCap API functions are made available to the user.  Data may be formatted consistent with the data dictionary for 
+analysis-ready data.
 }
 \details{
 \tabular{ll}{
 Package: \tab redcap\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2012-04-11\cr
-License: \tab What license is it under?\cr
+Version: \tab 0.9\cr
+Date: \tab 2014-08-01\cr
+License: \tab gpl\cr
 LazyLoad: \tab yes\cr
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
 }
 \author{
-Who wrote it
+Jeffery Horner, Jeremy Stevens, Will Gray, Benjamin Nutter
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Benjamin Nutter <nutterb@ccf.org>
+
 }
 \keyword{ package }
