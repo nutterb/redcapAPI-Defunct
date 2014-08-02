@@ -1,10 +1,10 @@
 Package: redcap
 Type: Package
 Title: R interface to REDCap
-Version: 0.1
-Date: 2012-04-26
+Version: 0.9
+Date: 2014-08-01
 Author: Jeffrey Horner
-Maintainer: Jeffrey Horner <jeffrey.horner@vanderbilt.edu>
+Maintainer: Benjamin Nutter <nutterb@ccf.org>
 Description: The redcap package uses the REDCap API to export and import
  records.
 License: GPL-2
