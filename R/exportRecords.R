@@ -127,10 +127,26 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 
 exportRecords.redcapApiConnection <- 
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,batch.size=-1,
-           meta_data=NULL, ...)
+           meta_data=getOption('redcap_project_info')$meta_data, 
+           events_list=getOption('redcap_project_info')$events, 
+           mappings = getOption('redcap_project_info')$mappings, ...)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    
+    if (is.null(events_list)) events_list <- exportEvents(rcon)
+    if (class(events_list) == "data.frame"){
+      if (any(!events %in% events_list$unique_event_name)){
+        stop(paste("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
+                   " are not valid event names", sep=""))
+    }
+    
+    if (is.null(mappings)) mappings <- exportMappings(rcon)
+    if (class(mappings) == "data.frame"){
+      if (any(!forms %in% unique(mappings$form_name))){
+        stop(paste("'", paste(forms[!forms %in% unique(mappings$form_name)], collapse="', '"),
+                   " are not valid form names"), sep="")
+      }
     
     .params <- list(token=rcon$token, content='record',
                     format='csv', type='flat')
