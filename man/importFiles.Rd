@@ -10,7 +10,7 @@
 \method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE,
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
-\method{importFiles}{redcapApiConnection}(rcon, record, field, event, overwrite=TRUE,
+\method{importFiles}{redcapApiConnection}(rcon, file, record, field, event, overwrite=TRUE,
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
 }
