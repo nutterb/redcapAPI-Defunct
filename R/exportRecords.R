@@ -139,6 +139,7 @@ exportRecords.redcapApiConnection <-
       if (any(!events %in% events_list$unique_event_name)){
         stop(paste("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
                    " are not valid event names", sep=""))
+      }
     }
     
     if (is.null(mappings)) mappings <- exportMappings(rcon)
@@ -147,6 +148,7 @@ exportRecords.redcapApiConnection <-
         stop(paste("'", paste(forms[!forms %in% unique(mappings$form_name)], collapse="', '"),
                    " are not valid form names"), sep="")
       }
+    }
     
     .params <- list(token=rcon$token, content='record',
                     format='csv', type='flat')
