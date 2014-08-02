@@ -29,6 +29,17 @@
   \item{records}{A vector of study id's to be returned.  If \code{NULL}, all subjects are returned.}
   \item{events}{A character vector of events to be returned from a longitudinal database.  If \code{NULL}, all
     events are returned.}
+  \item{survey}{specifies whether or not to export the survey identifier field (e.g., "redcap_survey_identifier") 
+    or survey timestamp fields (e.g., form_name+"_timestamp") when surveys are utilized in the project. 
+    If you do not pass in this flag, it will default to "false". If set to "true", it will return the 
+    redcap_survey_identifier field and also the survey timestamp field for a particular survey when at least 
+    one field from that survey is being exported. NOTE: If the survey identifier field or survey timestamp 
+    fields are imported via API data import, they will simply be ignored since they are not real fields in 
+    the project but rather are pseudo-fields.}
+  \item{dag}{specifies whether or not to export the "redcap_data_access_group" field when data access 
+    groups are utilized in the project. If you do not pass in this flag, it will default to "false". 
+    NOTE: This flag is only viable if the user whose token is being used to make the API request is 
+    *not* in a data access group. If the user is in a group, then this flag will revert to its default value.}
   \item{batch.size}{Integer.  Specifies the number of subjects to be included in each batch of a batched export.  
     Non-positive numbers export the entire project in a single batch.  Batching the export may be beneficial to prevent
     tying up smaller servers.  See details for more explanation.}
