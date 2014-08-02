@@ -7,7 +7,9 @@
 
 \usage{
 \method{importRecords}{redcapDbConnection}(rcon, data, ...)
-\method{importRecords}{redcapApiConnection}(rcon, data, meta_data=NULL, overwriteBehavior=c('normal', 'overwrite'),
+\method{importRecords}{redcapApiConnection}(rcon, data, 
+              meta_data=getOption('redcap_project_info')$meta_data, 
+              overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnFormat=c('xml', 'csv', 'json'),
               returnData=FALSE, logfile="", ...)
@@ -17,9 +19,9 @@
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
   \item{data}{A \code{data.frame} to be imported to the REDCap project.}
-  \item{meta_data}{An optional data frame obtained from a separate call to \code{exportMetaData}.  The advantage to 
-    providing the meta data is that the number of calls to the API can be reduced.  This may be helpful when making
-    multiple calls to export data (for instance, if downloading each event individually).}
+  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
+    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
+    records.  If necessary, an API call will be made to retrieve this table.}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}

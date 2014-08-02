@@ -1,18 +1,59 @@
-exportFiles <- function(rcon, records, field, event, dir, ...)
+exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+                        meta_data=getOption('redcap_project_info')$meta_data,
+                        events_list=getOption('redcap_project_info')$events, ...)
   UseMethod("exportFiles")
 
-exportFiles.redcapDbConnection <- function(rcon, records, field, event=NULL, dir){
+exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+                        meta_data=getOption('redcap_project_info')$meta_data,
+                        events_list=getOption('redcap_project_info')$events, ...){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-exportFiles.redcapApiConnection <- function(rcon, records, field, event=NULL, dir){
-  if (length(field) > 1) stop ("only one field allowed")
-  if (length(event) > 1) stop ("only one event allowed")
+exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+                        meta_data=getOption('redcap_project_info')$meta_data,
+                        events_list=getOption('redcap_project_info')$events, ...){
+  #* Use working directory if 'dir' is not specified
+  if (missing(dir)) dir <- getwd()
+  
+  #* stop the function if arguments do not specify a unique record-event
+  if (any(sapply(list(record, field, event), length) > 1)){
+    stop("The arguments 'record', 'field', and 'event' may each only have length 1")
+  }
+  
+  #* make sure 'field' exist in the project and are 'file' fields
+  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+  if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
+  if (meta_data$field_type[meta_data$field_name == field] != "file")
+      stop(paste("'", field, "' is not of field type 'file'", sep=""))
+      
+  #* make sure 'event' exists in the project
+  if (missing(event)) event <- ""
+  if (is.null(events_list)) events_list <- exportEvents(rcon)
+  if (!is.null(events_list)){
+    if (!event %in% events_list$unique_event_name) 
+      stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
+  }
+
   .params <- list(token=rcon$token, content='file',
-                  action='export', record=records,
-                  field=field, event=event)
-  file <- postForm(uri=rcon$url, .params=.params,
-                   .opts=curlOptions(ssl.verifyhost=FALSE))
-  write(file, file.path(dir, gsub("\"", "", attributes(file)$'Content-Type'['name'])))
+                  action='export', record=record,
+                  field=field)
+  if (event == "") .params[['event']] <- event
+  
+  #* Export the file
+  file <- tryCatch(postForm(uri=rcon$url, .params=.params,
+                            .opts=curlOptions(ssl.verifyhost=FALSE)),
+                   error = function(cond) if (grepl("Bad Request", cond[1])) return("No file was found"))
+  
+  if (class(file) == "character") message(file)
+  else{                 
+    #* Get the filename
+    filename <- gsub("\"", "", attributes(file)$'Content-Type'['name'])
+    if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
+  
+    #* Write the file to a directory
+    writeBin(as.vector(file), file.path(dir, filename), 
+             useBytes=TRUE)
+    message(paste("The file was saved to '", filename, "'", sep=""))
+  }
 }
