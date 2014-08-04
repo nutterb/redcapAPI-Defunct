@@ -38,7 +38,8 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event,
   if (event != "") .params[['event']] <- event
   
   #* Delete the file
-  apiContent <- httr::POST(url=rcon$url, body=.params)
-  as.character(apiContent)
+  x <- tryCatch(httr::POST(url=rcon$url, body=.params),
+                error=function(cond) return("The file was successfully deleted."))
+  as.character(x)
   
 }
