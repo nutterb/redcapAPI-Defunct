@@ -12,5 +12,5 @@ exportArms.redcapApiConnection <- function(rcon, arms, ...){
   
   if (x$status_code == "200")
     return(read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))
-  else (stop(as.character(x)))
+  else stop(paste(x$status_code, ": ", as.character(x), sep=""))
 }
