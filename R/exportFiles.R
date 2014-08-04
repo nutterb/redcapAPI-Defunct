@@ -52,6 +52,6 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
     message(paste("The file was saved to '", filename, "'", sep=""))
   }
   else{                 
-   stop(as.character(x))
+   stop(paste(x$status_code, ": ", as.character(x), sep=""))
   }
 }
