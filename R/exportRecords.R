@@ -133,8 +133,8 @@ exportRecords.redcapApiConnection <-
            meta_data=getOption('redcap_project_info')$meta_data, 
            events_list=getOption('redcap_project_info')$events, ...)
   {
-  #  Hlabel <- require(Hmisc)
-  #  if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    Hlabel <- require(Hmisc)
+    if (!Hlabel) stop("Please install the 'Hmisc' package.")
     
     if (is.null(events_list)) events_list <- exportEvents(rcon)
     if (class(events_list) == "data.frame" & !is.null(events)){
@@ -259,7 +259,7 @@ exportRecords.redcapApiConnection <-
                                    x[[i]],factors,dates)
            }
     )
-    if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
+    if (labels) label(x[, field_names], self=FALSE) <- field_labels
     x
   }
 
