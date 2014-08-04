@@ -55,5 +55,5 @@ function(rcon)
      x$required_field <- as.integer(x$required_field)
      return(x)
    }
-   else stop(as.character(x))
+   else stop(paste(x$status_code, ": ", as.character(x), sep=""))
 }
