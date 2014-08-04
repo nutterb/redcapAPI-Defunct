@@ -7,7 +7,9 @@
 
 \usage{
 \method{deleteFiles}{redcapDbConnection}(rcon, record, field, event, ...)
-\method{deleteFiles}{redcapApiConnection}(rcon, record, field, event, ...)
+\method{deleteFiles}{redcapApiConnection}(rcon, record, field, event, 
+    meta_data=getOption("redcap_project_info")$meta_data,
+    events_list = getOption("redcap_project_info")$events, ...)
 }
 
 
@@ -18,6 +20,12 @@
   \item{event}{The event name for the file.  Must be length 1.  This applies only to longitudinal projects.  
     If the event is not
     supplied for a longitudinal project, the API will return the message "Error: Bad Request"}
+  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
+    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
+    records.  If necessary, an API call will be made to retrieve this table.}
+  \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
+    checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
+    prior to exporting records.  If necessary, an API call will be made to retrieve this table.}
    \item{...}{Arguments to be passed to other methods}
 }
 

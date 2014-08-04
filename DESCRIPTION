@@ -3,12 +3,11 @@ Type: Package
 Title: R interface to REDCap
 Version: 0.9
 Date: 2014-08-01
-Author: Jeffrey Horner
+Author: Jeffrey Horner, Will Gray, Jeremy Stephens, Benjamin Nutter
 Maintainer: Benjamin Nutter <nutterb@ccf.org>
 Description: The redcap package uses the REDCap API to export and import
  records.
 License: GPL-2
-Depends: RCurl
-Imports: chron
-Suggests: Hmisc, DBI
+Imports: chron, httr
+Suggests: DBI, Hmisc
 LazyLoad: yes

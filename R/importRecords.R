@@ -9,7 +9,6 @@ importRecords.redcapApiConnection <- function(rcon, data,
                           meta_data=getOption('redcap_project_info')$meta_data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
-                          returnFormat=c('xml', 'csv', 'json'),
                           returnData=FALSE, logfile="", ...){
   
   warn.flag <- 0
@@ -20,7 +19,6 @@ importRecords.redcapApiConnection <- function(rcon, data,
   
   overwriteBehavior <- match.arg(overwriteBehavior, c('normal', 'overwrite'))
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
-  returnFormat <- match.arg(returnFormat, c('xml', 'csv', 'json'))
   
   if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
@@ -99,8 +97,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
                                          .Names = c("", "charset")))
   attributes(out) <- att
   
-  cat(postForm(uri=rcon$url,
-               token = rcon$token, content='record', format='csv',
-               type='flat', overwriteBehavior = overwriteBehavior, 
-               data=out))
+  x <- httr::POST(url=rcon$url,
+               body=list(token = rcon$token, content='record', format='csv',
+                         type='flat', overwriteBehavior = overwriteBehavior,
+                         returnFormat='csv', data=out))
+  if (x$status_code == "200") as.character(x) else stop(paste(x$status_code, ": ", as.character(x), sep=""))
 }

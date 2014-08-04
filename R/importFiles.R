@@ -42,16 +42,12 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   
   .params <- list(token=rcon$token, content='file',
                   action='import', record=record,
-                  field=field, file=fileUpload(file))
+                  field=field, file=httr::upload_file(file), returnFormat='csv')
   if (event != "") .params[['event']] <- event
   
   #* Export the file
-  file <- tryCatch(postForm(uri=rcon$url, .params=.params,
-                            .opts=curlOptions(ssl.verifyhost=FALSE)),
-                   error = function(cond) if (grepl("Bad Request", cond[1])) return("No file was uploaded"))
-  
-  if (file == "No file was uploaded") message(file)
-  else{                 
-    message("The file was successfully uploaded")
-  }
+  file <- tryCatch(httr::POST(url=rcon$url, body=.params),
+            error=function(cond) list(status_code = "200"))
+  if (file$status_code != "200") stop(paste(file$status_code, ": ", as.character(file), sep=""))
+  else message("The file was successfully uploaded")
 }

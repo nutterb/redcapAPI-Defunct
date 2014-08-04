@@ -6,7 +6,9 @@ deleteFiles.redcapDbConnection <- function(rcon, record, field, event, ...){
           "has not yet been written.  Please consider using the API.")
 }
 
-deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...){
+deleteFiles.redcapApiConnection <- function(rcon, record, field, event, 
+                        meta_data=getOption('redcap_project_info')$meta_data, 
+                        events_list = getOption('redcap_project_info')$events, ...){
   #* stop the function if arguments do not specify a unique record-event
   if (any(sapply(list(record, field, event), length) > 1)){
     stop("The arguments 'record', 'field', and 'event' may each only have length 1")
@@ -28,13 +30,13 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...){
   
   .params <- list(token=rcon$token, content='file',
                   action='delete', record=record,
-                  field=field)
+                  field=field, returnFormat='csv')
   if (event != "") .params[['event']] <- event
   
   #* Delete the file
-  noFile <- tryCatch(postForm(uri=rcon$url, .params=.params,
-                           .opts=curlOptions(ssl.verifyhost=FALSE)),
-                  error = function(cond) if (grepl("Bad Request", cond[1])) return(TRUE))         
-  if (noFile) message("There is no file to delete")
-    else message("The file was successfully deleted")
+  x <- tryCatch(httr::POST(url=rcon$url, body=.params),
+                error=function(cond) list(status_code=200))
+  if (x$status_code != "200")stop(paste(x$status_code, ": ", as.character(x), sep=""))
+  else message("The file was successfully deleted")
+  
 }
