@@ -19,7 +19,6 @@ importRecords.redcapApiConnection <- function(rcon, data,
   
   overwriteBehavior <- match.arg(overwriteBehavior, c('normal', 'overwrite'))
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
-  returnFormat <- match.arg(returnFormat, c('xml', 'csv', 'json'))
   
   if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
