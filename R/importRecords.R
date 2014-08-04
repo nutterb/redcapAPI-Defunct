@@ -101,5 +101,5 @@ importRecords.redcapApiConnection <- function(rcon, data,
                body=list(token = rcon$token, content='record', format='csv',
                          type='flat', overwriteBehavior = overwriteBehavior,
                          returnFormat='csv', data=out))
-  if (x$status_code == "200") as.character(x) else stop(as.character(x))
+  if (x$status_code == "200") as.character(x) else stop(paste(x$status_code, ": ", as.character(x), sep=""))
 }
