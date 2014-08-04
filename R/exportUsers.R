@@ -11,7 +11,7 @@ exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   
   #* Export Users file and convert to data frame
   x <- httr::POST(url=rcon$url, body=.params)
-  if (x$status_code != "200") stop(as.character(x))
+  if (x$status_code != "200") stop(paste(x$status_code, ": ", as.character(x), sep=""))
   x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
   
   #* convert expiration date to POSIXct class
