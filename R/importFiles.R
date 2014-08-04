@@ -47,6 +47,6 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   
   #* Export the file
   file <- httr::POST(url=rcon$url, body=.params)
-  if (file$status_code != "200") stop(paste(x$status_code, ": ", as.character(x), sep=""))
+  if (file$status_code != "200") stop(paste(file$status_code, ": ", as.character(file), sep=""))
   message("The file was successfully uploaded")
 }
