@@ -58,12 +58,12 @@ order by abs(record), record, event_id
 
 exportRecords <-
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, ...)
+         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
    UseMethod("exportRecords")
 
 exportRecords.redcapDbConnection <- 
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, ...)
+         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
 {
   require(DBI)
    meta_data <- exportMetaData(rcon)
@@ -129,9 +129,10 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 
 exportRecords.redcapApiConnection <- 
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-           survey=TRUE, dag=TRUE, batch.size=-1,
+           survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ..., 
+           batch.size=-1,
            meta_data=getOption('redcap_project_info')$meta_data, 
-           events_list=getOption('redcap_project_info')$events, ...)
+           events_list=getOption('redcap_project_info')$events)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -256,7 +257,7 @@ exportRecords.redcapApiConnection <-
            function(i) 
            {
              x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-                                   x[[i]],factors,dates)
+                                   x[[i]],factors,dates, checkboxLabels)
            }
     )
     if (labels) label(x[, field_names], self=FALSE) <- field_labels
