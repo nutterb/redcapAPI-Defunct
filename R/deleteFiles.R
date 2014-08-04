@@ -1,11 +1,7 @@
-deleteFiles <- function(rcon, record, field, event, 
-                        meta_data=getOption('redcap_project_info')$meta_data, 
-                        events_list = getOption('redcap_project_info')$events, ...)
+deleteFiles <- function(rcon, record, field, event, ...)
   UseMethod("deleteFiles")
 
-deleteFiles.redcapDbConnection <- function(rcon, record, field, event, 
-                        meta_data=getOption('redcap_project_info')$meta_data, 
-                        events_list = getOption('redcap_project_info')$events, ...){
+deleteFiles.redcapDbConnection <- function(rcon, record, field, event, ...){
   message("Please accept my apologies.  The deleteFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
