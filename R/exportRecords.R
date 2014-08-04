@@ -147,7 +147,8 @@ exportRecords.redcapApiConnection <-
     .params <- list(token=rcon$token, content='record',
                     format='csv', type='flat',
                     exportSurveyFields=tolower(survey),
-                    exportDataAccessGroups=tolower(dag))
+                    exportDataAccessGroups=tolower(dag),
+                    returnFormat='csv')
     
     if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
@@ -215,19 +216,19 @@ exportRecords.redcapApiConnection <-
     if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
     
     if (batch.size < 1){
-      x <- postForm(uri=rcon$url,.params=.params,
-                    .opts=curlOptions(ssl.verifyhost=FALSE))
+      x <- httr::POST(url=rcon$url, body=.params)
+      if (x$status_code != "200") stop(as.character(x))
     
-      x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
+      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
     }
     else {
       batch.params <- list(token=rcon$token, content='record',
                            format='csv', type='flat',
                            fields=meta_data$field_name[1])
       if (!is.null(records)) batch.params[['records']] = paste(records, collapse=",")
-      ID <- postForm(uri=rcon$url, .params=batch.params,
-                     .opts=curlOptions(ssl.verifyhost=FALSE))
-      ID <- read.csv(textConnection(ID), stringsAsFactors=FALSE, na.strings="")
+      ID <- httr::POST(url=rcon$url, body=batch.params)
+      if (ID$status_code != "200") stop(as.character(ID))
+      ID <- read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
       ID <- unique(ID[, 1, drop=FALSE])
       n.batch <- ceiling(nrow(ID) / batch.size)
       ID$batch.number <- rep(1:n.batch, rep(batch.size, n.batch))[1:nrow(ID)]
@@ -235,10 +236,10 @@ exportRecords.redcapApiConnection <-
       
       if (!is.null(.params$records)) .params$records <- NULL
       x <- lapply(batch.records, 
-                  function(r) postForm(uri=rcon$url,
-                                       .params=c(.params, list(records=paste(r, collapse=","))),
-                                       .opts=curlOptions(ssl.verifyhost=FALSE)))
-      x <- lapply(x, function(r) read.csv(textConnection(r), stringsAsFactors=FALSE, na.strings=""))
+                  function(r) httr::POST(url=rcon$url,
+                                       body=c(.params, list(records=paste(r, collapse=","))))
+      if (x[[1]]$status_code != "200") stop(as.character(x[[1]]))
+      x <- lapply(x, function(r) read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings=""))
       x <- do.call("rbind", x)
     }
     
