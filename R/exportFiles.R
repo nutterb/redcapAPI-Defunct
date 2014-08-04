@@ -36,24 +36,22 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   }
 
   .params <- list(token=rcon$token, content='file',
-                  action='export', record=record,
+                  action='export', returnFormat='csv',
+                  record=record,
                   field=field)
   if (event != "") .params[['event']] <- event
   
   #* Export the file
-  file <- tryCatch(postForm(uri=rcon$url, .params=.params,
-                            .opts=curlOptions(ssl.verifyhost=FALSE)),
-                   error = function(cond) if (grepl("Bad Request", cond[1])) return("No file was found"))
-  
-  if (class(file) == "character") message(file)
-  else{                 
-    #* Get the filename
-    filename <- gsub("\"", "", attributes(file)$'Content-Type'['name'])
+  x <- httr::POST(url=rcon$url, body=.params)
+  if (x$status_code == 200){
+    filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')
+    filename = gsub("\"", "", filename)
     if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
-  
-    #* Write the file to a directory
-    writeBin(as.vector(file), file.path(dir, filename), 
+    writeBin(as.vector(x$content), file.path(dir, filename), 
              useBytes=TRUE)
     message(paste("The file was saved to '", filename, "'", sep=""))
+  }
+  else{                 
+   stop(as.character(x))
   }
 }
