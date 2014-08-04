@@ -8,11 +8,9 @@ exportMappings.redcapDbConnection <- function(rcon, arms, ...){
 exportMappings.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='formEventMapping', format='csv')
   if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
-  x <- tryCatch(postForm(uri=rcon$url,.params=.params,
-                .opts=curlOptions(ssl.verifyhost=FALSE)),
-                error = function(cond) if (grepl("Bad Request", cond[1])) return("Not a longitudinal project"))
+  x <- httr::POST(url=rcon$url, body=.params)
   
-  if (x != "Not a longitudinal project")
-    x <- read.csv(textConnection(x), stringsAsFactors=FALSE)  
-  return(x)
+  if (x$status_code == "200")
+    return(read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))
+  else (stop(as.character(x)))
 }
