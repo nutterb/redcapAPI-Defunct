@@ -21,8 +21,10 @@ exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   if (label){
     x$data_export <- factor(x$data_export, c(0, 2, 1), c("No access", "De-identified", "Full data set"))
     
-    x[, 8:length(x)] <- lapply(x[, 8:length(x)], factor, c(0, 2, 1, 3),
-                               c("No access", "Read only", "view records/responses and edit records", "Edit survey responses"))
+    x[, which(names(x) == "data_export"):length(x)] <- 
+        lapply(x[, which(names(x) == "data_export"):length(x)], 
+            factor, c(0, 2, 1, 3),
+            c("No access", "Read only", "view records/responses and edit records", "Edit survey responses"))
   }
   
   return(x)
