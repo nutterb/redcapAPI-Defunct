@@ -227,7 +227,7 @@ exportRecords.redcapApiConnection <-
                            fields=meta_data$field_name[1])
       if (!is.null(records)) batch.params[['records']] = paste(records, collapse=",")
       ID <- httr::POST(url=rcon$url, body=batch.params)
-      if (ID$status_code != "200") stop(as.character(ID))
+      if (ID$status_code != "200") stop(paste(ID$status_code, ": ", as.character(ID), sep=""))
       ID <- read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
       ID <- unique(ID[, 1, drop=FALSE])
       n.batch <- ceiling(nrow(ID) / batch.size)
@@ -238,7 +238,7 @@ exportRecords.redcapApiConnection <-
       x <- lapply(batch.records, 
                   function(r) httr::POST(url=rcon$url,
                                        body=c(.params, list(records=paste(r, collapse=",")))))
-      if (x[[1]]$status_code != "200") stop(as.character(x[[1]]))
+      if (x[[1]]$status_code != "200") stop(paste(x[[1]]$status_code, ": ", as.character(x[[1]])))
       x <- lapply(x, function(r) read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings=""))
       x <- do.call("rbind", x)
     }
