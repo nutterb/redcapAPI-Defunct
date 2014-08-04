@@ -49,7 +49,6 @@ S3method(redcapProjectInfo, redcapDbConnection)
 S3method(redcapProjectInfo, redcapApiConnection)
 
 importFrom("Hmisc", label.default)
-importFrom("Hmisc", label<-.default)
 importFrom("Hmisc", label.data.frame)
 importFrom("Hmisc", label<-.data.frame)
 
