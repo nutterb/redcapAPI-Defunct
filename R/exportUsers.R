@@ -7,12 +7,12 @@ exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
 
 exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   #* parameters for the Users File Export
-  .params <- list(token=rcon$token, content='user', format='csv')
+  .params <- list(token=rcon$token, content='user', format='csv', returnFormat='csv')
   
   #* Export Users file and convert to data frame
-  x <- postForm(uri=rcon$url,.params=.params,
-                .opts=curlOptions(ssl.verifyhost=FALSE))
-  x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
+  x <- httr::POST(url=rcon$url, body=.params)
+  if (x$status_code != "200") stop(as.character(x))
+  x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
   
   #* convert expiration date to POSIXct class
   if (date) x$expiration <- as.POSIXct(x$expiration, format="%Y-%m-%d")
