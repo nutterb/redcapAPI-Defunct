@@ -6,7 +6,7 @@ exportArms.redcapDbConnection <- function(rcon, arms, ...){
 }
 
 exportArms.redcapApiConnection <- function(rcon, arms, ...){
-  .params <- list(token=rcon$token, content='arm', format='csv')
+  .params <- list(token=rcon$token, content='arm', format='csv', returnFormat='csv')
   if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
   x <- httr::POST(url=rcon$url, body=.params)
   
