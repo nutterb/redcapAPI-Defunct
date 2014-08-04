@@ -46,6 +46,7 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   if (x$status_code == 200){
     filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')
     filename = gsub("\"", "", filename)
+    filename <- sub(";charset[[:print:]]+", "", filename)
     if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
     writeBin(as.vector(x$content), file.path(dir, filename), 
              useBytes=TRUE)
