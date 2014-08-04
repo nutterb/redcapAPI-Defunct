@@ -9,7 +9,6 @@ importRecords.redcapApiConnection <- function(rcon, data,
                           meta_data=getOption('redcap_project_info')$meta_data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
-                          returnFormat=c('xml', 'csv', 'json'),
                           returnData=FALSE, logfile="", ...){
   
   warn.flag <- 0
@@ -99,8 +98,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
                                          .Names = c("", "charset")))
   attributes(out) <- att
   
-  cat(postForm(uri=rcon$url,
-               token = rcon$token, content='record', format='csv',
-               type='flat', overwriteBehavior = overwriteBehavior, 
-               data=out))
+  x <- httr::POST(url=rcon$url,
+               body=list(token = rcon$token, content='record', format='csv',
+                         type='flat', overwriteBehavior = overwriteBehavior,
+                         returnFormat='csv', data=out))
+  as.character(x)                       
 }
