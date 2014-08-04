@@ -49,6 +49,7 @@ S3method(redcapProjectInfo, redcapDbConnection)
 S3method(redcapProjectInfo, redcapApiConnection)
 
 importFrom("Hmisc", label)
+importFrom("Hmisc", label.data.frame)
 importFrom("httr", POST)
 importFrom("httr", upload_file)
 importFrom("chron", times)
