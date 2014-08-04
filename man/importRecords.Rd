@@ -11,7 +11,6 @@
               meta_data=getOption('redcap_project_info')$meta_data, 
               overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
-              returnFormat=c('xml', 'csv', 'json'),
               returnData=FALSE, logfile="", ...)
 }
 
@@ -24,7 +23,6 @@
     records.  If necessary, an API call will be made to retrieve this table.}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
-  \item{returnFormat}{A character vector of forms to be returned. If \code{NULL}, all forms are returned.}
   \item{returnData}{Logical.  Prevents the REDCap import and instead returns the data frame that would have been given
                     for import.  This is sometimes helpful if the API import fails with message "Bad Request."  The
                     data frame can be written to a csv and uploaded using the interactive tools to troubleshoot the
