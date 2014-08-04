@@ -237,7 +237,7 @@ exportRecords.redcapApiConnection <-
       if (!is.null(.params$records)) .params$records <- NULL
       x <- lapply(batch.records, 
                   function(r) httr::POST(url=rcon$url,
-                                       body=c(.params, list(records=paste(r, collapse=","))))
+                                       body=c(.params, list(records=paste(r, collapse=",")))))
       if (x[[1]]$status_code != "200") stop(as.character(x[[1]]))
       x <- lapply(x, function(r) read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings=""))
       x <- do.call("rbind", x)
