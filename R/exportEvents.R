@@ -12,5 +12,5 @@ exportEvents.redcapApiConnection <- function(rcon, arms, ...){
   x <- httr::POST(url=rcon$url, body=.params)
   if (x$status_code == "200")
     x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE)  
-  stop(as.character(x))
+  else(stop(as.character(x)))
 }
