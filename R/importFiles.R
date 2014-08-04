@@ -42,7 +42,7 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   
   .params <- list(token=rcon$token, content='file',
                   action='import', record=record,
-                  field=field, file=fileUpload(file), returnFormat='csv')
+                  field=field, file=httr::upload_file(file), returnFormat='csv')
   if (event != "") .params[['event']] <- event
   
   #* Export the file
