@@ -55,5 +55,5 @@ function(rcon)
      x$required_field <- as.integer(x$required_field)
      return(x)
    }
-   else as.character(x)
+   else stop(as.character(x))
 }
