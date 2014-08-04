@@ -7,7 +7,7 @@
 
 \usage{
 \method{deleteFiles}{redcapDbConnection}(rcon, record, field, event, ...)
-\method{deleteFiles}{redcapApiConnection}(rcon, record, field, event, , 
+\method{deleteFiles}{redcapApiConnection}(rcon, record, field, event, 
     meta_data=getOption("redcap_project_info")$meta_data,
     events_list = getOption("redcap_project_info")$events, ...)
 }
