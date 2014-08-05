@@ -3,7 +3,7 @@
 \title{Convert a REDCap Data Field to an R Vector}
 \description{Converts a field exported from REDCap into a valid R vector}
 
-\usage{fieldToVar(m, d, factors=TRUE, dates=TRUE)}
+\usage{fieldToVar(m, d, factors=TRUE, dates=TRUE, checkboxLabels=FALSE)}
 
 
 \arguments{
