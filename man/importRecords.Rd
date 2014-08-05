@@ -53,9 +53,15 @@
         with thanks to Josh O'Brien and etb (see references)}
 
 \references{
-http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389\cr
-https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R\cr
-See also the REDCap API documentation}
+\url{http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389}\cr
+\url{https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R}\cr
+See also the REDCap API documentation
+
+Please refer to your institution's API documentation.
+
+Additional details on API parameters are found on the package wiki at
+\url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+}
 
 \examples{
 \dontrun{
