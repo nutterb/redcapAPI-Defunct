@@ -7,12 +7,12 @@
     behavior of the API, which only allows one file to be uploaded at a time.}
 
 \usage{
-\method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE,
+\method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
     meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events, ...)
-\method{importFiles}{redcapApiConnection}(rcon, file, record, field, event, overwrite=TRUE,
+    events_list = getOption("redcap_project_info")$events)
+\method{importFiles}{redcapApiConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
     meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events, ...)
+    events_list = getOption("redcap_project_info")$events)
 }
 
 
