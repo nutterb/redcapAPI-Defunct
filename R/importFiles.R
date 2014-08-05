@@ -1,18 +1,18 @@
-importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, 
+importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
                         meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events, ...)
+                        events_list=getOption('redcap_project_info')$events)
   UseMethod("importFiles")
 
-importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, 
+importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ..., 
                                            meta_data=getOption('redcap_project_info')$meta_data,
-                                           events_list=getOption('redcap_project_info')$events, ...){
+                                           events_list=getOption('redcap_project_info')$events){
   message("Please accept my apologies.  The importFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE,
+importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
                                             meta_data=getOption('redcap_project_info')$meta_data,
-                                            events_list=getOption('redcap_project_info')$events, ...){
+                                            events_list=getOption('redcap_project_info')$events){
   #* Use working directory if 'dir' is not specified
   if (!file.exists(file)) stop(paste("No file found at '", file, "'", sep=""))
   
