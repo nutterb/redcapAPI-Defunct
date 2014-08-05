@@ -11,6 +11,8 @@ exportEvents.redcapApiConnection <- function(rcon, arms, ...){
   
   x <- httr::POST(url=rcon$url, body=.params)
   if (x$status_code == "200")
-    read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE)  
+    read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
+  else if (x$status_code == "400" & as.character(x) == "You cannot export events for classic projects") 
+    return("Not a longitudinal project")
   else(stop(paste(x$status_code, ": ", as.character(x), sep="")))
 }
