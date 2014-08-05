@@ -40,6 +40,13 @@ The function may only import a single file.}
 
 \author{Benjamin Nutter}
 
+\references{
+Please refer to your institution's API documentation.
+
+Additional details on API parameters are found on the package wiki at
+\url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+}
+
 \examples{
 \dontrun{
 > #*** Note: I cannot provide working examples without
