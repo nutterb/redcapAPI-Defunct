@@ -27,11 +27,11 @@
   \item{overwrite}{Logical.  When \code{FALSE}, the function checks if a file already exists.  If a file exists,
     the function terminates to prevent overwriting.  When \code{TRUE}, no additional check is performed.}
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
+    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to importing
     records.  If necessary, an API call will be made to retrieve this table.}
   \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
     checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
-    prior to exporting records.  If necessary, an API call will be made to retrieve this table.}    
+    prior to importing records.  If necessary, an API call will be made to retrieve this table.}    
   \item{...}{Arguments to be passed to other methods}
 }
 
