@@ -41,8 +41,11 @@
     NOTE: This flag is only viable if the user whose token is being used to make the API request is 
     *not* in a data access group. If the user is in a group, then this flag will revert to its default value.}
   \item{batch.size}{Integer.  Specifies the number of subjects to be included in each batch of a batched export.  
-    Non-positive numbers export the entire project in a single batch.  Batching the export may be beneficial to prevent
+    Non-positive numbers export the entire project in a single batch. Batching the export may be beneficial to prevent
     tying up smaller servers.  See details for more explanation.}
+  \item{checkboxLabels}{Logical. Determines the format of labels in checkbox variables.  If \code{FALSE} labels are
+    applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] is the
+    label assigned to the level in the data dictionary.}
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
     the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
     records.  If necessary, an API call will be made to retrieve this table.}
