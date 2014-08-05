@@ -1,5 +1,5 @@
 fieldToVar <- 
-  function(m,d,factors=TRUE, dates=TRUE)
+  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE)
   {
     
     # Date variables
@@ -99,9 +99,14 @@ fieldToVar <-
     }
     else if (m$field_type %in% c('checkbox'))
     {
-      if (factors){
+      if (factors & !checkboxLabels){
         d <- factor(d, 0:1, c('Unchecked', 'Checked'))
         attr(d, 'redcapLabels') <- c('Unchecked', 'Checked')
+        attr(d, 'redcapLevels') <- 0:1
+      }
+      if (factors & checkboxLabels){
+        d <- factor(d)
+        attr(d, 'redcapLabels') <- levels(d)
         attr(d, 'redcapLevels') <- 0:1
       }
     }

@@ -8,10 +8,14 @@
 \usage{
 \method{exportRecords}{redcapDbConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
-    survey=TRUE, dag=TRUE, ...)
+    survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
+<<<<<<< HEAD
+    survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...,
+=======
     survey=TRUE, dag=TRUE, ...
+>>>>>>> master
     batch.size=-1, 
     meta_data=getOption("redcap_project_info")$meta_data, 
     events_list=getOption("redcap_project_info")$events)
@@ -41,8 +45,11 @@
     NOTE: This flag is only viable if the user whose token is being used to make the API request is 
     *not* in a data access group. If the user is in a group, then this flag will revert to its default value.}
   \item{batch.size}{Integer.  Specifies the number of subjects to be included in each batch of a batched export.  
-    Non-positive numbers export the entire project in a single batch.  Batching the export may be beneficial to prevent
+    Non-positive numbers export the entire project in a single batch. Batching the export may be beneficial to prevent
     tying up smaller servers.  See details for more explanation.}
+  \item{checkboxLabels}{Logical. Determines the format of labels in checkbox variables.  If \code{FALSE} labels are
+    applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] is the
+    label assigned to the level in the data dictionary. This option is only available after REDCap version 6.0.}
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
     the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
     records.  If necessary, an API call will be made to retrieve this table.}
@@ -70,6 +77,13 @@ concerned about tying up the server with a large, longitudinal project, it would
 
 
 \author{Jeffrey Horner}
+
+\references{
+Please refer to your institution's API documentation.
+
+Additional details on API parameters are found on the package wiki at
+\url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+}
 
 \examples{
 \dontrun{
