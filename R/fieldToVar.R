@@ -1,5 +1,5 @@
 fieldToVar <- 
-  function(m,d,factors=TRUE, dates=TRUE)
+  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE)
   {
     
     # Date variables
