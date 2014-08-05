@@ -8,7 +8,7 @@
 \usage{
 \method{exportRecords}{redcapDbConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
-    survey=TRUE, dag=TRUE, ...)
+    survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
     survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...,
