@@ -13,6 +13,9 @@
     or as labelled factors.}
   \item{dates}{Logical. Determines if date variables from REDCap are converted to POSIXlt format.  The API 
                returns dates as character strings by default in YYYY-MM-DD format.}
+  \item{checkboxLabels}{Logical. Determines the format of labels in checkbox variables.  If \code{FALSE} labels are
+    applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] is the
+    label assigned to the level in the data dictionary.}
 }
 
 
