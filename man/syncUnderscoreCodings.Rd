@@ -7,7 +7,8 @@
              underscore causes \code{fieldToVar} to fail as it can't match variable names to the meta data.  
              \code{syncUnderscoreCodings} rectifies this problem by searching the suffixes and meta data for 
              underscores.  If a discrepancy is found, the underscores are removed from the metadata codings, restoring
-             harmony to the universe.}
+             harmony to the universe.  This bug was fixed in REDCap version 5.5.21 and this function does not apply to
+             that and later versions.}
 
 \usage{
 syncUnderscoreCodings(records, meta_data, export)
