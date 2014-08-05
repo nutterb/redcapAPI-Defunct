@@ -19,13 +19,15 @@
   \item{field}{The field name in which the file is stored. Must be length 1.}
   \item{event}{The event name for the file.  Must be length 1.  This applies only to longitudinal projects.  
     If the event is not
-    supplied for a longitudinal project, the API will return the message "Error: Bad Request"}
+    supplied for a longitudinal project, the API will return an error message.}
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
-    records.  If necessary, an API call will be made to retrieve this table.}
+    the call to the API.  If you are managing multiple files, it is recommended that you run 
+    \code{redcapProjectInfo} prior to managing the files.  
+    If necessary, an API call will be made to retrieve this table.}
   \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
-    checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
-    prior to exporting records.  If necessary, an API call will be made to retrieve this table.}
+    checking prior to making the call to the API.  If you are managing multiple files, it is recommended that you run 
+    \code{redcapProjectInfo} prior to managing the files.  
+    If necessary, an API call will be made to retrieve this table.}
    \item{...}{Arguments to be passed to other methods}
 }
 
