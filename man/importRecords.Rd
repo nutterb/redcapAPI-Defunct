@@ -6,12 +6,15 @@
 \description{Imports records from a \code{data.frame} to a REDCap Database.}
 
 \usage{
-\method{importRecords}{redcapDbConnection}(rcon, data, ...)
+\method{importRecords}{redcapDbConnection}(rcon, data, 
+                          overwriteBehavior=c('normal', 'overwrite'),
+                          returnContent=c('count', 'ids', 'nothing'),
+                          returnData=FALSE, logfile="", ...)
 \method{importRecords}{redcapApiConnection}(rcon, data, 
-              meta_data=getOption('redcap_project_info')$meta_data, 
-              overwriteBehavior=c('normal', 'overwrite'),
+                            overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
-              returnData=FALSE, logfile="", ...)
+              returnData=FALSE, logfile="", ...,
+              meta_data=getOption('redcap_project_info')$meta_data)
 }
 
 
