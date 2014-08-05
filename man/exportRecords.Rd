@@ -11,10 +11,10 @@
     survey=TRUE, dag=TRUE, ...)
 \method{exportRecords}{redcapApiConnection}(rcon, factors=TRUE, fields=NULL,
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
-    survey=TRUE, dag=TRUE,
+    survey=TRUE, dag=TRUE, ...
     batch.size=-1, 
     meta_data=getOption("redcap_project_info")$meta_data, 
-    events_list=getOption("redcap_project_info")$events, ...)
+    events_list=getOption("redcap_project_info")$events)
 } 
 
 
