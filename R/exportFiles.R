@@ -1,18 +1,18 @@
-exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
                         meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events, ...)
+                        events_list=getOption('redcap_project_info')$events)
   UseMethod("exportFiles")
 
-exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
                         meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events, ...){
+                        events_list=getOption('redcap_project_info')$events){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, 
+exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
                         meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events, ...){
+                        events_list=getOption('redcap_project_info')$events){
   #* Use working directory if 'dir' is not specified
   if (missing(dir)) dir <- getwd()
   
