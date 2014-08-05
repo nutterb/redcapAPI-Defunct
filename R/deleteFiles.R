@@ -6,9 +6,9 @@ deleteFiles.redcapDbConnection <- function(rcon, record, field, event, ...){
           "has not yet been written.  Please consider using the API.")
 }
 
-deleteFiles.redcapApiConnection <- function(rcon, record, field, event, 
+deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ..., 
                         meta_data=getOption('redcap_project_info')$meta_data, 
-                        events_list = getOption('redcap_project_info')$events, ...){
+                        events_list = getOption('redcap_project_info')$events){
   #* stop the function if arguments do not specify a unique record-event
   if (any(sapply(list(record, field, event), length) > 1)){
     stop("The arguments 'record', 'field', and 'event' may each only have length 1")
