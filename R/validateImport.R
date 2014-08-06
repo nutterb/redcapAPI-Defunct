@@ -8,6 +8,11 @@ validateImport <- function(field, meta_data, records, ids,
     suppressWarnings(write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
   }
   
+  #*** fields with all missing values are not altered
+  #*** NA's are imported as blanks, and a field of all NA's
+  #*** has the potential to cause errors in other validations
+  #*** (especially with date and date/time fields
+  if (all(is.na(x))) return(x)
   #*** Form complete fields
   if (nrow(meta_data) == 0){
     if (is.character(x) | is.factor(x)){
