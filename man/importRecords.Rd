@@ -48,6 +48,7 @@
           objects.
     \item Determine if values are within their specified validation limits.
   }
+  See the documentation for \code{\link{validateImport}} for detailed explanations of the validation.
 }
 
 \author{Benjamin Nutter\cr
@@ -62,6 +63,10 @@ Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+}
+
+\seealso{
+\code{\link{validateImport}}
 }
 
 \examples{
