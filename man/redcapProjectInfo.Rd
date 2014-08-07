@@ -22,7 +22,7 @@
 
 \details{
 The project information is stored in the option \code{redcap_project_info}.  If the project is not longitudinal, the 
-events table will remain NULL.
+events, arms, and event-form mappings elements will be assigned character vectors instead of data frames.
 }
 
 \author{Benjamin Nutter}
