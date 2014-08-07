@@ -44,10 +44,15 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   #* Export the file
   x <- httr::POST(url=rcon$url, body=.params)
   if (x$status_code == 200){
+    #* strip the returned character string to just the file name.
     filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')
     filename = gsub("\"", "", filename)
     filename <- sub(";charset[[:print:]]+", "", filename)
+    
+    #* Add the prefix
     if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
+    
+    #* Write to a file
     writeBin(as.vector(x$content), file.path(dir, filename), 
              useBytes=TRUE)
     message(paste("The file was saved to '", filename, "'", sep=""))
