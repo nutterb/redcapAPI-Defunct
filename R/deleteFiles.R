@@ -23,7 +23,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
   #* make sure 'event' exists in the project
   if (missing(event)) event <- ""
   if (is.null(events_list)) events_list <- exportEvents(rcon)
-  if (class(events_list) != "data.frame"){
+  if (class(events_list) == "data.frame"){
     if (!event %in% events_list$unique_event_name) 
       stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
   }
