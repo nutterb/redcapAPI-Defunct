@@ -14,6 +14,10 @@ export(exportFiles)
 S3method(exportFiles, redcapDbConnection)
 S3method(exportFiles, redcapApiConnection)
 
+export(exportInstruments)
+S3method(exportInstruments, redcapDbConnection)
+S3method(exportInstruments, redcapApiConnection)
+
 export(exportMappings)
 S3method(exportMappings, redcapDbConnection)
 S3method(exportMappings, redcapApiConnection)
