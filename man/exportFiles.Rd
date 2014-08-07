@@ -29,7 +29,8 @@
   \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
     the call to the API.  If managing multiple files, it is recommended that you run 
     \code{redcapProjectInfo} prior to managing records.  If necessary, an API call will be made to retrieve this table.}
-  \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
+  \item{events_list}{A data frame with the list of events in a longitudinal project as returned by \code{exportEvents}.  
+    This is used to do parameter
     checking prior to making the call to the API.  If managing multiple files, it is recommended that you run 
     \code{redcapProjectInfo} prior to managing records.  If necessary, an API call will be made to retrieve this table.}    
   \item{...}{Arguments to be passed to other methods}
