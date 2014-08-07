@@ -11,10 +11,11 @@ validateImport <- function(field, meta_data, records, ids,
   #*** fields with all missing values are not altered
   #*** NA's are imported as blanks, and a field of all NA's
   #*** has the potential to cause errors in other validations
-  #*** (especially with date and date/time fields
+  #*** (especially with date and date/time fields(
   if (all(is.na(x))) return(x)
+  
   #*** Form complete fields
-  if (nrow(meta_data) == 0){
+  else if (nrow(meta_data) == 0){
     if (is.character(x) | is.factor(x)){
       w <- which(!grepl("(0|1|2|Incomplete|Unverified|Complete)", x))
       if (length(w) > 0){
