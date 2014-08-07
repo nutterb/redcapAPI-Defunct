@@ -29,7 +29,13 @@ Form Rights: 0=no access, 2=read only, 1=view records/responses and edit records
 
 (NOTE: At this time, only a limited amount of rights-related info will be exported (expiration, data access group ID, 
 data export rights, and form-level rights. However, more info about a user's rights will eventually be added to the 
-Export Users API functionality in future versions of REDCap.)}
+Export Users API functionality in future versions of REDCap.)
+
+For some reason I have yet to identify, some User Tables do not export correctly. In some situations, the fields
+are all shifted one column to the left and the form names are not always exported. This seems to be more common
+in projects still in Development mode. I have seen one instance of a project in Production where one user had 
+one more column given than any other user.  If you notice this behavior, please report it to me as it may help me
+narrow down the source of the problem.}
 
 \author{Benjamin Nutter}
 
