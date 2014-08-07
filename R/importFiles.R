@@ -30,7 +30,7 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   #* make sure 'event' exists in the project
   if (missing(event)) event <- ""
   if (is.null(events_list)) events_list <- exportEvents(rcon)
-  if (!is.null(events_list)){
+  if (class(events_list) == 'data.frame'){
     if (!event %in% events_list$unique_event_name) 
       stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
   }
