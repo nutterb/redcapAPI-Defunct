@@ -422,7 +422,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* radio and dropdown fields
   else if (grepl("(select|radio|dropdown)", meta_data$field_type)){
     x <- as.character(x)
-    mapping <- do.call("rbind", strsplit(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", "))
+    mapping <- do.call("rbind", str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2))
     
     #* Return labeled values to coded values
     for (i in 1:nrow(mapping)){
