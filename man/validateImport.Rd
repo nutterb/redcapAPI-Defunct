@@ -49,8 +49,25 @@ REDCap.  Values that cannot be reconciled are deleted with a message printed in 
 Checkbox fields require a value of "Checked", "Unchecked", "0", or "1".  These are currently case sensitive.  Values 
 that do not match these are deleted with a warning printed in the log.
 
+Phone numbers are required to be 10 digit numbers.  The phone number is broken into three parts: 1) a 3 digit area code,
+2) a 3 digit exchange code, and 3) a 4 digit station code.  The exchange code must start with a number from 2–9, 
+followed by 0–8, and then any third digit.  The exchange code starts with a number from 2–9, followed by any two digits.
+The station code is 4 digits with no restrictions.
+
+E-mail addresses are considered valid when they have three parts. The first part comes before the @ symbol, and may be 
+number of characters from a-z, A-Z, a period (.), underscore(_), percent(\%), plus(+), or minus (-).  The second part 
+comes after the @, but before the period, and may consist of any number of letters, numbers, periods, or dashes.  
+Finally, the string ends with a period (.) then anywhere from 2 to 6 letters.
+
 }
 
 \author{Benjamin Nutter}
+
+\references{
+See the REDCap Help and FAQ page's section on 'Text Validation Types'
+
+Validating e-mail addresses
+\url{http://www.regular-expressions.info/email.html}
+}
 
 \keyword{ methods }
