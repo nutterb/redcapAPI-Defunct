@@ -39,7 +39,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
   check_var <- paste(rep(.checkbox$field_name, sapply(.opts, length)), unlist(.opts), sep="___")
   with_complete_fields <- c(unique(meta_data$field_name), paste(form_names, "_complete", sep=""), check_var)
   
-  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
+  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name",
+                              "redcap_survey_identifier", "initial_request_timestamp",
+                              "redcap_data_access_group"))){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg, 
                    paste(error.flag, ": The variables ", paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
