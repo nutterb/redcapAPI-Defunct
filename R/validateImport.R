@@ -455,6 +455,52 @@ validateImport <- function(field, meta_data, records, ids,
     return(x)
   }
   
+  #*********************************************************
+  #* phone number fields
+  else if (grepl("phone", meta_data$field_type)){
+    x <- as.character(x)
+    x <- gsub("[[:punct:]]", "", x)
+
+    w <- which(nchar(x) != 10)
+    if (length(w) > 0){
+      phone_msg <- records[w, c(ids, field), drop=FALSE]
+      phone_msg$msg <- paste("Entry for '", field, "' must be a 10 digit phone number.", 
+                             "This value was not uploaded.", sep="")
+      printLog(phone_msg, logfile)
+    }
+    x[w] <- NA
+    
+    x.area <- substr(x,1,3)
+    x.exchange <- substr(x, 4, 6)
+    x.station <- substr(x, 7, 10)
+    
+    w <- which(!(grepl("[2-9][0-8][0-9]", x.area) & grepl("[2-9]\\d{2}", x.exchange) & grepl("\\d{4}", x.station)))
+    if (length(w) > 0){
+      phone_msg <- records[w, c(ids, field), drop=FALSE]
+      phone_msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
+                         "and is not imported.", sep="")
+      printLog(phone_msg, logfile)
+    }
+    
+    x[w] <- NA
+    return(x)
+  }
+  
+  #*********************************************************
+  #* phone number fields
+  else if (grepl("email", meta_data$field_type)){
+    x <- as.character(x)
+    w <- which(!grepl("[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}", x))
+    if (length(x) > 0){
+      email_msg <- records[w, c(ids, field), drop=FALSE]
+      email_msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
+                         "and is not imported.", sep="")
+      printLog(email_msg, logfile)
+    }
+    x[w] <- NA
+    return(x)
+  }
+  
   return(x)
   
 }
