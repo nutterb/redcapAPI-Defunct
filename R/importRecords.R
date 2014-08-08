@@ -40,7 +40,8 @@ importRecords.redcapApiConnection <- function(rcon, data,
   with_complete_fields <- c(unique(meta_data$field_name), paste(form_names, "_complete", sep=""), check_var)
   
   if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name",
-                              "redcap_survey_identifier", "initial_request_timestamp",
+                              "redcap_survey_identifier", 
+                              paste(unique(meta_data$form_name), "_timestamp", sep=""),
                               "redcap_data_access_group"))){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg, 
