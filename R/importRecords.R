@@ -43,7 +43,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   w.remove <- which(names(data) %in% c("redcap_survey_identifier", 
                               paste(unique(meta_data$form_name), "_timestamp", sep=""),
                               "redcap_data_access_group"))
-  if (length(w.remove) > 0) data <- data[, -w.remove])
+  if (length(w.remove) > 0) data <- data[, -w.remove]
   
   if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
     error.flag <- error.flag + 1
