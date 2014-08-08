@@ -59,5 +59,6 @@ S3method(redcapProjectInfo, redcapApiConnection)
 importFrom("httr", POST)
 importFrom("httr", upload_file)
 importFrom("chron", times)
+importFrom("stringr", str_split_fixed)
 
 useDynLib(redcap,.registration=TRUE)
