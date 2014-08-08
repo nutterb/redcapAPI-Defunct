@@ -12,7 +12,7 @@ validateImport <- function(field, meta_data, records, ids,
   #*** NA's are imported as blanks, and a field of all NA's
   #*** has the potential to cause errors in other validations
   #*** (especially with date and date/time fields(
-  if (all(is.na(x))) return(x)
+  if (all(is.na(x))) return(rep('', length(x)))
   
   #*** Form complete fields
   else if (nrow(meta_data) == 0){
