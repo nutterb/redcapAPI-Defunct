@@ -39,10 +39,13 @@ importRecords.redcapApiConnection <- function(rcon, data,
   check_var <- paste(rep(.checkbox$field_name, sapply(.opts, length)), unlist(.opts), sep="___")
   with_complete_fields <- c(unique(meta_data$field_name), paste(form_names, "_complete", sep=""), check_var)
   
-  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name",
-                              "redcap_survey_identifier", 
+  #** Remove survey identifiers and data access group fields from data
+  w.remove <- which(names(data) %in% c("redcap_survey_identifier", 
                               paste(unique(meta_data$form_name), "_timestamp", sep=""),
-                              "redcap_data_access_group"))){
+                              "redcap_data_access_group"))
+  if (length(w.remove) > 0) data <- data[, -w.remove])
+  
+  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg, 
                    paste(error.flag, ": The variables ", paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
