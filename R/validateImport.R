@@ -454,7 +454,7 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
-      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked," 
+      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked,", 
                              checkChoice, ".", sep="")
       printLog(check_msg, logfile)
     }
