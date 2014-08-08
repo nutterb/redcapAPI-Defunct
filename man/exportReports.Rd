@@ -6,14 +6,16 @@
 \description{Exports reports from a REDCap Database and formats data if requested}
 
 \usage{
-\method{exportRecords}{redcapDbConnection}(rcon, report_id, factors=TRUE, labels=TRUE, dates=TRUE, ...)
-\method{exportRecords}{redcapApiConnection}(rcon, report_id, factors=TRUE, labels=TRUE, dates=TRUE, ...,
+\method{exportReports}{redcapDbConnection}(rcon, report_id, factors=TRUE, labels=TRUE, dates=TRUE, ...)
+\method{exportReports}{redcapApiConnection}(rcon, report_id, factors=TRUE, labels=TRUE, dates=TRUE, ...,
     meta_data=getOption("redcap_project_info")$meta_data)
 }
 
 
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
+  \item{report_id}{Integer.  Gives the report id of the desired report. This is located on the Report Builder page
+    of the user interface on REDCap.}
   \item{factors}{Logical.  Determines if categorical data from the database is returned as numeric codes or labelled 
     factors.}
   \item{labels}{Logical.  Determines if the variable labels are applied to the data frame.}
