@@ -459,9 +459,9 @@ validateImport <- function(field, meta_data, records, ids,
   #* phone number fields
   else if (grepl("phone", meta_data$text_validation_type_or_show_slider_number)){
     x <- as.character(x)
-    x <- gsub("[[:punct:]]", "", x)
-
-    w <- which(nchar(x) != 10)
+    x <- gsub("[[:punct:][:space:]]", "", x)
+    
+    w <- which(nchar(x) != 10 & !is.na(x))
     if (length(w) > 0){
       phone_msg <- records[w, c(ids, field), drop=FALSE]
       phone_msg$msg <- paste("Entry for '", field, "' must be a 10 digit phone number.", 
