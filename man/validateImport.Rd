@@ -50,8 +50,8 @@ Checkbox fields require a value of "Checked", "Unchecked", "0", or "1".  These a
 that do not match these are deleted with a warning printed in the log.
 
 Phone numbers are required to be 10 digit numbers.  The phone number is broken into three parts: 1) a 3 digit area code,
-2) a 3 digit exchange code, and 3) a 4 digit station code.  The exchange code must start with a number from 2–9, 
-followed by 0–8, and then any third digit.  The exchange code starts with a number from 2–9, followed by any two digits.
+2) a 3 digit exchange code, and 3) a 4 digit station code.  The exchange code must start with a number from 2-9, 
+followed by 0-8, and then any third digit.  The exchange code starts with a number from 2-9, followed by any two digits.
 The station code is 4 digits with no restrictions.
 
 E-mail addresses are considered valid when they have three parts. The first part comes before the @ symbol, and may be 
