@@ -424,15 +424,20 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
     mapping <- do.call("rbind", strsplit(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", "))
     
-    w <- which(!x %in% mapping[, 2] & !is.na(x))
+    #* Return labeled values to coded values
+    for (i in 1:nrow(mapping)){
+      x[x==mapping[i, 2]] <- mapping[i, 1]  
+    }
+    
+    
+    w <- which(!x %in% mapping[, 1] & !is.na(x))
     if (length(w) > 0){
       radio_msg <- records[w, c(ids, field), drop=FALSE]
-      radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(mapping[, 1], collapse=", "), ".", sep="")
+      radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(c(mapping[, 1], mapping[, 2]), collapse=", "), ".", sep="")
       printLog(radio_msg, logfile)
       x[w] <- NA
     }
     
-    x <- as.character(factor(x, mapping[, 2], mapping[, 1]))
     return(x)
   }
   
@@ -467,9 +472,9 @@ validateImport <- function(field, meta_data, records, ids,
       phone_msg$msg <- paste("Entry for '", field, "' must be a 10 digit phone number.", 
                              "This value was not uploaded.", sep="")
       printLog(phone_msg, logfile)
+      x[w] <- NA
     }
-    x[w] <- NA
-    
+
     x.area <- substr(x,1,3)
     x.exchange <- substr(x, 4, 6)
     x.station <- substr(x, 7, 10)
@@ -481,9 +486,9 @@ validateImport <- function(field, meta_data, records, ids,
       phone_msg$msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
                          "and is not imported.", sep="")
       printLog(phone_msg, logfile)
+      x[w] <- NA
     }
     
-    x[w] <- NA
     return(x)
   }
   
