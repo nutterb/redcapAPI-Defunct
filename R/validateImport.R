@@ -492,7 +492,7 @@ validateImport <- function(field, meta_data, records, ids,
   else if (grepl("email", meta_data$text_validation_type_or_show_slider_number)){
     x <- as.character(x)
     w <- which(!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}$", x))
-    if (length(x) > 0){
+    if (length(w) > 0){
       email_msg <- records[w, c(ids, field), drop=FALSE]
       email_msg$msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
                          "and is not imported.", sep="")
