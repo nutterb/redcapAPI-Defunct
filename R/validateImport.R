@@ -447,6 +447,9 @@ validateImport <- function(field, meta_data, records, ids,
   else if (grepl("checkbox", meta_data$field_type)){
     x <- as.character(x)
     
+    #* Select the labeled string from the options as a valid input for the import.
+    checkChoice <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
+    checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field, "___"))[2], 2]
     
     w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
     if (length(w) > 0){
@@ -456,6 +459,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     x[x %in% "Checked"] <- "1"
     x[x %in% "Unchecked"] <- "0"
+    x[x %in% checkChoice] <- "1"
     x[!x %in% c("0", "1")] <- NA
     return(x)
   }
