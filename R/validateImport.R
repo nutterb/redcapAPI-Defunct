@@ -457,7 +457,7 @@ validateImport <- function(field, meta_data, records, ids,
   
   #*********************************************************
   #* phone number fields
-  else if (grepl("phone", meta_data$field_type)){
+  else if (grepl("phone", meta_data$text_validation_type_or_show_slider_number)){
     x <- as.character(x)
     x <- gsub("[[:punct:]]", "", x)
 
@@ -488,7 +488,7 @@ validateImport <- function(field, meta_data, records, ids,
   
   #*********************************************************
   #* phone number fields
-  else if (grepl("email", meta_data$field_type)){
+  else if (grepl("email", meta_data$text_validation_type_or_show_slider_number)){
     x <- as.character(x)
     w <- which(!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}", x))
     if (length(x) > 0){
