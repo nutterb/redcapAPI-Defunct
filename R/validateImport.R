@@ -451,10 +451,10 @@ validateImport <- function(field, meta_data, records, ids,
     checkChoice <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
     checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field, "___"))[2], 2]
     
-    w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
+    w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice) & !is.na(x))
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
-      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked,", 
+      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked, ", 
                              checkChoice, ".", sep="")
       printLog(check_msg, logfile)
     }
