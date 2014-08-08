@@ -474,7 +474,8 @@ validateImport <- function(field, meta_data, records, ids,
     x.exchange <- substr(x, 4, 6)
     x.station <- substr(x, 7, 10)
     
-    w <- which(!(grepl("[2-9][0-8][0-9]", x.area) & grepl("[2-9]\\d{2}", x.exchange) & grepl("\\d{4}", x.station)))
+    w <- which(!is.na(x) & !(grepl("[2-9][0-8][0-9]", x.area) & grepl("[2-9]\\d{2}", x.exchange) & 
+                           grepl("\\d{4}", x.station)))
     if (length(w) > 0){
       phone_msg <- records[w, c(ids, field), drop=FALSE]
       phone_msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
