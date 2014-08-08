@@ -478,7 +478,7 @@ validateImport <- function(field, meta_data, records, ids,
                            grepl("\\d{4}", x.station)))
     if (length(w) > 0){
       phone_msg <- records[w, c(ids, field), drop=FALSE]
-      phone_msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
+      phone_msg$msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
                          "and is not imported.", sep="")
       printLog(phone_msg, logfile)
     }
@@ -494,7 +494,7 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!grepl("\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}\b", x))
     if (length(x) > 0){
       email_msg <- records[w, c(ids, field), drop=FALSE]
-      email_msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
+      email_msg$msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
                          "and is not imported.", sep="")
       printLog(email_msg, logfile)
     }
