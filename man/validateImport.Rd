@@ -55,9 +55,9 @@ followed by 0–8, and then any third digit.  The exchange code starts with a nu
 The station code is 4 digits with no restrictions.
 
 E-mail addresses are considered valid when they have three parts. The first part comes before the @ symbol, and may be 
-number of characters from a-z, A-Z, a period (.), underscore(_), percent(\%), plus(+), or minus (-).  The second part 
+number of characters from a-z, A-Z, a period, underscore, percent, plus, or minus.  The second part 
 comes after the @, but before the period, and may consist of any number of letters, numbers, periods, or dashes.  
-Finally, the string ends with a period (.) then anywhere from 2 to 6 letters.
+Finally, the string ends with a period then anywhere from 2 to 6 letters.
 
 }
 
