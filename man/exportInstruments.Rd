@@ -6,8 +6,8 @@
 \description{Retrieve a data frame giving the instrument names and labels in a project.}
 
 \usage{
-\method{exportEvents}{redcapDbConnection}(rcon, ...)
-\method{exportEvents}{redcapApiConnection}(rcon, ...)
+\method{exportInstruments}{redcapDbConnection}(rcon, ...)
+\method{exportInstruments}{redcapApiConnection}(rcon, ...)
 }
 
 
