@@ -8,6 +8,7 @@ compareRedcapVersion <- function(current_version, required_version){
   
   #* accept version numbers of the forms x, x.y, and x.y.z
 <<<<<<< HEAD
+<<<<<<< HEAD
   check_current <- if (is.null(current_version)) FALSE 
     else grepl("(\\d{1,3}|\\d{1,3}[.]\\d{1,3}|\\d{1,3}[.]\\d{1,3}[.]\\d{1,3})", current_version)
   
@@ -17,6 +18,8 @@ compareRedcapVersion <- function(current_version, required_version){
   #* if current version is unknown, return -1
   if (current_version == "Version Unknown") return(-1)
 =======
+=======
+>>>>>>> 1d3599f02c53d3e21bc34f4c5dd20107a57b34b4
   check_current <- grepl("(\\d{1,3}|\\d{1,3}[.]\\d{1,3}|\\d{1,3}[.]\\d{1,3}[.]\\d{1,3})")
   
   #* If a version style is not recognized, set the current version to 'Version Unknown'
@@ -24,6 +27,9 @@ compareRedcapVersion <- function(current_version, required_version){
   
   #* if current version is null or unknown, return -1
   if (is.null(current_version) | current_version == "Version Unknown") return(-1)
+<<<<<<< HEAD
+>>>>>>> 1d3599f02c53d3e21bc34f4c5dd20107a57b34b4
+=======
 >>>>>>> 1d3599f02c53d3e21bc34f4c5dd20107a57b34b4
   
   #* compare versions using the function in the utils package
