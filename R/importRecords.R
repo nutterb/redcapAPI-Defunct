@@ -15,7 +15,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnData=FALSE, logfile="", ...,
-                          meta_data=getOption('redcap_project_info')$meta_data){
+                          proj = NULL){
   
   warn.flag <- 0
   warn.msg <- NULL
@@ -26,7 +26,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   overwriteBehavior <- match.arg(overwriteBehavior, c('normal', 'overwrite'))
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
   
-  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
   form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
