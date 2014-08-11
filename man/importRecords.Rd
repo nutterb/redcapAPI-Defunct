@@ -14,16 +14,14 @@
                             overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnData=FALSE, logfile="", ...,
-              meta_data=getOption('redcap_project_info')$meta_data)
+              proj=NULL)
 }
 
 
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
   \item{data}{A \code{data.frame} to be imported to the REDCap project.}
-  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
-    records.  If necessary, an API call will be made to retrieve this table.}
+  \item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnData}{Logical.  Prevents the REDCap import and instead returns the data frame that would have been given
