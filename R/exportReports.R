@@ -10,7 +10,7 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 
 exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...,
-              meta_data=getOption('redcap_project_info')$meta_data){
+              proj=NULL){
               
   Hlabel <- require(Hmisc)
   if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -22,7 +22,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
   #* descriptive fields aren't exported through the API, and 
   #* their meta_data can make other aspects of this function difficult,
   #* so we'll ignore them.
-  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
   
   x <- httr::POST(url=rcon$url, body=.params)
