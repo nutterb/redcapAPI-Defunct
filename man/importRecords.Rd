@@ -14,20 +14,19 @@
                             overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnData=FALSE, logfile="", ...,
-              meta_data=getOption('redcap_project_info')$meta_data)
+              proj=NULL)
 }
 
 
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
   \item{data}{A \code{data.frame} to be imported to the REDCap project.}
-  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
-    records.  If necessary, an API call will be made to retrieve this table.}
+  \item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
   \item{overwriteBehavior}{Character string.  'normal' prevents blank fields from overwriting populated fields.  'overwrite' causes blanks to overwrite data in the REDCap database.}
   \item{returnContent}{Character string.  'count' returns the number of records imported; 'ids' returns the record ids that are imported; 'nothing' returns no message.}
   \item{returnData}{Logical.  Prevents the REDCap import and instead returns the data frame that would have been given
-                    for import.  This is sometimes helpful if the API import fails with message "Bad Request."  The
+                    for import.  This is sometimes helpful if the API import fails without providing an 
+                    informative message. The
                     data frame can be written to a csv and uploaded using the interactive tools to troubleshoot the
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
@@ -45,8 +44,9 @@
     \item Force the study id variable to the first position in the data frame
     \item Verify that REDCap date fields are represented in the data frame as either character, POSIXct, or Date class
           objects.
+    \item Determine if values are within their specified validation limits.
   }
-
+  See the documentation for \code{\link{validateImport}} for detailed explanations of the validation.
 }
 
 \author{Benjamin Nutter\cr
@@ -61,6 +61,10 @@ Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+}
+
+\seealso{
+\code{\link{validateImport}}
 }
 
 \examples{

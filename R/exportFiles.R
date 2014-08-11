@@ -1,18 +1,15 @@
 exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
-                        meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events)
+                        proj=NULL)
   UseMethod("exportFiles")
 
 exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
-                        meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events){
+                        proj=NULL){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
 exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
-                        meta_data=getOption('redcap_project_info')$meta_data,
-                        events_list=getOption('redcap_project_info')$events){
+                        proj=NULL){
   #* Use working directory if 'dir' is not specified
   if (missing(dir)) dir <- getwd()
   
@@ -22,15 +19,15 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   }
   
   #* make sure 'field' exist in the project and are 'file' fields
-  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
   if (meta_data$field_type[meta_data$field_name == field] != "file")
       stop(paste("'", field, "' is not of field type 'file'", sep=""))
       
   #* make sure 'event' exists in the project
   if (missing(event)) event <- ""
-  if (is.null(events_list)) events_list <- exportEvents(rcon)
-  if (!is.null(events_list)){
+  if (is.null(proj$events)) events_list <- exportEvents(rcon)
+  if (class(events_list) == 'data.frame'){
     if (!event %in% events_list$unique_event_name) 
       stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
   }
@@ -44,10 +41,15 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   #* Export the file
   x <- httr::POST(url=rcon$url, body=.params)
   if (x$status_code == 200){
+    #* strip the returned character string to just the file name.
     filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')
     filename = gsub("\"", "", filename)
     filename <- sub(";charset[[:print:]]+", "", filename)
+    
+    #* Add the prefix
     if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
+    
+    #* Write to a file
     writeBin(as.vector(x$content), file.path(dir, filename), 
              useBytes=TRUE)
     message(paste("The file was saved to '", filename, "'", sep=""))

@@ -8,11 +8,9 @@
 
 \usage{
 \method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
-    meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events)
+    proj=NULL)
 \method{importFiles}{redcapApiConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
-    meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events)
+    proj=NULL)
 }
 
 
@@ -23,15 +21,11 @@
   \item{field}{The field name in which the file is stored. Must be length 1.}
   \item{event}{The event name for the file.  Must be length 1.  This applies only to longitudinal projects.  
     If the event is not
-    supplied for a longitudinal project, the API will return the message "Error: Bad Request"}
-  \item{overwrite}{Logical.  When \code{FALSE}, the function checks if a file already exists.  If a file exists,
+    supplied for a longitudinal project, the API will return an error}
+  \item{overwrite}{Logical.  When \code{FALSE}, the function checks if a file already exists for that record.  
+    If a file exists,
     the function terminates to prevent overwriting.  When \code{TRUE}, no additional check is performed.}
-  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to importing
-    records.  If necessary, an API call will be made to retrieve this table.}
-  \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
-    checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
-    prior to importing records.  If necessary, an API call will be made to retrieve this table.}    
+  \item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.} 
   \item{...}{Arguments to be passed to other methods}
 }
 

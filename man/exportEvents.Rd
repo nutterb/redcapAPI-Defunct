@@ -19,7 +19,11 @@
 
 \details{
 The data frame that is returned shows the event name, arm number, days offset, minimum offset, maximum offset, and 
-unique event name.}
+unique event name.
+
+When this function is called for a classic project, a character string is returned giving the API error message, 
+'400: You cannot export events for classic projects' but without casting an error in R. This is by design and allows 
+more flexible error checks in certain functions.}
 
 \author{Benjamin Nutter}
 

@@ -19,6 +19,10 @@
     REDCap versions 6.0 and higher.}
 }
 
+\details{
+This function is called internally by \code{exportRecords} and \code{exportReports}. It is not available to the user.
+}
+
 
 \author{Jeffrey Horner}
 

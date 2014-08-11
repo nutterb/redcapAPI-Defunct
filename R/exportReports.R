@@ -10,15 +10,19 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 
 exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...,
-              meta_data=getOption('redcap_project_info')$meta_data){
+              proj=NULL){
               
   Hlabel <- require(Hmisc)
   if (!Hlabel) stop("Please install the 'Hmisc' package.")
               
   .params <- list(token=rcon$token, content='report',
-                    format='csv', returnFormat='csv')
-                    
-  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+                    format='csv', returnFormat='csv',
+                    report_id=report_id)
+  
+  #* descriptive fields aren't exported through the API, and 
+  #* their meta_data can make other aspects of this function difficult,
+  #* so we'll ignore them.
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
   
   x <- httr::POST(url=rcon$url, body=.params)
@@ -42,7 +46,31 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
                                 x[[i]],factors,dates,checkboxLabels)
         }
   )
-  if (labels) label(x[, field_names], self=FALSE) <- field_labels
+  if (labels){
+    field_names <- gsub("___[a-z,A-Z,0-9,_]+", "", names(x))
+    
+    #* Extract label suffixes for checkbox fields
+    #* This takes the choices of the checkboxes from the meta data and organizes
+    #* To be conveniently pasted to 'field_label'
+    #* In this process, a checkbox field label is replicated as many times as it has options
+    checklabs <- function(x){
+      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
+        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
+        opts <- sub("[[:space:]]+$", "", unlist(sapply(strsplit(opts, ","), '[', 2)))
+        opts <- sub("[[:space:]]+", ": ", opts)
+        return(opts)
+      }
+      return("")
+    }
+    field_labels_suffix <- unlist(sapply(unique(field_names), checklabs))
+    
+    #* Ensures field_labels is adjusted to the proper length to account for
+    #* checkbox variables and creates the labels.
+    field_labels <- rep(field_labels, sapply(field_names, length))
+    field_labels <- paste(field_labels, field_labels_suffix, sep="")
+    
+    label(x[, field_names], self=FALSE) <- field_labels
+  }
   x
               
 }

@@ -15,7 +15,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnData=FALSE, logfile="", ...,
-                          meta_data=getOption('redcap_project_info')$meta_data){
+                          proj = NULL){
   
   warn.flag <- 0
   warn.msg <- NULL
@@ -26,8 +26,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
   overwriteBehavior <- match.arg(overwriteBehavior, c('normal', 'overwrite'))
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
   
-  if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
-  meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
+  if (compareRedcapVersion(proj$version, "5.5.21") == -1 )
+    meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
   form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
   meta_data <- subset(meta_data, meta_data$field_name %in% sub("___[a-z,A-Z,0-9,_]+", "", names(data)))
@@ -38,6 +39,12 @@ importRecords.redcapApiConnection <- function(rcon, data,
   .opts <- lapply(.opts, function(x) gsub(",[[:print:]]+", "", x))
   check_var <- paste(rep(.checkbox$field_name, sapply(.opts, length)), unlist(.opts), sep="___")
   with_complete_fields <- c(unique(meta_data$field_name), paste(form_names, "_complete", sep=""), check_var)
+  
+  #** Remove survey identifiers and data access group fields from data
+  w.remove <- which(names(data) %in% c("redcap_survey_identifier", 
+                              paste(unique(meta_data$form_name), "_timestamp", sep=""),
+                              "redcap_data_access_group"))
+  if (length(w.remove) > 0) data <- data[, -w.remove]
   
   if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
     error.flag <- error.flag + 1

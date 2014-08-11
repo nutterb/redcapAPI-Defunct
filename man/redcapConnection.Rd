@@ -10,8 +10,8 @@ connection through an SQL server]}
  \item{url}{URL for a REDCap database API.  Check your institution's REDCap documentation for this address.  Either
             \code{url} or \code{conn} must be specified.}
  \item{token}{REDCap API token}
- \item{conn}{[need documentation] If used, \code{project} must also be used.}
- \item{project}{[need documentation]}
+ \item{conn}{The database connection to be used. If used, \code{project} must also be used.}
+ \item{project}{The project ID in the REDCap tables.}
 }
 
 \details{

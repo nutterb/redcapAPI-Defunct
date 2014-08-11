@@ -14,6 +14,10 @@ export(exportFiles)
 S3method(exportFiles, redcapDbConnection)
 S3method(exportFiles, redcapApiConnection)
 
+export(exportInstruments)
+S3method(exportInstruments, redcapDbConnection)
+S3method(exportInstruments, redcapApiConnection)
+
 export(exportMappings)
 S3method(exportMappings, redcapDbConnection)
 S3method(exportMappings, redcapApiConnection)
@@ -26,9 +30,17 @@ export(exportRecords)
 S3method(exportRecords, redcapDbConnection)
 S3method(exportRecords, redcapApiConnection)
 
+export(exportReports)
+S3method(exportReports, redcapDbConnection)
+S3method(exportReports, redcapApiConnection)
+
 export(exportUsers)
 S3method(exportUsers, redcapDbConnection)
 S3method(exportUsers, redcapApiConnection)
+
+export(exportVersion)
+S3method(exportVersion, redcapDbConnection)
+S3method(exportVersion, redcapApiConnection)
 
 export(importFiles)
 S3method(importFiles, redcapDbConnection)
@@ -51,5 +63,6 @@ S3method(redcapProjectInfo, redcapApiConnection)
 importFrom("httr", POST)
 importFrom("httr", upload_file)
 importFrom("chron", times)
+importFrom("stringr", str_split_fixed)
 
 useDynLib(redcap,.registration=TRUE)

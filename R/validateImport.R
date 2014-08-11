@@ -8,8 +8,14 @@ validateImport <- function(field, meta_data, records, ids,
     suppressWarnings(write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
   }
   
+  #*** fields with all missing values are not altered
+  #*** NA's are imported as blanks, and a field of all NA's
+  #*** has the potential to cause errors in other validations
+  #*** (especially with date and date/time fields(
+  if (all(is.na(x))) return(rep('', length(x)))
+  
   #*** Form complete fields
-  if (nrow(meta_data) == 0){
+  else if (nrow(meta_data) == 0){
     if (is.character(x) | is.factor(x)){
       w <- which(!grepl("(0|1|2|Incomplete|Unverified|Complete)", x))
       if (length(w) > 0){
@@ -416,17 +422,22 @@ validateImport <- function(field, meta_data, records, ids,
   #* radio and dropdown fields
   else if (grepl("(select|radio|dropdown)", meta_data$field_type)){
     x <- as.character(x)
-    mapping <- do.call("rbind", strsplit(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", "))
+    mapping <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
     
-    w <- which(!x %in% mapping[, 2] & !is.na(x))
+    #* Return labeled values to coded values
+    for (i in 1:nrow(mapping)){
+      x[x==mapping[i, 2]] <- mapping[i, 1]  
+    }
+    
+    
+    w <- which(!x %in% mapping[, 1] & !is.na(x))
     if (length(w) > 0){
       radio_msg <- records[w, c(ids, field), drop=FALSE]
-      radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(mapping[, 1], collapse=", "), ".", sep="")
+      radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(c(mapping[, 1], mapping[, 2]), collapse=", "), ".", sep="")
       printLog(radio_msg, logfile)
       x[w] <- NA
     }
     
-    x <- as.character(factor(x, mapping[, 2], mapping[, 1]))
     return(x)
   }
   
@@ -436,16 +447,68 @@ validateImport <- function(field, meta_data, records, ids,
   else if (grepl("checkbox", meta_data$field_type)){
     x <- as.character(x)
     
+    #* Select the labeled string from the options as a valid input for the import.
+    checkChoice <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
+    checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field, "___"))[2], 2]
     
-    w <- which(!x %in% c("Checked", "Unchecked", "0", "1") & !is.na(x))
+    w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice) & !is.na(x))
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
-      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked.", sep="")
+      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked, ", 
+                             checkChoice, ".", sep="")
       printLog(check_msg, logfile)
     }
     x[x %in% "Checked"] <- "1"
     x[x %in% "Unchecked"] <- "0"
+    x[x %in% checkChoice] <- "1"
     x[!x %in% c("0", "1")] <- NA
+    return(x)
+  }
+  
+  #*********************************************************
+  #* phone number fields
+  else if (grepl("phone", meta_data$text_validation_type_or_show_slider_number)){
+    x <- as.character(x)
+    x <- gsub("[[:punct:][:space:]]", "", x)
+    
+    w <- which(nchar(x) != 10 & !is.na(x))
+    if (length(w) > 0){
+      phone_msg <- records[w, c(ids, field), drop=FALSE]
+      phone_msg$msg <- paste("Entry for '", field, "' must be a 10 digit phone number.", 
+                             "This value was not uploaded.", sep="")
+      printLog(phone_msg, logfile)
+      x[w] <- NA
+    }
+
+    x.area <- substr(x,1,3)
+    x.exchange <- substr(x, 4, 6)
+    x.station <- substr(x, 7, 10)
+    
+    w <- which(!is.na(x) & !(grepl("[2-9][0-8][0-9]", x.area) & grepl("[2-9]\\d{2}", x.exchange) & 
+                           grepl("\\d{4}", x.station)))
+    if (length(w) > 0){
+      phone_msg <- records[w, c(ids, field), drop=FALSE]
+      phone_msg$msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
+                         "and is not imported.", sep="")
+      printLog(phone_msg, logfile)
+      x[w] <- NA
+    }
+    
+    return(x)
+  }
+  
+  #*********************************************************
+  #* phone number fields
+  else if (grepl("email", meta_data$text_validation_type_or_show_slider_number)){
+    x <- as.character(x)
+    w <- which(!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}$", x) & !is.na(x))
+    if (length(w) > 0){
+      email_msg <- records[w, c(ids, field), drop=FALSE]
+      email_msg$msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
+                         "and is not imported.", sep="")
+      printLog(email_msg, logfile)
+    }
+    x[w] <- NA
     return(x)
   }
   
