@@ -6,6 +6,8 @@ exportInstruments.redcapDbConnection <- function(rcon, ...){
 }
 
 exportInstruments.redcapApiConnection <- function(rcon, ...){
+  if (compareRedcapVersion(proj$version, "5.9.0") == -1) 
+    return("'exportInstruments' requires REDCap version 5.9.0 or higher")
   x <- httr::POST(url=rcon$url, body=list(token=rcon$token, content='instrument', format='csv'))
   if (x$status_code == "200")
     read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
