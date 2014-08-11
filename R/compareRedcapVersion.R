@@ -7,10 +7,11 @@ compareRedcapVersion <- function(current_version, required_version){
   #*     an -1 means FALSE.  Any other answer is TRUE
   
   #* accept version numbers of the forms x, x.y, and x.y.z
-  check_current <- grepl("(\\d{1,3}|\\d{1,3}[.]\\d{1,3}|\\d{1,3}[.]\\d{1,3}[.]\\d{1,3})", current_version)
+  check_current <- if (is.null(current_version)) FALSE 
+    else grepl("(\\d{1,3}|\\d{1,3}[.]\\d{1,3}|\\d{1,3}[.]\\d{1,3}[.]\\d{1,3})", current_version)
   
   #* If a version style is not recognized, or current_version is NULL, set the current version to 'Version Unknown'
-  if (!check_current | is.null(current_version)) current_version <- "Version Unknown"
+  if (!check_current) current_version <- "Version Unknown"
   
   #* if current version is unknown, return -1
   if (current_version == "Version Unknown") return(-1)
