@@ -1,4 +1,4 @@
-\name{exportArms}
+\name{exportVersion}
 \alias{exportVersion}
 \alias{exportVersion.redcapDbConnection}
 \alias{exportVersion.redcapApiConnection}
