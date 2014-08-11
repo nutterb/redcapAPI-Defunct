@@ -281,7 +281,7 @@ exportRecords.redcapApiConnection <-
     
     #* synchronize underscore codings between records and meta data
     #* Only affects calls in REDCap versions earlier than 5.5.21
-    if (compareRedcapVersion(proj$version, "5.5.21") > -1) meta_data <- syncUnderscoreCodings(x, meta_data)
+    if (compareRedcapVersion(proj$version, "5.5.21") == -1) meta_data <- syncUnderscoreCodings(x, meta_data)
     
     #* Change field_names to match underscore codings
     if (!is.null(attributes(meta_data)$checkbox_field_name_map)){
