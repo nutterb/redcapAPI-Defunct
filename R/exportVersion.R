@@ -14,5 +14,6 @@ exportVersion.redcapApiConnection <- function(rcon, ...){
   #*** When this API function isn't available (ie, before version 6.0),
   #*** we want to avoid throwing a disruptive error. Instead, we 
   #*** return the message that indicates the version is unknown.
-  else return("Version Unknown")
+  else if (as.character(x) ==  "The value of the parameter \"content\" is not valid") return("Version Unknown")
+  else return(as.character(x))
 }
