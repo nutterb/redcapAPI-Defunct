@@ -8,11 +8,9 @@
 
 \usage{
 \method{importFiles}{redcapDbConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
-    meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events)
+    proj=NULL)
 \method{importFiles}{redcapApiConnection}(rcon, file, record, field, event, overwrite=TRUE, ...,
-    meta_data=getOption("redcap_project_info")$meta_data,
-    events_list = getOption("redcap_project_info")$events)
+    proj=NULL)
 }
 
 
@@ -27,13 +25,7 @@
   \item{overwrite}{Logical.  When \code{FALSE}, the function checks if a file already exists for that record.  
     If a file exists,
     the function terminates to prevent overwriting.  When \code{TRUE}, no additional check is performed.}
-  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to importing
-    records.  If necessary, an API call will be made to retrieve this table.}
-  \item{events_list}{A data frame with the list of events in a longitudinal project as retured by \code{exportEvents}.  
-    This is used to do parameter
-    checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
-    prior to importing records.  If necessary, an API call will be made to retrieve this table.}    
+  \item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.} 
   \item{...}{Arguments to be passed to other methods}
 }
 
