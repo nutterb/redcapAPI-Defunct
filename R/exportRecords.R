@@ -131,14 +131,13 @@ exportRecords.redcapApiConnection <-
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
            survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ..., 
            batch.size=-1,
-           meta_data=getOption('redcap_project_info')$meta_data, 
-           events_list=getOption('redcap_project_info')$events)
+           proj=NULL)
   {
     Hlabel <- require(Hmisc)
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
     
     #* Check that any events listed exist in the events table.
-    if (is.null(events_list)) events_list <- exportEvents(rcon)
+    if (is.null(proj$events)) events_list <- exportEvents(rcon)
     if (class(events_list) == "data.frame" & !is.null(events)){
       if (any(!events %in% events_list$unique_event_name)){
         stop(paste("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
@@ -154,7 +153,7 @@ exportRecords.redcapApiConnection <-
     
     #* for purposes of the export, we don't need the descriptive fields. 
     #* Including them makes the process more error prone, so we'll ignore them.
-    if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+    if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
     
     #* Check that stated forms exist
