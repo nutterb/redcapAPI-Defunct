@@ -10,12 +10,12 @@
 
 \usage{
 \method{redcapProjectInfo}{redcapDbConnection}(rcon, date=TRUE, label=TRUE,
-                              meta_data=TRUE, users=TRUE, events=TRUE,
-                              arms=TRUE, mappings=TRUE,
+                              meta_data=TRUE, users=TRUE, instruments=TRUE,
+                              events=TRUE, arms=TRUE, mappings=TRUE,
                               version=TRUE, ...)
 \method{redcapProjectInfo}{redcapApiConnection}(rcon, date=TRUE, label=TRUE,
-                              meta_data=TRUE, users=TRUE, events=TRUE,
-                              arms=TRUE, mappings=TRUE,
+                              meta_data=TRUE, users=TRUE, instruments=TRUE, 
+                              events=TRUE, arms=TRUE, mappings=TRUE,
                               version=TRUE, ...,
                               v.number="")
 }
@@ -27,6 +27,7 @@
   \item{label}{Logical.  If \code{TRUE}, the user form permissions are converted to labelled factors.}
   \item{meta_data}{Logical.  Indicates if the meta data (data dictionary) should be exported.}
   \item{users}{Logical. Indicates if the users table should be exported.}
+  \item{instruments}{Logical. Indicates if the instruments table should be exported.}
   \item{events}{Logical. Indicates if the event names should be exported.}
   \item{arms}{Logical. Indicates if the arms table should be exported.}
   \item{mappings}{Logical. Indicates if the form-event mappings should be exported.}
