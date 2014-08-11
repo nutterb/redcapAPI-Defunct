@@ -11,7 +11,6 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...,
               proj=NULL){
-  if (compareRedcapVersion(proj$version, "6.0.0") == -1) stop("This API Function Requires Version 6.0.0 or higher")
               
   Hlabel <- require(Hmisc)
   if (!Hlabel) stop("Please install the 'Hmisc' package.")
