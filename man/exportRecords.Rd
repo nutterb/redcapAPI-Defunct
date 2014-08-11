@@ -13,8 +13,7 @@
     forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE, 
     survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...,
     batch.size=-1, 
-    meta_data=getOption("redcap_project_info")$meta_data, 
-    events_list=getOption("redcap_project_info")$events)
+    proj=NULL)
 } 
 
 
@@ -46,12 +45,7 @@
   \item{checkboxLabels}{Logical. Determines the format of labels in checkbox variables.  If \code{FALSE} labels are
     applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] is the
     label assigned to the level in the data dictionary. This option is only available after REDCap version 6.0.}
-  \item{meta_data}{A data frame of the project meta_data.  This is used to do parameter checking prior to making
-    the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo} prior to exporting
-    records.  If necessary, an API call will be made to retrieve this table.}
-  \item{events_list}{A data frame with the list of events in a longitudinal project.  This is used to do parameter
-    checking prior to making the call to the API.  It is strongly recommended that you run \code{redcapProjectInfo}
-    prior to exporting records.  If necessary, an API call will be made to retrieve this table.}
+  \item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
   \item{...}{Additional arguments to be passed between methods.}
 }
 
