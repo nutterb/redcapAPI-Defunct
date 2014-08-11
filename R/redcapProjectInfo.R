@@ -20,7 +20,7 @@ redcapProjectInfo.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE,
   version <- if (version) exportVersion(rcon) else v.number
   meta_data <- if (meta_data) exportMetaData(rcon) else NULL
   users <- if (users) exportUsers(rcon, date, label) else NULL
-  instruments <- if (instruments) exportInstruments(rcon, proj=list(version=version)) else NULL
+  instruments <- if (instruments) exportInstruments(rcon) else NULL
   events <- if (events) exportEvents(rcon) else NULL
   arms <- if (arms) exportArms(rcon) else NULL
   mappings <- if (mappings) exportMappings(rcon) else NULL
