@@ -10,7 +10,7 @@
         checkboxLabels=FALSE, ...)
 \method{exportReports}{redcapApiConnection}(rcon, report_id, factors=TRUE, labels=TRUE, dates=TRUE, 
     checkboxLabels=FALSE, ...,
-    meta_data=getOption("redcap_project_info")$meta_data)
+    proj=NULL)
 }
 
 
