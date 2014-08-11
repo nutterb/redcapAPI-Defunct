@@ -27,7 +27,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
   
   if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
-  if (compareRedcapVersion(proj$version, "5.5.21") > -1 )
+  if (compareRedcapVersion(proj$version, "5.5.21") == -1 )
     meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
   form_names <- unique(meta_data$form_name)
   names(data)[names(data) %in% attributes(meta_data)$checkbox_field_name_map[, 2]] <- attributes(meta_data)$checkbox_field_name_map[, 1]
