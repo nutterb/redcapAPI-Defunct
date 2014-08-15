@@ -9,6 +9,7 @@ deleteFiles.redcapDbConnection <- function(rcon, record, field, event, ...){
 deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ..., 
                         proj=NULL){
   #* stop the function if arguments do not specify a unique record-event
+  if (missing(event)) event <- ""
   if (any(sapply(list(record, field, event), length) > 1)){
     stop("The arguments 'record', 'field', and 'event' may each only have length 1")
   }
@@ -20,7 +21,6 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
       stop(paste("'", field, "' is not of field type 'file'", sep=""))
       
   #* make sure 'event' exists in the project
-  if (missing(event)) event <- ""
   if (is.null(proj$events)) events_list <- exportEvents(rcon)
   if (class(events_list) == "data.frame"){
     if (!event %in% events_list$unique_event_name) 
