@@ -9,7 +9,7 @@ exportInstruments.redcapApiConnection <- function(rcon, ...){
   x <- httr::POST(url=rcon$url, body=list(token=rcon$token, content='instrument', format='csv'))
   if (x$status_code == "200")
     read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
-  else if (x$status_code == "400" & as.character(x) == "You cannot export form/event mappings for classic projects") 
+  else if (x$status_code == "400" & as.character(x) == "The value of the parameter \"content\" is not valid") 
     paste(x$status_code, ": ", as.character(x), sep="")
   else stop(paste(x$status_code, ": ", as.character(x), sep=""))
 }
