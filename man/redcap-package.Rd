@@ -25,6 +25,11 @@ Jeffery Horner, Jeremy Stevens, Will Gray, Benjamin Nutter
 Maintainer: Benjamin Nutter <nutterb@ccf.org>
 }
 
+\references{
+Additional documentation and resources can be found at \url{https://github.com/nutterb/redcap/wiki}\cr
+Please also refer to your institution's API documentation.
+}
+
 \examples{
 \dontrun{
 > #*** Note: I cannot provide working examples
