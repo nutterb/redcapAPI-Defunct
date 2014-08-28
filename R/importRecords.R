@@ -97,22 +97,55 @@ importRecords.redcapApiConnection <- function(rcon, data,
   #** Thanks go to:
   #**   https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R
   #**   http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389
-  data <- lapply(data, function(x){
-    if(any(is.na(x))) {x[is.na(x)] <- ""; x} else {x}
-  })
   
-  l1 <- paste(names(data), collapse=",")
-  l2 <- capture.output(write.table(data, sep=",", col.names=FALSE, row.names=FALSE))
-  out <- paste0(c(l1, l2, ""), collapse="\n")
+  if (batch.size > 0){
+    n.batch <- ceiling(nrow(data) / batch.size)
+    ID <- data.frame(row = 1:nrow(data))
+    ID$batch.number <- rep(1:n.batch, rep(batch.size, n.batch))[1:nrow(ID)]
+    
+    data <- lapply(unique(ID$batch.number), function(x) data[ID$row[ID$batch.number == x], ])
+    data <- lapply(data, function(d) lapply(d, function(x){
+                                                  if(any(is.na(x))) {x[is.na(x)] <- ""; x} else {x}}))
+    out <- lapply(data, function(d){ l1 <- paste(names(d), collapse=",")
+                                      l2 <- capture.output(write.table(d, sep=",", col.names=FALSE, row.names=FALSE))
+                                      out <- paste0(c(l1, l2, ""), collapse="\n")})
+    att <- list("Content-Type" = structure(c("text/html", "utf-8"),
+                                           .Names = c("", "charset")))
+    out <- lapply(out, function(d) {attributes(d) <- att; return(d)})
+    
+    x <- lapply(out,
+                function(o){
+                  httr::POST(url=rcon$url,
+                             body=list(token = rcon$token, content='record', format='csv',
+                                       type='flat', overwriteBehavior = overwriteBehavior,
+                                       returnFormat='csv', data=o))})
+    if (all(unlist(sapply(x, '[', "status_code")) == "200")) sapply(x, as.character) 
+    else {
+      status.code <- unlist(sapply(x, '[', "status_code"))
+      msg <- sapply(x, as.character)
+      
+      stop(paste(paste(status.code[status.code != "200"], ": ", msg[status.code != "200"], sep=""), collapse="\n"))
+    }
+    
+  }
+  else{
+    data <- lapply(data, function(x){
+      if(any(is.na(x))) {x[is.na(x)] <- ""; x} else {x}
+    })
+  
+    l1 <- paste(names(data), collapse=",")
+    l2 <- capture.output(write.table(data, sep=",", col.names=FALSE, row.names=FALSE))
+    out <- paste0(c(l1, l2, ""), collapse="\n")
   
   ## Reattach attributes
-  att <- list("Content-Type" = structure(c("text/html", "utf-8"),
-                                         .Names = c("", "charset")))
-  attributes(out) <- att
+    att <- list("Content-Type" = structure(c("text/html", "utf-8"),
+                                           .Names = c("", "charset")))
+    attributes(out) <- att
   
-  x <- httr::POST(url=rcon$url,
-               body=list(token = rcon$token, content='record', format='csv',
-                         type='flat', overwriteBehavior = overwriteBehavior,
-                         returnFormat='csv', data=out))
-  if (x$status_code == "200") as.character(x) else stop(paste(x$status_code, ": ", as.character(x), sep=""))
+    x <- httr::POST(url=rcon$url,
+                    body=list(token = rcon$token, content='record', format='csv',
+                              type='flat', overwriteBehavior = overwriteBehavior,
+                              returnFormat='csv', data=out))
+    if (x$status_code == "200") as.character(x) else stop(paste(x$status_code, ": ", as.character(x), sep=""))
+  }
 }
