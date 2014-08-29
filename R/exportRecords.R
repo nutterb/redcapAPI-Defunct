@@ -137,7 +137,7 @@ exportRecords.redcapApiConnection <-
     if (!Hlabel) stop("Please install the 'Hmisc' package.")
     
     #* Check that any events listed exist in the events table.
-    if (is.null(proj$events)) events_list <- exportEvents(rcon)
+    events_list <- if (is.null(proj$events)) exportEvents(rcon) else proj$events
     if (class(events_list) == "data.frame" & !is.null(events)){
       if (any(!events %in% events_list$unique_event_name)){
         stop(paste("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
