@@ -15,7 +15,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
                           overwriteBehavior=c('normal', 'overwrite'),
                           returnContent=c('count', 'ids', 'nothing'),
                           returnData=FALSE, logfile="", ...,
-                          proj = NULL){
+                          proj = NULL, batch.size=-1){
   
   warn.flag <- 0
   warn.msg <- NULL
