@@ -153,7 +153,7 @@ exportRecords.redcapApiConnection <-
     
     #* for purposes of the export, we don't need the descriptive fields. 
     #* Including them makes the process more error prone, so we'll ignore them.
-    if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
+    meta_data <- if (is.null(proj$meta_data)) exportMetaData(rcon) else proj$meta_data
     meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
     
     #* Check that stated forms exist
