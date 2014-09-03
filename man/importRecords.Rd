@@ -14,7 +14,7 @@
                             overwriteBehavior=c('normal', 'overwrite'),
               returnContent=c('count', 'ids', 'nothing'),
               returnData=FALSE, logfile="", ...,
-              proj=NULL)
+              proj=NULL, batch.size=-1)
 }
 
 
@@ -31,6 +31,7 @@
                     problem.  Please shoot me an e-mail if you find errors I havne't accounted for.}
   \item{logfile}{An optional filepath (preferably .txt) in which to print the log of errors and warnings about the data. 
                  If \code{""}, the log is printed to the console.}
+  \item{batch.size}{Specifies size of batches.  A negative value indicates no batching.}
   \item{...}{Arguments to be passed to other methods.}
 
 }
