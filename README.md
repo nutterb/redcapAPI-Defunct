@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wibeasley/redcap.png?branch=master)](https://travis-ci.org/wibeasley/redcap)
+
 redcap
 ======
 

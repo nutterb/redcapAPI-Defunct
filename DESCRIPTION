@@ -6,8 +6,13 @@ Date: 2014-08-01
 Author: Jeffrey Horner, Will Gray, Jeremy Stephens, Benjamin Nutter
 Maintainer: Benjamin Nutter <nutterb@ccf.org>
 Description: The redcap package uses the REDCap API to export and import
- records.
+    records.
 License: GPL-2
-Imports: chron, httr, stringr
-Suggests: DBI, Hmisc
+Imports:
+    chron,
+    httr,
+    stringr
+Suggests:
+    DBI,
+    Hmisc
 LazyLoad: yes
