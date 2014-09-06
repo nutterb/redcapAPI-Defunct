@@ -1,11 +1,8 @@
 fieldToVar <- 
   function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE)
-  {
-    
-    if (all(is.na(d))) d <- d
-    
+  {    
     # Date variables
-    else if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
+    if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
       d <- as.POSIXct(d, format="%Y-%m-%d")  
     }
     

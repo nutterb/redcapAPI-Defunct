@@ -18,5 +18,10 @@
 
 \author{Jeffrey Horner}
 
+\references{
+This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
+\url{https://github.com/vubiostat/redcap}
+}
+
 \keyword{ methods }
 

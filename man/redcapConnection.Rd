@@ -28,6 +28,11 @@ Tokens are specific to a project, and a token must be created for each project f
 
 \author{Jeffrey Horner}
 
+\references{
+  This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
+  \url{https://github.com/vubiostat/redcap}
+}
+
 \examples{
 \dontrun{
 rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])

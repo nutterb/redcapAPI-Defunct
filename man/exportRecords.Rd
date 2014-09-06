@@ -72,7 +72,13 @@ concerned about tying up the server with a large, longitudinal project, it would
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
-\url{https://github.com/nutterb/redcap/wiki/REDCap-API-Parameters}
+\url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+
+This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
+\url{https://github.com/vubiostat/redcap}
+
+See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
+\url{https://github.com/OuhscBbmc/REDCapR}
 }
 
 \examples{
