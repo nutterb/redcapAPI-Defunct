@@ -1,7 +1,7 @@
-exportMetaData <- function(rcon) UseMethod("exportMetaData")
+exportMetaData <- function(rcon, ...) UseMethod("exportMetaData")
 
 exportMetaData.redcapDbConnection <- 
-function(rcon)
+function(rcon, ...)
 {
   require(DBI)
 .SQL_PROJECT_META_DATA <- "
@@ -44,12 +44,13 @@ ORDER BY field_order"
 }
 
 exportMetaData.redcapApiConnection <-
-function(rcon)
+function(rcon, ...)
 {
    x <- httr::POST(
          url=rcon$url,
          body = list(token=rcon$token, content='metadata',
-                     format='csv', returnFormat='csv'))
+                     format='csv', returnFormat='csv'),
+         config=rcon$config)
    if (x$status_code == 200){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      # x$required_field <- as.integer(x$required_field) # I'm not sure why this is here.

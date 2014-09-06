@@ -9,7 +9,7 @@ exportEvents.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='event', format='csv', returnFormat='csv')
   if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
   
-  x <- httr::POST(url=rcon$url, body=.params)
+  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   if (x$status_code == "200")
     read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
   #*** For classic projects, we want to avoid throwing a disruptive error. Instead, we 

@@ -39,7 +39,7 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, fil
   if (event != "") .params[['event']] <- event
   
   #* Export the file
-  x <- httr::POST(url=rcon$url, body=.params)
+  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   if (x$status_code == 200){
     #* strip the returned character string to just the file name.
     filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')

@@ -6,7 +6,9 @@ exportInstruments.redcapDbConnection <- function(rcon, ...){
 }
 
 exportInstruments.redcapApiConnection <- function(rcon, ...){
-  x <- httr::POST(url=rcon$url, body=list(token=rcon$token, content='instrument', format='csv'))
+  x <- httr::POST(url=rcon$url, 
+                  body=list(token=rcon$token, content='instrument', format='csv'),
+                  config=rcon$config)
   if (x$status_code == "200")
     read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
   else if (x$status_code == "400" & as.character(x) == "The value of the parameter \"content\" is not valid") 

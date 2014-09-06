@@ -7,7 +7,7 @@ exportVersion.redcapDbConnection <- function(rcon, ...){
 
 exportVersion.redcapApiConnection <- function(rcon, ...){
   .params <- list(token=rcon$token, content='version', returnFormat='csv')
-  x <- httr::POST(url=rcon$url, body=.params)
+  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   
   if (x$status_code == "200")
     return(as.character(x$content))

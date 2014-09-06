@@ -8,7 +8,7 @@ exportArms.redcapDbConnection <- function(rcon, arms, ...){
 exportArms.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='arm', format='csv', returnFormat='csv')
   if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
-  x <- httr::POST(url=rcon$url, body=.params)
+  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   
   if (x$status_code == "200")
     return(read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))

@@ -43,7 +43,7 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   if (event != "") .params[['event']] <- event
   
   #* Export the file
-  file <- tryCatch(httr::POST(url=rcon$url, body=.params),
+  file <- tryCatch(httr::POST(url=rcon$url, body=.params, config=rcon$config),
             error=function(cond) list(status_code = "200"))
   if (file$status_code != "200") stop(paste(file$status_code, ": ", as.character(file), sep=""))
   else message("The file was successfully uploaded")

@@ -118,7 +118,8 @@ importRecords.redcapApiConnection <- function(rcon, data,
                   httr::POST(url=rcon$url,
                              body=list(token = rcon$token, content='record', format='csv',
                                        type='flat', overwriteBehavior = overwriteBehavior,
-                                       returnFormat='csv', data=o))})
+                                       returnFormat='csv', data=o),
+                             config=rcon$config)})
     if (all(unlist(sapply(x, '[', "status_code")) == "200")) sapply(x, as.character) 
     else {
       status.code <- unlist(sapply(x, '[', "status_code"))

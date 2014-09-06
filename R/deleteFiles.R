@@ -15,7 +15,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
   }
   
   #* make sure 'field' exist in the project and are 'file' fields
-  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon, config=config)
   if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
   if (meta_data$field_type[meta_data$field_name == field] != "file")
       stop(paste("'", field, "' is not of field type 'file'", sep=""))
@@ -33,7 +33,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
   if (event != "") .params[['event']] <- event
   
   #* Delete the file
-  x <- tryCatch(httr::POST(url=rcon$url, body=.params),
+  x <- tryCatch(httr::POST(url=rcon$url, body=.params, config=rcon$config),
                 error=function(cond) list(status_code=200))
   if (x$status_code != "200")stop(paste(x$status_code, ": ", as.character(x), sep=""))
   else message("The file was successfully deleted")

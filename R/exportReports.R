@@ -25,7 +25,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
   if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
   
-  x <- httr::POST(url=rcon$url, body=.params)
+  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   if (x$status_code != "200") stop(as.character(x))
     
   x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
