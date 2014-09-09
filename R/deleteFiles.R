@@ -33,6 +33,10 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
   if (event != "") .params[['event']] <- event
   
   #* Delete the file
+  #* The tryCatch here seems a little quirky.  My best understanding is that since the API isn't returning
+  #* anything into the 'content' attribute returned by POST, POST is casting an error.  Oddly, an error in this
+  #* case, an error means the action was successfully performed.  The tryCatch call negotiates that oddity to
+  #* get the desired result.
   x <- tryCatch(httr::POST(url=rcon$url, body=.params, config=rcon$config),
                 error=function(cond) list(status_code=200))
   if (x$status_code != "200")stop(paste(x$status_code, ": ", as.character(x), sep=""))
