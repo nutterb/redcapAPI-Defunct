@@ -65,4 +65,4 @@ importFrom("httr", upload_file)
 importFrom("chron", times)
 importFrom("stringr", str_split_fixed)
 
-useDynLib(redcap,.registration=TRUE)
+useDynLib(redcapAPI,.registration=TRUE)
