@@ -8,13 +8,14 @@ file can be used to parse levels of factors, apply labels, and other data manage
 retrieved.}
 
 \usage{
-\method{exportMetaData}{redcapDbConnection}(rcon)
-\method{exportMetaData}{redcapApiConnection}(rcon)
+\method{exportMetaData}{redcapDbConnection}(rcon, ...)
+\method{exportMetaData}{redcapApiConnection}(rcon, ...)
 }
 
 
 \arguments{
  \item{rcon}{An API connection created by \code{redcapConnection}.}
+ \item{...}{Arguments to be passed to other methods.}
 }
 
 \details{A record of this export is placed in the REDCap logging page, but the file that is exported is not stored in 
