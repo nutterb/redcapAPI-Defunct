@@ -1,5 +1,5 @@
-\name{redcap-package}
-\alias{redcap-package}
+\name{redcapAPI-package}
+\alias{redcapAPI-package}
 \docType{package}
 \title{
 Access data, meta data, and files from REDCap using the API
@@ -12,7 +12,7 @@ analysis.
 
 As much as possible, I've tried to adequately document \code{redcapAPI}.  Some topics did not seem well-suited to 
 documenting in the typical R help files.  Additional tips and discussion are available at the package wiki at
-\url{https://github.com/nutterb/redcap/wiki}.  These topics include "Getting started with \code{redcapAPI}", 
+\url{https://github.com/nutterb/redcapAPI/wiki}.  These topics include "Getting started with \code{redcapAPI}", 
 "Setting Rights to Grant API Access", "Export data from REDCap" and a detailed description of the REDCap API 
 parameters and how they are implemented in \code{R}.  I expect most documentation improvements to be placed on 
 the wiki.
@@ -59,6 +59,8 @@ Maintainer: Benjamin Nutter <nutterb@ccf.org>
 
   See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
   \url{https://github.com/OuhscBbmc/REDCapR}
+  
+  To learn more about REDCap, visit \url{project-recap.org}.
 }
 
 \examples{
