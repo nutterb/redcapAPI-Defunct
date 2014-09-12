@@ -222,10 +222,10 @@ validateImport <- function(field, meta_data, records, ids,
     x[x == "NA"] <- NA
 
     # reconvert to times objects to compare to meta data
-    x <- suppressWarnings(times(paste("00", x, sep=":"), format=c(times="h:m:s")))
+    x <- suppressWarnings(chron::times(paste("00", x, sep=":"), format=c(times="h:m:s")))
     
     if (!is.na(meta_data$text_validation_min)){
-      w <- which(x < times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
+      w <- which(x < chron::times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
         time_mmss_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
@@ -234,7 +234,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x > times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
+      w <- which(x > chron::times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
         time_mmss_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
@@ -268,10 +268,10 @@ validateImport <- function(field, meta_data, records, ids,
     x[x == "NA"] <- NA
     
     # reconvert to times objects to compare to meta data
-    x <- suppressWarnings(times(paste(x, "00", sep=":"), format=c(times="h:m:s")))
+    x <- suppressWarnings(chron::times(paste(x, "00", sep=":"), format=c(times="h:m:s")))
     
     if (!is.na(meta_data$text_validation_min)){
-      w <- which(x < times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
+      w <- which(x < chron::times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
         time_hhmm_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
@@ -280,7 +280,7 @@ validateImport <- function(field, meta_data, records, ids,
     }
     
     if (!is.na(meta_data$text_validation_max)){
-      w <- which(x > times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
+      w <- which(x > chron::times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
         time_hhmm_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
