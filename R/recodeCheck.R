@@ -19,7 +19,7 @@ recodeCheck <- function(df, vars,
     checkbox <- vars[vars_are_check]
   }
 
-  var.label <- label(df[checkbox])
+  var.label <- Hmisc::label(df[checkbox])
 
   #* Utility function for recoding check variables
   recodeFn <- function(v, old=old, new=new, reverse=reverse){
@@ -31,6 +31,6 @@ recodeCheck <- function(df, vars,
 
   #* Apply the new labels
   df[checkbox] <- lapply(df[checkbox], recodeFn, old, new, reverse)
-  label(df[, checkbox], self=FALSE) <- var.label
+  Hmisc::label(df[, checkbox], self=FALSE) <- var.label
   return(df)
 }
