@@ -297,7 +297,7 @@ exportRecords.redcapApiConnection <-
                                    x[[i]],factors,dates, checkboxLabels)
            }
     )
-    if (labels) label(x[, field_names], self=FALSE) <- field_labels
+    if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
     x
   }
 
