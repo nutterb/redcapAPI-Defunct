@@ -10,8 +10,9 @@ Description: The redcapAPI package uses the REDCap API to export and import
 License: GPL-2
 Imports:
     chron,
-    DBI,
     httr,
-    Hmisc,
     stringr
+Suggests:
+    DBI,
+    Hmisc
 LazyLoad: yes
