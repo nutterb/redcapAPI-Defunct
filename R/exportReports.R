@@ -69,7 +69,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
     field_labels <- rep(field_labels, sapply(field_names, length))
     field_labels <- paste(field_labels, field_labels_suffix, sep="")
     
-    label(x[, field_names], self=FALSE) <- field_labels
+    Hmisc::label(x[, field_names], self=FALSE) <- field_labels
   }
   x
               
