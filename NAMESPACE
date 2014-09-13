@@ -67,5 +67,7 @@ importFrom("stringr", str_split_fixed)
 importFrom("DBI", dbGetQuery)
 importFrom("Hmisc", label)
 importFrom("Hmisc", 'label<-')
+importFrom("Hmisc", label.data.frame)
+importFrom("Hmisc", 'label.data.frame<-')
 
 useDynLib(redcapAPI,.registration=TRUE)
