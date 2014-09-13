@@ -64,5 +64,6 @@ importFrom("httr", POST)
 importFrom("httr", upload_file)
 importFrom("chron", times)
 importFrom("stringr", str_split_fixed)
+importFrom("DBI", dbGetQuery)
 
 useDynLib(redcapAPI,.registration=TRUE)
