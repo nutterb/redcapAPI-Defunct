@@ -65,5 +65,7 @@ importFrom("httr", upload_file)
 importFrom("chron", times)
 importFrom("stringr", str_split_fixed)
 importFrom("DBI", dbGetQuery)
+importFrom("Hmisc", label)
+importFrom("Hmisc", 'label<-')
 
 useDynLib(redcapAPI,.registration=TRUE)
