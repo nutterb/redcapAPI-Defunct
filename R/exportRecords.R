@@ -65,7 +65,7 @@ exportRecords.redcapDbConnection <-
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
          survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
 {
-#  require(DBI)
+  require(DBI)
    meta_data <- exportMetaData(rcon)
    if (!is.null(fields))
    {
@@ -133,8 +133,8 @@ exportRecords.redcapApiConnection <-
            batch.size=-1,
            proj=NULL)
   {
-#    Hlabel <- require(Hmisc)
-#    if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    Hlabel <- require(Hmisc)
+    if (!Hlabel) stop("Please install the 'Hmisc' package.")
     
     #* Check that any events listed exist in the events table.
     events_list <- if (is.null(proj$events)) exportEvents(rcon) else proj$events
