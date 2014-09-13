@@ -12,8 +12,8 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
               dates=TRUE, checkboxLabels=FALSE, ...,
               proj=NULL){
               
-#  Hlabel <- require(Hmisc)
-#  if (!Hlabel) stop("Please install the 'Hmisc' package.")
+  Hlabel <- require(Hmisc)
+  if (!Hlabel) stop("Please install the 'Hmisc' package.")
               
   .params <- list(token=rcon$token, content='report',
                     format='csv', returnFormat='csv',
