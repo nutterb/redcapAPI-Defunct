@@ -53,7 +53,7 @@ order by abs(record), record, event_id
 
    sql <- sprintf(.SQL_PROJECT_DATA, getOption('redcap.dataTable'),
                   rcon$project,recordsSQL,eventsSQL,fieldsSQL,'\\_\\_%')
-   dbGetQuery(rcon$conn, sql)
+   DBI::dbGetQuery(rcon$conn, sql)
 }
 
 exportRecords <-
