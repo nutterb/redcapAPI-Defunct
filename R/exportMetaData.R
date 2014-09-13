@@ -28,7 +28,7 @@ WHERE
 ORDER BY field_order"
 
    suppressWarnings(
-   x <- dbGetQuery(rcon$con,
+   x <- DBI::dbGetQuery(rcon$con,
            sprintf(.SQL_PROJECT_META_DATA,
                    getOption('redcap.metaDataTable'),
                    rcon$project))
