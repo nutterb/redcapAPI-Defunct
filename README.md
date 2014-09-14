@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/wibeasley/redcap.png?branch=master)](https://travis-ci.org/wibeasley/redcap)
+[![Build Status](https://travis-ci.org/nutterb/redcapAPI.png?branch=master)](https://travis-ci.org/nutterb/redcapAPI)
 
-redcap
+redcapAPI
 ======
 
-R interface to REDCap (http://www.project-redcap.org/)
+The package `redcapAPI` is an R interface to REDCap (http://www.project-redcap.org/), and is an actively developed fork of [redcap](https://github.com/vubiostat/redcap), originally created by [Jeffrey Horner](https://github.com/jeffreyhorner).
 
 Please read the documentation on your institutions REDCap installation.
 
