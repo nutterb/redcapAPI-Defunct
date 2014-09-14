@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wibeasley/redcap.png?branch=master)](https://travis-ci.org/wibeasley/redcap)
+[![Build Status](https://travis-ci.org/nutterb/redcapAPI.png?branch=master)](https://travis-ci.org/nutterb/redcapAPI)
 
 redcapAPI
 ======
