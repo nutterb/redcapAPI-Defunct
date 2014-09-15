@@ -15,6 +15,6 @@ Suggests:
     DBI,
     Hmisc
 LazyLoad: yes
-URL: https://github.com/nutterb/redcapAPI/wiki
-     https://github.com/nutterb/redcapAPI
+URL: https://github.com/nutterb/redcapAPI/wiki,
+     https://github.com/nutterb/redcapAPI,
      http://project-redcap.org
