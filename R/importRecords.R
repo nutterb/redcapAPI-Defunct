@@ -26,7 +26,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   overwriteBehavior <- match.arg(overwriteBehavior, c('normal', 'overwrite'))
   returnContent <- match.arg(returnContent, c('count', 'ids', 'nothing'))
   
-  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
+  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon) else meta_data <- proj$meta_data
   if (compareRedcapVersion(proj$version, "5.5.21") == -1 )
     meta_data <- syncUnderscoreCodings(data, meta_data, export=FALSE)
   form_names <- unique(meta_data$form_name)
