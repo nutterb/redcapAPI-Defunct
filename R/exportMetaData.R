@@ -46,12 +46,22 @@ ORDER BY field_order"
 exportMetaData.redcapApiConnection <-
 function(rcon, ...)
 {
-   x <- httr::POST(
-         url=rcon$url,
-         body = list(token=rcon$token, content='metadata',
-                     format='csv', returnFormat='csv'),
-         config=rcon$config)
-   if (x$status_code == 200){
+   x <- tryCatch(httr::POST(
+                       url=rcon$url,
+                       body = list(token=rcon$token, content='metadata',
+                                   format='csv', returnFormat='csv'),
+                       config=rcon$config),
+                 error = function(cond) {
+                           if (grepl("GnuTLS recv error [(]-9[)]", cond)){
+                             m <- RCurl::postForm(uri=rcon$url,
+                                             .params=list(token=rcon$token, content='metadata',
+                                                          format='csv', returnFormat='csv'),
+                                             .opts=rcon$config)
+                             attributes(m)$RCurl <- TRUE
+                           }
+                           else stop (cond))
+                    
+   if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      # x$required_field <- as.integer(x$required_field) # I'm not sure why this is here.
      return(x)
