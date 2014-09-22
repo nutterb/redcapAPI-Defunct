@@ -58,10 +58,16 @@ function(rcon, ...)
                                                           format='csv', returnFormat='csv'),
                                              .opts=rcon$config)
                              attributes(m)$RCurl <- TRUE
+                             return(m)
                            }
                            else stop(cond)})
+   
+   if (!is.null(attributes(x)$RCurl)){
+     x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+     return(x)
+   }
                     
-   if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
+   else if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      # x$required_field <- as.integer(x$required_field) # I'm not sure why this is here.
      return(x)
