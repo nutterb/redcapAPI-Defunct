@@ -10,6 +10,7 @@ License: GPL-2
 Imports:
     chron,
     httr,
+    RCurl,
     stringr
 Suggests:
     DBI,
