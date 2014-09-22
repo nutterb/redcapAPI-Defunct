@@ -46,30 +46,12 @@ ORDER BY field_order"
 exportMetaData.redcapApiConnection <-
 function(rcon, ...)
 {
-   x <- tryCatch(httr::POST(
-                       url=rcon$url,
-                       body = list(token=rcon$token, content='metadata',
-                                   format='csv', returnFormat='csv'),
-                       config=rcon$config),
-                 error = function(cond) {
-                           if (grepl("GnuTLS recv error [(]-9[)]", cond)){
-                             m <- RCurl::postForm(uri=rcon$url,
-                                             .params=list(token=rcon$token, content='metadata',
-                                                          format='csv', returnFormat='csv'),
-                                             .opts=rcon$config)
-                             attributes(m)$RCurl <- TRUE
-                             return(m)
-                           }
-                           else stop(cond)})
-   
-   if (!is.null(attributes(x)$RCurl)){
+   x <- apiCall(url=rcon$url, 
+                body=list(token=rcon$token, content='metadata',
+                          format='csv', returnFormat='csv'),
+                config=rcon$config)          
+if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-     return(x)
-   }
-                    
-   else if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
-     x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-     # x$required_field <- as.integer(x$required_field) # I'm not sure why this is here.
      return(x)
    }
    else stop(paste(x$status_code, ": ", as.character(x), sep=""))
