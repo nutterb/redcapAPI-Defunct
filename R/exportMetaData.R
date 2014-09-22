@@ -59,7 +59,7 @@ function(rcon, ...)
                                              .opts=rcon$config)
                              attributes(m)$RCurl <- TRUE
                            }
-                           else stop (cond))
+                           else stop(cond)})
                     
    if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
