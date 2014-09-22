@@ -235,7 +235,7 @@ exportRecords.redcapApiConnection <-
     
     #* read in one API call
     if (batch.size < 1){
-      x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
+      x <- apiCall(url=rcon$url, body=.params, config=rcon$config)
       if (x$status_code != "200") stop(as.character(x))
     
       x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
@@ -252,7 +252,7 @@ exportRecords.redcapApiConnection <-
       #* Export IDs, then limit to unique IDs (for longitudinal projects). 
       #* There isn't really a way to extract a fixed number of records in each batch
       #* The best we can do is a fixed number of ID's.
-      ID <- httr::POST(url=rcon$url, body=batch.params, config=rcon$config)
+      ID <- apiCall(url=rcon$url, body=batch.params, config=rcon$config)
       if (ID$status_code != "200") stop(paste(ID$status_code, ": ", as.character(ID), sep=""))
       ID <- read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
       ID <- unique(ID[, 1, drop=FALSE])
@@ -270,7 +270,7 @@ exportRecords.redcapApiConnection <-
       
       #* API calls
       x <- lapply(batch.records, 
-                  function(r) httr::POST(url=rcon$url,
+                  function(r) apiCall(url=rcon$url,
                                        body=c(.params, list(records=paste(r, collapse=","))),
                                        config=rcon$config))
       if (x[[1]]$status_code != "200") stop(paste(x[[1]]$status_code, ": ", as.character(x[[1]])))
