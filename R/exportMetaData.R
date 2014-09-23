@@ -50,7 +50,7 @@ function(rcon, ...)
                 body=list(token=rcon$token, content='metadata',
                           format='csv', returnFormat='csv'),
                 config=rcon$config)          
-if (x$status_code == 200 | !is.null(attributes(x)$RCurl)){
+if (x$status_code == 200){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      return(x)
    }
