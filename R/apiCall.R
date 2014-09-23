@@ -1,5 +1,5 @@
 apiCall <- function(url, body, config){
-  x <- tryCatch(httr::POST(url, body, config),
+  x <- tryCatch(httr::POST(url=url, body=body, config=config),
                 error = function(cond){
                   if (grepl("GnuTLS recv error [(]-9[)]", cond)){
                     m <- RCurl::postForm(uri=url, .params=body,
