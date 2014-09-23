@@ -8,6 +8,8 @@ apiCall <- function(url, body, config){
                               status_code = 200,
                               url=rcon$url)
                     class(m) <- "response"
-                    return(m))
+                    return(m)
+                  }
+                })
   return(x)
 }
