@@ -6,7 +6,7 @@ apiCall <- function(url, body, config){
                                          .opts=config)
                     m <- list(content=charToRaw(m),
                               status_code = "200",
-                              url=rcon$url)
+                              url=url)
                     class(m) <- "response"
                     return(m)
                   }
