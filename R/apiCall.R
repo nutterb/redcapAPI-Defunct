@@ -5,7 +5,7 @@ apiCall <- function(url, body, config){
                     m <- RCurl::postForm(uri=url, .params=body,
                                          .opts=config)
                     m <- list(content=charToRaw(m),
-                              status_code = 200,
+                              status_code = "200",
                               url=rcon$url)
                     class(m) <- "response"
                     return(m)
