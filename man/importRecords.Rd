@@ -42,7 +42,8 @@
   \enumerate{
     \item Check that all variables in \code{data} exist in the REDCap data dictionary.
     \item Check that the study id variable exists
-    \item Force the study id variable to the first position in the data frame
+    \item Force the study id variable to the first position in the data frame (with a warning)
+    \item Remove calculated fields (with a warning)
     \item Verify that REDCap date fields are represented in the data frame as either character, POSIXct, or Date class
           objects.
     \item Determine if values are within their specified validation limits.
