@@ -84,9 +84,15 @@ importRecords.redcapApiConnection <- function(rcon, data,
   #*** Remove calculated fields
   calc_field <- meta_data$field_name[meta_data$field_type == "calc"]
   if (length(calc_field) > 0){
-    data <- data[, !names(data) %in% calc_field]
+    warn.flag <- warn.flag + 1
+    warn.msg <- c(warn.msg,
+                  paste(warn.flag, ": The variable(s) '", paste(calc_field, collapse="', '"), 
+                        "' are calculated fields and cannot be imported. ",
+                        "They have been removed from the imported data frame.", sep=""))
+    data <- data[, !names(data) %in% calc_field, drop=FALSE]
   }
   
+  if (warn.flag) warning(paste(warn.msg, collapse="\n"))
   if (error.flag) stop(paste(error.msg, collapse="\n"))
   
   
