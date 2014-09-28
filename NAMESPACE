@@ -62,7 +62,6 @@ S3method(redcapProjectInfo, redcapApiConnection)
 
 importFrom("httr", POST)
 importFrom("httr", upload_file)
-importFrom("RCurl", postForm)
 importFrom("chron", times)
 importFrom("stringr", str_split_fixed)
 importFrom("Hmisc", label.default)
