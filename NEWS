@@ -1,0 +1,9 @@
+Changes in Version 1.1 (2014-10-01)
+  * Bug fix: in `importRecords` meta data was not previously exported when a project info 
+    object was not provided.  This is now corrected
+  * added function `apiCall`.  This wraps a call to `tryCatch`.  If a Gnu/TLS recv error is returned, the encoding is
+    changed from 'gzip' to 'identity' to successfully retrieve the API response.
+  * The Hmisc package was moved from the Suggests field to the Imports field.  This reflects the addition of some of
+    the label functions in Hmisc being explicitly exported, making them available to import.  
+  * redcapAPI requires Hmisc 3.14-6 or higher.  This is a consequence of the previous item.  Please update your
+    Hmisc package.
