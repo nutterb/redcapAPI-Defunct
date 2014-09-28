@@ -1,8 +1,8 @@
 recodeCheck <- function(df, vars, 
                         old=c("Unchecked", "Checked"), new=c("No", "Yes"), 
                         reverse=FALSE){
-    Hlabel <- require(Hmisc)
-    if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    #Hlabel <- require(Hmisc)
+    #if (!Hlabel) stop("Please install the 'Hmisc' package.")
 
   #* If no variable names are provided, check the data frame for all variables in which all values 
   #* are either "Checked" or "Unchecked"
