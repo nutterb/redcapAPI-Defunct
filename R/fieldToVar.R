@@ -1,5 +1,5 @@
 fieldToVar <- 
-  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE)
+  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE, vname)
   {    
     # Date variables
     if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
