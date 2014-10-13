@@ -9,6 +9,8 @@ Changes in Version 1.1 (2014-10-01)
   * Bug fix: in `exportRecords` and `exportReports`, the checkbox labels
     weren't being returned as factor levels when `checkboxLabels=TRUE`.
     The behavior is now consistent with expectations.
+  * Bug fix: in `compareRedcapVersion`, a logical check was failing due 
+    to an ommitted argument in `grepl`.  This has been corrected.
   * added function `apiCall`.  This wraps a call to `tryCatch`.  If a 
     Gnu/TLS recv error is returned, the encoding is changed from 'gzip' 
     to 'identity' to successfully retrieve the API response.
