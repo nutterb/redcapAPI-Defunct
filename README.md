@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/nutterb/redcapAPI.png?branch=master)](https://travis-ci.org/nutterb/redcapAPI)
 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11826.png)](http://dx.doi.org/10.5281/zenodo.11826)
+
 redcapAPI
 ======
 

@@ -5,5 +5,6 @@ bibentry(bibtype = "Manual",
          title = "{redcapAPI}: Accessing data from REDCap projects using the API",
          author = c(person("Benjamin", "Nutter")),
          year = year,
+         doi = "10.5281/zenodo.11826",
          note = note,
          url = "https://github.com/nutterb/redcapAPI/wiki")

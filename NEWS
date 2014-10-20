@@ -1,0 +1,17 @@
+Changes in Version 1.0.1 (2014-10-20)
+  * Bug fix: in `importRecords` meta data was not previously exported 
+    when a project info object was not provided.  This is now corrected
+  * Bug fix: in `exportRecords` and `exportReports`, the checkbox labels
+    weren't being returned as factor levels when `checkboxLabels=TRUE`.
+    The behavior is now consistent with expectations.
+  * Bug fix: in `compareRedcapVersion`, a logical check was failing due 
+    to an ommitted argument in `grepl`.  This has been corrected.
+  * added function `apiCall`.  This wraps a call to `tryCatch`.  If a 
+    Gnu/TLS recv error is returned, the encoding is changed from 'gzip' 
+    to 'identity' to successfully retrieve the API response.
+  * `tryCatch` calls are added to `redcapProjectInfo` to prevent fatal 
+    errors when one of the API functions casts an error.  The output 
+    is modified to indicate where the problem occurred.  This is most 
+    likely to affect `exportUsers`. An unresolved issue behind this is 
+    logged in the issues on Github.
+    

@@ -46,14 +46,12 @@ ORDER BY field_order"
 exportMetaData.redcapApiConnection <-
 function(rcon, ...)
 {
-   x <- httr::POST(
-         url=rcon$url,
-         body = list(token=rcon$token, content='metadata',
-                     format='csv', returnFormat='csv'),
-         config=rcon$config)
-   if (x$status_code == 200){
+   x <- apiCall(url=rcon$url, 
+                body=list(token=rcon$token, content='metadata',
+                          format='csv', returnFormat='csv'),
+                config=rcon$config)          
+if (x$status_code == 200){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-     # x$required_field <- as.integer(x$required_field) # I'm not sure why this is here.
      return(x)
    }
    else stop(paste(x$status_code, ": ", as.character(x), sep=""))

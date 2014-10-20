@@ -1,5 +1,5 @@
 fieldToVar <- 
-  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE)
+  function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE, vname)
   {    
     # Date variables
     if (grepl("date_", m$text_validation_type_or_show_slider_number) && dates){
@@ -104,7 +104,20 @@ fieldToVar <-
         attr(d, 'redcapLevels') <- 0:1
       }
       if (factors & checkboxLabels){
-        d <- factor(d)
+        #* convert choices to a matrix of options
+        w <- unlist(strsplit(m$select_choices_or_calculations,"[\n|]"))
+        w <- as.data.frame(do.call("rbind", strsplit(w, ",")), 
+                           stringsAsFactors=FALSE)
+        w <- sapply(w, function(x){ x <- gsub('^\\s*','',x,perl=TRUE);
+                                    x <- gsub('\\s*$','',x,perl=TRUE);
+                                    return(x)})
+        #* get the suffix of the current variable
+        suffix <- unlist(strsplit(vname, "___"))[2]
+        
+        #* match the label to the suffix
+        lbl <- c("", w[w[, 1] == suffix, 2])
+        
+        d <- factor(d, 0:1, lbl)
         attr(d, 'redcapLabels') <- levels(d)
         attr(d, 'redcapLevels') <- 0:1
       }

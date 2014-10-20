@@ -43,7 +43,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
       function(i) 
         {
           x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-                                x[[i]],factors,dates,checkboxLabels)
+                                x[[i]],factors,dates,checkboxLabels,vname=i)
         }
   )
   if (labels){
