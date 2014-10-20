@@ -9,11 +9,11 @@ Description: Access data stored in REDCap databases using the Application Progra
 License: GPL-2
 Imports:
     chron,
-    Hmisc,
     httr,
     stringr
 Suggests:
-    DBI
+    DBI,
+    Hmisc
 LazyLoad: yes
 URL: https://github.com/nutterb/redcapAPI/wiki,
      https://github.com/nutterb/redcapAPI,
