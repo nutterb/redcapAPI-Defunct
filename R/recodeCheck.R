@@ -15,9 +15,9 @@ recodeCheck <- function(df, vars,
   else {
     vars_are_check <- sapply(df, function(x) all(attributes(x)$redcapLabels %in% old))
     vars_not_check <- vars[!vars_are_check]
-    if (any(!vars_are_check)) warning(paste("'", paste(vars[!vars_are_check], collapse = "', '"), 
+    if (any(!vars_are_check)) warning(paste0("'", paste(vars[!vars_are_check], collapse = "', '"), 
                                             "' do not appear to be 'checkbox' variables.",
-                                            "\nThese variables were not recoded.", sep=""))
+                                            "\nThese variables were not recoded."))
     checkbox <- vars[vars_are_check]
   }
 
