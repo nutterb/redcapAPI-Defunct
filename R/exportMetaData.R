@@ -54,5 +54,5 @@ if (x$status_code == 200){
      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      return(x)
    }
-   else stop(paste(x$status_code, ": ", as.character(x), sep=""))
+   else stop(paste0(x$status_code, ": ", as.character(x)))
 }
