@@ -11,7 +11,7 @@ importFiles.redcapDbConnection <- function(rcon, file, record, field, event, ove
 importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
                                             proj=NULL){
   #* Use working directory if 'dir' is not specified
-  if (!file.exists(file)) stop(paste("No file found at '", file, "'", sep=""))
+  if (!file.exists(file)) stop(paste0("No file found at '", file, "'"))
   
   #* stop the function if arguments do not specify a unique record-event
   if (missing(event)) event <- ""
@@ -23,13 +23,13 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
   if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
   if (meta_data$field_type[meta_data$field_name == field] != "file")
-    stop(paste("'", field, "' is not of field type 'file'", sep=""))
+    stop(paste0("'", field, "' is not of field type 'file'"))
   
   #* make sure 'event' exists in the project
   if (is.null(proj$events)) events_list <- exportEvents(rcon)
   if (class(events_list) == 'data.frame'){
     if (!event %in% events_list$unique_event_name) 
-      stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
+      stop(paste0("'", event, "' is not a valid event name in this project."))
   }
   
   if (!overwrite){
@@ -45,6 +45,6 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event, ov
   #* Export the file
   file <- tryCatch(httr::POST(url=rcon$url, body=.params, config=rcon$config),
             error=function(cond) list(status_code = "200"))
-  if (file$status_code != "200") stop(paste(file$status_code, ": ", as.character(file), sep=""))
+  if (file$status_code != "200") stop(paste0(file$status_code, ": ", as.character(file)))
   else message("The file was successfully uploaded")
 }
