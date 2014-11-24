@@ -182,7 +182,7 @@ exportRecords.redcapApiConnection <-
    
    #* Expand 'field_names' to include fields from specified forms.    
    if (!is.null(forms)) 
-     field_names <- c(field_names, meta_data$field_name[meta_data$form_name %in% forms])
+     field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
     
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
