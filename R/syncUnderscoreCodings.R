@@ -14,8 +14,8 @@ syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
   
   #* If the function reaches this point, there were underscores in the codings
   #* Now check the variable names in the exported records for underscores in the coding suffixes
-  ptrn <- paste("(", paste(.checkbox$field_name, collapse="|"), ")", sep="")
-  ptrn_suff <- paste("(", paste(.checkbox$field_name, "___", sep="", collapse="|"), ")", sep="")
+  ptrn <- paste0("(", paste(.checkbox$field_name, collapse="|"), ")")
+  ptrn_suff <- paste0("(", paste(.checkbox$field_name, "___", sep="", collapse="|"), ")")
   checkNames <- names(records)[grepl(ptrn, names(records))]
   checkNames <- gsub(ptrn_suff, "", checkNames)
   recordUnderscore <- any(grepl("_", checkNames))
