@@ -1,4 +1,8 @@
 Changes in Version 1.1 (2014-10-01)
+  * redcapAPI now depends on R 3.0.0 or higher
+  * A bug fix was added.  When specifying the 'fields' and 'forms' arguments 
+    in 'exportRecords', only the variables in 'fields' were being converted
+    to the appropriate data types.  This has been corrected.
   * redcapAPI requires Hmisc 3.14-6 or higher.  This is a consequence of 
     the following item.  Please update your Hmisc package.
   * The Hmisc package was moved from the Suggests field to the Imports 
