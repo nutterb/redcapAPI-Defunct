@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-Changes in Version 1.1 (2014-10-01)
+Changes in Version 1.1 (2014-11-25)
   * redcapAPI now depends on R 3.0.0 or higher
   * A bug fix was added.  When specifying the 'fields' and 'forms' arguments 
     in 'exportRecords', only the variables in 'fields' were being converted
@@ -27,4 +26,3 @@ Changes in Version 1.0.1 (2014-10-20)
     likely to affect `exportUsers`. An unresolved issue behind this is 
     logged in the issues on Github.
     
->>>>>>> master
