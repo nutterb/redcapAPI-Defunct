@@ -7,6 +7,8 @@ Author: Benjamin Nutter. Initiated by Jeffrey Horner and Will Gray with contribu
 Maintainer: Benjamin Nutter <nutterb@ccf.org>
 Description: Access data stored in REDCap databases using the Application Programming Interface (API).  REDCap (Research Electronic Data CAPture) is a web application for building and managing online surveys and databases developed at Vanderbilt University.  The API allows users to access data and project meta data (such as the data dictionary) from the web programmatically.  The redcapAPI package facilitates the process of accessing data with options to prepare an analysis-ready data set consistent with the definitions in a database's data dictionary.
 License: GPL-2
+Depends: 
+    R (>= 3.0.0)
 Imports:
     chron,
     Hmisc (>= 3.14-6),
