@@ -20,7 +20,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!grepl("(0|1|2|Incomplete|Unverified|Complete)", x))
       if (length(w) > 0){
         complt_fld_msg <- records[w, c(ids, field), drop=FALSE]
-        complt_fld_msg$msg <- paste("Entry in '", field, "' must be either 0, 1, 2, Incomplete, Unverified, or Complete. Value not imported", sep="")
+        complt_fld_msg$msg <- paste0("Entry in '", field, "' must be either 0, 1, 2, Incomplete, Unverified, or Complete. Value not imported")
         x[w] <- NA
       }
       x <- gsub("Incomplete", "0", x)
@@ -31,7 +31,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!x %in% 0:2)
       if (length(w) > 0){
         complt_fld_msg <- records[w, c(ids, field), drop=FALSE]
-        complt_fld_msg$msg <- paste("Entry in '", field, "' must be either 0, 1, 2, Incomplete, Unverified, or Complete. Value not imported", sep="")
+        complt_fld_msg$msg <- paste0("Entry in '", field, "' must be either 0, 1, 2, Incomplete, Unverified, or Complete. Value not imported")
         x[w] <- NA  
       }
     }
@@ -45,8 +45,8 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!grepl("(\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d{4}[/,-]\\d{1,2}[/,-]\\d{1,2}|\\d{4}\\d{2}\\d{2})", x) & !is.na(x))
       if (length(w) > 0){
         date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
-        date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
-                                  "or character class with format mm/dd/YYYY, YYYY/mm/dd, YYYY-mm-dd, or YYYYmmdd.", sep="")
+        date_fmt_msg$msg <- paste0("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
+                                  "or character class with format mm/dd/YYYY, YYYY/mm/dd, YYYY-mm-dd, or YYYYmmdd.")
         printLog(date_fmt_msg, logfile)
         x[w] <- NA
       }
@@ -66,7 +66,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d") & !is.na(x))
       if (length(w) > 0){
         date_min_msg <- records[w, c(ids, field), drop=FALSE]
-        date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        date_min_msg$msg <- paste0("Entry for '", field, "' is before the acceptable minimum.  Please confirm.")
         printLog(date_min_msg, logfile)
       }
     }
@@ -75,7 +75,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
-        date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        date_max_msg$msg <- paste0("Entry for '", field, "' is after the acceptable maximum.  Please confirm.")
         printLog(date_max_msg, logfile)
       }
     }
@@ -98,9 +98,9 @@ validateImport <- function(field, meta_data, records, ids,
                               x) & !is.na(x))
       if (length(w) > 0){
         date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
-        date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
+        date_fmt_msg$msg <- paste0("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
                                   "or character class with format mm/dd/YYYY HH:MM, YYYY/mm/dd HH:MM, YYYY-mm-dd HH:MM, or YYYYmmdd HH:MM",
-                                  "with an optional AM/PM on the end.", sep="")
+                                  "with an optional AM/PM on the end.")
         printLog(date_fmt_msg, logfile)
         x[w] <- NA
       }
@@ -126,7 +126,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d %I:%M") & !is.na(x))
       if (length(w) > 0){
         date_min_msg <- records[w, c(ids, field), drop=FALSE]
-        date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        date_min_msg$msg <- paste0("Entry for '", field, "' is before the acceptable minimum.  Please confirm.")
         printLog(date_min_msg, logfile)
       }
     }
@@ -135,7 +135,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
-        date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        date_max_msg$msg <- paste0("Entry for '", field, "' is after the acceptable maximum.  Please confirm.")
         printLog(date_max_msg, logfile)
       }
     }
@@ -158,9 +158,9 @@ validateImport <- function(field, meta_data, records, ids,
                         x) & !is.na(x))
       if (length(w) > 0){
         date_fmt_msg <- records[w, c(ids, field), drop=FALSE]
-        date_fmt_msg$msg <- paste("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
+        date_fmt_msg$msg <- paste0("Date entry in '", field, "' were NOT imported!  \n      These should be either POSIXct class, Date class, ",
                                   "or character class with format mm/dd/YYYY HH:MM:SS, YYYY/mm/dd HH:MM:SS, YYYY-mm-dd HH:MM:SS, or YYYYmmdd HH:MM:SS",
-                                  "with an optional AM/PM on the end.", sep="")
+                                  "with an optional AM/PM on the end.")
         printLog(date_fmt_msg, logfile)
         x[w] <- NA
       }
@@ -186,7 +186,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < as.POSIXct(meta_data$text_validation_min, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
       if (length(w) > 0){
         date_min_msg <- records[w, c(ids, field), drop=FALSE]
-        date_min_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        date_min_msg$msg <- paste0("Entry for '", field, "' is before the acceptable minimum.  Please confirm.")
         printLog(date_min_msg, logfile)
       }
     }
@@ -195,7 +195,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > as.POSIXct(meta_data$text_validation_max, format="%Y-%m-%d %I:%M:%S") & !is.na(x))
       if (length(w) > 0){
         date_max_msg <- records[w, c(ids, field), drop=FALSE]
-        date_max_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        date_max_msg$msg <- paste0("Entry for '", field, "' is after the acceptable maximum.  Please confirm.")
         printLog(date_max_msg, logfile)
       }
     }
@@ -215,7 +215,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
-      not_time_mmss_msg$msg <- paste("Entry for '", field, "' is not in 00:MM:SS or MM:SS format.", sep="")
+      not_time_mmss_msg$msg <- paste0("Entry for '", field, "' is not in 00:MM:SS or MM:SS format.")
       printLog(not_time_mmss_msg, logfile)
       x[w] <- NA
     }
@@ -228,7 +228,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < chron::times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
-        time_mmss_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        time_mmss_msg$msg <- paste0("Entry for '", field, "' is before the acceptable minimum.  Please confirm.")
         printLog(time_mmss_msg, logfile)
       }
     }
@@ -237,7 +237,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > chron::times(paste("00", meta_data$text_validation_min, sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
-        time_mmss_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        time_mmss_msg$msg <- paste0("Entry for '", field, "' is after the acceptable maximum.  Please confirm.")
         printLog(time_mmss_msg, logfile)
       }
     }
@@ -261,7 +261,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
-      not_time_mmss_msg$msg <- paste("Entry for '", field, "' is not in HH:MM:00 or HH:MM format.", sep="")
+      not_time_mmss_msg$msg <- paste0("Entry for '", field, "' is not in HH:MM:00 or HH:MM format.")
       printLog(not_time_mmss_msg, logfile)
       x[w] <- NA
     }
@@ -274,7 +274,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < chron::times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
-        time_hhmm_msg$msg <- paste("Entry for '", field, "' is before the acceptable minimum.  Please confirm.", sep="")
+        time_hhmm_msg$msg <- paste0("Entry for '", field, "' is before the acceptable minimum.  Please confirm.")
         printLog(time_hhmm_msg, logfile)
       }
     }
@@ -283,7 +283,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > chron::times(paste(meta_data$text_validation_min, "00", sep=":")) & !is.na(x))
       if (length(w) > 0){
         time_hhmm_msg <- records[w, c(ids, field), drop=FALSE]
-        time_hhmm_msg$msg <- paste("Entry for '", field, "' is after the acceptable maximum.  Please confirm.", sep="")
+        time_hhmm_msg$msg <- paste0("Entry for '", field, "' is after the acceptable maximum.  Please confirm.")
         printLog(time_hhmm_msg, logfile)
       }
     }
@@ -305,7 +305,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!is.integer(x) & !is.na(x))
       if (length(w) > 0){
         not_int_msg <- records[w, c(ids, field), drop=FALSE]
-        not_int_msg$msg <- paste("Entry for '", field, "' is not an integer and was coerced to an integer.", sep="")
+        not_int_msg$msg <- paste0("Entry for '", field, "' is not an integer and was coerced to an integer.")
         printLog(not_int_msg, logfile)
         x <- as.integer(x)
       }
@@ -313,7 +313,7 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!is.numeric(x) & !is.na(x))
     if (length(w) > 0){
       not_num_msg <- records[w, c(ids, field), drop=FALSE]
-      not_num_msg$msg <- paste("Entry for '", field, "' was not numeric and was coerced to a numeric.", sep="")
+      not_num_msg$msg <- paste0("Entry for '", field, "' was not numeric and was coerced to a numeric.")
       printLog(not_num_msg, logfile)
       x <- as.numeric(x)
     }
@@ -325,7 +325,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x < meta_data$text_validation_min & !is.na(x))
       if (length(w) > 0){
         num_min_msg <- records[w, c(ids, field), drop=FALSE]
-        num_min_msg$msg <- paste("Entry for '", field, "' is smaller than the acceptable minimum.  Please confirm.", sep="")
+        num_min_msg$msg <- paste0("Entry for '", field, "' is smaller than the acceptable minimum.  Please confirm.")
         printLog(num_min_msg, logfile)
       }
     }
@@ -334,7 +334,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(x > meta_data$text_validation_max & !is.na(x))
       if (length(w) > 0){
         num_max_msg <- records[w, c(ids, field), drop=FALSE]
-        num_max_msg$msg <- paste("Entry for '", field, "' is larger than the acceptable maximum.  Please confirm.", sep="")
+        num_max_msg$msg <- paste0("Entry for '", field, "' is larger than the acceptable maximum.  Please confirm.")
         printLog(num_max_msg, logfile)
       }
     }
@@ -368,7 +368,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!x %in% c("no", "yes", "0", "1") & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
-        bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
+        bad_yn_msg$msg <- paste0("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.")
         printLog(bad_yn_msg, logfile)
         x[w] <- NA
       }
@@ -379,7 +379,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!x %in% 0:1 & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
-        bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
+        bad_yn_msg$msg <- paste0("Entry for '", field, "' must be either no, yes, 0, or 1.")
         printLog(bad_yn_msg, logfile)
         x[!x %in% 0:1] <- NA
       }
@@ -397,7 +397,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!x %in% c("true", "false") & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
-        bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.", sep="")
+        bad_yn_msg$msg <- paste0("Entry for '", field, "' must be either no, yes, 0, or 1.  No value was imported.")
         printLog(bad_yn_msg, logfile)
         x <- as.character(factor(x, c("no", "yes"), 0:1))
       }
@@ -406,7 +406,7 @@ validateImport <- function(field, meta_data, records, ids,
       w <- which(!x %in% 0:1 & !is.na(x))
       if (length(w) > 0){
         bad_yn_msg <- records[w, c(ids, field), drop=FALSE]
-        bad_yn_msg$msg <- paste("Entry for '", field, "' must be either no, yes, 0, or 1.", sep="")
+        bad_yn_msg$msg <- paste0("Entry for '", field, "' must be either no, yes, 0, or 1.")
         printLog(bad_yn_msg, logfile)
         x[!x %in% 0:1] <- NA
       }
@@ -433,7 +433,7 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!x %in% mapping[, 1] & !is.na(x))
     if (length(w) > 0){
       radio_msg <- records[w, c(ids, field), drop=FALSE]
-      radio_msg$msg <- paste("Entry for '", field, "' must be either one of: ", paste(c(mapping[, 1], mapping[, 2]), collapse=", "), ".", sep="")
+      radio_msg$msg <- paste0("Entry for '", field, "' must be either one of: ", paste(c(mapping[, 1], mapping[, 2]), collapse=", "), ".")
       printLog(radio_msg, logfile)
       x[w] <- NA
     }
@@ -454,8 +454,8 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice) & !is.na(x))
     if (length(w) > 0){
       check_msg <- records[w, c(ids, field), drop=FALSE]
-      check_msg$msg <- paste("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked, ", 
-                             checkChoice, ".", sep="")
+      check_msg$msg <- paste0("Entry for '", field, "' must be either one of: 0, 1, Checked, Unchecked, ", 
+                             checkChoice, ".")
       printLog(check_msg, logfile)
     }
     x[x %in% "Checked"] <- "1"
@@ -474,8 +474,8 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(nchar(x) != 10 & !is.na(x))
     if (length(w) > 0){
       phone_msg <- records[w, c(ids, field), drop=FALSE]
-      phone_msg$msg <- paste("Entry for '", field, "' must be a 10 digit phone number.", 
-                             "This value was not uploaded.", sep="")
+      phone_msg$msg <- paste0("Entry for '", field, "' must be a 10 digit phone number.", 
+                             "This value was not uploaded.")
       printLog(phone_msg, logfile)
       x[w] <- NA
     }
@@ -488,8 +488,8 @@ validateImport <- function(field, meta_data, records, ids,
                            grepl("\\d{4}", x.station)))
     if (length(w) > 0){
       phone_msg <- records[w, c(ids, field), drop=FALSE]
-      phone_msg$msg <- paste("Entry for '", field, "' is not a valid 10 digit phone number ",
-                         "and is not imported.", sep="")
+      phone_msg$msg <- paste0("Entry for '", field, "' is not a valid 10 digit phone number ",
+                         "and is not imported.")
       printLog(phone_msg, logfile)
       x[w] <- NA
     }
@@ -504,8 +504,8 @@ validateImport <- function(field, meta_data, records, ids,
     w <- which(!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}$", x) & !is.na(x))
     if (length(w) > 0){
       email_msg <- records[w, c(ids, field), drop=FALSE]
-      email_msg$msg <- paste("Entry for '", field,"' is not a valid e-mail address ",
-                         "and is not imported.", sep="")
+      email_msg$msg <- paste0("Entry for '", field,"' is not a valid e-mail address ",
+                         "and is not imported.")
       printLog(email_msg, logfile)
     }
     x[w] <- NA

@@ -12,8 +12,8 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
               dates=TRUE, checkboxLabels=FALSE, ...,
               proj=NULL){
               
-  Hlabel <- require(Hmisc)
-  if (!Hlabel) stop("Please install the 'Hmisc' package.")
+  #Hlabel <- require(Hmisc)
+  #if (!Hlabel) stop("Please install the 'Hmisc' package.")
               
   .params <- list(token=rcon$token, content='report',
                     format='csv', returnFormat='csv',
@@ -67,7 +67,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
     #* Ensures field_labels is adjusted to the proper length to account for
     #* checkbox variables and creates the labels.
     field_labels <- rep(field_labels, sapply(field_names, length))
-    field_labels <- paste(field_labels, field_labels_suffix, sep="")
+    field_labels <- paste0(field_labels, field_labels_suffix)
     
     Hmisc::label(x[, field_names], self=FALSE) <- field_labels
   }

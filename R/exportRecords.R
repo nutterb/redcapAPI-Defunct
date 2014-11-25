@@ -133,15 +133,15 @@ exportRecords.redcapApiConnection <-
            batch.size=-1,
            proj=NULL)
   {
-    Hlabel <- require(Hmisc)
-    if (!Hlabel) stop("Please install the 'Hmisc' package.")
+    #Hlabel <- require(Hmisc)
+    #if (!Hlabel) stop("Please install the 'Hmisc' package.")
     
     #* Check that any events listed exist in the events table.
     events_list <- if (is.null(proj$events)) exportEvents(rcon) else proj$events
     if (class(events_list) == "data.frame" & !is.null(events)){
       if (any(!events %in% events_list$unique_event_name)){
-        stop(paste("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
-                   " are not valid event names", sep=""))
+        stop(paste0("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
+                   " are not valid event names"))
       }
     }
     
@@ -158,8 +158,8 @@ exportRecords.redcapApiConnection <-
     
     #* Check that stated forms exist
     if (any(!forms %in% unique(meta_data$form_name))){
-        stop(paste("'", paste(forms[!forms %in% unique(meta_data$form_name)], collapse="', '"),
-                   " are not valid form names"), sep="")
+        stop(paste0("'", paste(forms[!forms %in% unique(meta_data$form_name)], collapse="', '"),
+                   " are not valid form names"))
       }
     
     #* Create list of field names
@@ -182,8 +182,7 @@ exportRecords.redcapApiConnection <-
    
    #* Expand 'field_names' to include fields from specified forms.    
    if (!is.null(forms)) 
-     field_names <- field_names[field_names %in% c(fields, 
-                                                   meta_data$field_name[meta_data$form_name %in% forms])]
+     field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
     
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
@@ -253,7 +252,7 @@ exportRecords.redcapApiConnection <-
       #* There isn't really a way to extract a fixed number of records in each batch
       #* The best we can do is a fixed number of ID's.
       ID <- apiCall(url=rcon$url, body=batch.params, config=rcon$config)
-      if (ID$status_code != "200") stop(paste(ID$status_code, ": ", as.character(ID), sep=""))
+      if (ID$status_code != "200") stop(paste0(ID$status_code, ": ", as.character(ID)))
       ID <- read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
       ID <- unique(ID[, 1, drop=FALSE])
       

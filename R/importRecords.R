@@ -42,23 +42,23 @@ importRecords.redcapApiConnection <- function(rcon, data,
   
   #** Remove survey identifiers and data access group fields from data
   w.remove <- which(names(data) %in% c("redcap_survey_identifier", 
-                              paste(unique(meta_data$form_name), "_timestamp", sep=""),
+                              paste0(unique(meta_data$form_name), "_timestamp"),
                               "redcap_data_access_group"))
   if (length(w.remove) > 0) data <- data[, -w.remove]
   
   if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name"))){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg, 
-                   paste(error.flag, ": The variables ", paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
-                         " do not exist in the REDCap Data Dictionary", sep=""))
+                   paste0(error.flag, ": The variables ", paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
+                         " do not exist in the REDCap Data Dictionary"))
   }
   
   #** Check that the study id exists in data
   if (!meta_data$field_name[1] %in% names(data)){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg,
-                   paste(error.flag, ": The variable '", meta_data$field_name[1], "' cannot be found in 'data'. ",
-                         "Please include this variable and place it in the first column.", sep=""))
+                   paste0(error.flag, ": The variable '", meta_data$field_name[1], "' cannot be found in 'data'. ",
+                         "Please include this variable and place it in the first column."))
   }
   
   #** If the study id is not in the the first column, move it and print a warning
@@ -77,8 +77,8 @@ importRecords.redcapApiConnection <- function(rcon, data,
   if (any(bad_date_fmt)){
     error.flag <- error.flag + 1
     error.msg <- c(error.msg,
-                   paste(error.flag, ": The variables '", paste(date_vars[bad_date_fmt], collapse="', '"), 
-                         "' must have class Date, POSIXct, or character.", sep=""))
+                   paste0(error.flag, ": The variables '", paste(date_vars[bad_date_fmt], collapse="', '"), 
+                         "' must have class Date, POSIXct, or character."))
   }
   
   #*** Remove calculated fields
@@ -86,9 +86,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
   if (length(calc_field) > 0){
     warn.flag <- warn.flag + 1
     warn.msg <- c(warn.msg,
-                  paste(warn.flag, ": The variable(s) '", paste(calc_field, collapse="', '"), 
+                  paste0(warn.flag, ": The variable(s) '", paste(calc_field, collapse="', '"), 
                         "' are calculated fields and cannot be imported. ",
-                        "They have been removed from the imported data frame.", sep=""))
+                        "They have been removed from the imported data frame."))
     data <- data[, !names(data) %in% calc_field, drop=FALSE]
   }
   
@@ -98,8 +98,8 @@ importRecords.redcapApiConnection <- function(rcon, data,
   
   idvars <- if ("redcap_event_name" %in% names(data)) c(meta_data$field_name[1], "redcap_event_name") else meta_data$field_name[1]
   
-  msg <- paste("REDCap Data Import Log: ", Sys.time(), 
-               "\nThe following (if any) conditions were noted about the data.\n\n", sep="")
+  msg <- paste0("REDCap Data Import Log: ", Sys.time(), 
+               "\nThe following (if any) conditions were noted about the data.\n\n")
   if (is.null(logfile)) cat(msg) else write(msg, logfile)
 
   data[, names(data)] <- lapply(names(data), validateImport, meta_data, data, idvars, logfile)
@@ -137,7 +137,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
       status.code <- unlist(sapply(x, '[', "status_code"))
       msg <- sapply(x, as.character)
       
-      stop(paste(paste(status.code[status.code != "200"], ": ", msg[status.code != "200"], sep=""), collapse="\n"))
+      stop(paste(paste0(status.code[status.code != "200"], ": ", msg[status.code != "200"]), collapse="\n"))
     }
     
   }
@@ -159,6 +159,6 @@ importRecords.redcapApiConnection <- function(rcon, data,
                     body=list(token = rcon$token, content='record', format='csv',
                               type='flat', overwriteBehavior = overwriteBehavior,
                               returnFormat='csv', data=out))
-    if (x$status_code == "200") as.character(x) else stop(paste(x$status_code, ": ", as.character(x), sep=""))
+    if (x$status_code == "200") as.character(x) else stop(paste0(x$status_code, ": ", as.character(x)))
   }
 }

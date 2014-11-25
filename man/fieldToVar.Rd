@@ -17,7 +17,12 @@
     applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_label]" where [field_label] is the
     label assigned to the level in the data dictionary.  This option only applies when \code{factors=TRUE} and only to 
     REDCap versions 6.0 and higher.}
+<<<<<<< HEAD
+  \item{vname}{The variable name being converted.  This is used only when \code{checkboxLabels=TRUE} in order to 
+    extract the checkbox label.}
+=======
   \item{vname}{Used for determining the label of a checkbox when \code{checkboxLabels=TRUE}.}
+>>>>>>> master
 }
 
 \details{

@@ -16,15 +16,15 @@ deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ...,
   
   #* make sure 'field' exist in the project and are 'file' fields
   if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon, config=rcon$config)
-  if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
+  if (!field %in% meta_data$field_name) stop(paste0("'", field, "' does not exist in the project."))
   if (meta_data$field_type[meta_data$field_name == field] != "file")
-      stop(paste("'", field, "' is not of field type 'file'", sep=""))
+      stop(paste0("'", field, "' is not of field type 'file'"))
       
   #* make sure 'event' exists in the project
   if (is.null(proj$events)) events_list <- exportEvents(rcon)
   if (class(events_list) == "data.frame"){
     if (!event %in% events_list$unique_event_name) 
-      stop(paste("'", event, "' is not a valid event name in this project.", sep=""))
+      stop(paste0("'", event, "' is not a valid event name in this project."))
   }
   
   .params <- list(token=rcon$token, content='file',
