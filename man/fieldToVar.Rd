@@ -3,7 +3,7 @@
 \title{Convert a REDCap Data Field to an R Vector}
 \description{Converts a field exported from REDCap into a valid R vector}
 
-\usage{fieldToVar(m, d, factors=TRUE, dates=TRUE, checkboxLabels=FALSE)}
+\usage{fieldToVar(m, d, factors=TRUE, dates=TRUE, checkboxLabels=FALSE, vname)}
 
 
 \arguments{
@@ -17,6 +17,8 @@
     applies as "Unchecked"/"Checked".  If \code{TRUE}, they are applied as ""/"[field_label]" where [field_label] is the
     label assigned to the level in the data dictionary.  This option only applies when \code{factors=TRUE} and only to 
     REDCap versions 6.0 and higher.}
+  \item{vname}{The variable name being converted.  This is used only when \code{checkboxLabels=TRUE} in order to 
+    extract the checkbox label.}
 }
 
 \details{
