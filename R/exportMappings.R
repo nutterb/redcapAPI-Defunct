@@ -16,5 +16,5 @@ exportMappings.redcapApiConnection <- function(rcon, arms, ...){
   #*** return the message that indicates this is a classic project.
   else if (x$status_code == "400" & as.character(x) == "You cannot export form/event mappings for classic projects") 
     paste0(x$status_code, ": ", as.character(x))
-  else (stop0(paste(x$status_code, ": ", as.character(x))))
+  else (stop(paste0(x$status_code, ": ", as.character(x))))
 }
