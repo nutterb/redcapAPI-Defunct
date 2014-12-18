@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+Changes in Version 1.2 (2015-02-01)
+  * The function 'allocationTable' is added.  This assists in producing
+    allocation tables for the randomization module.
+
 Changes in Version 1.1 (2014-10-01)
   * redcapAPI now depends on R 3.0.0 or higher
   * A bug fix was added.  When specifying the 'fields' and 'forms' arguments 
@@ -9,7 +12,7 @@ Changes in Version 1.1 (2014-10-01)
   * The Hmisc package was moved from the Suggests field to the Imports 
     field.  This reflects the addition of some of the label functions in 
     Hmisc being explicitly exported, making them available to import.  
-=======
+
 Changes in Version 1.0.1 (2014-10-20)
   * Bug fix: in `importRecords` meta data was not previously exported 
     when a project info object was not provided.  This is now corrected
@@ -27,4 +30,3 @@ Changes in Version 1.0.1 (2014-10-20)
     likely to affect `exportUsers`. An unresolved issue behind this is 
     logged in the issues on Github.
     
->>>>>>> master
