@@ -34,7 +34,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   
   #* Function to extract the coded values from the meta_data
   redcapChoices <- function(v, meta_data){
-    if (meta_data$field_type[meta_data$field_name == v] %in% c("dropdown", "radio", "checkbox")){
+    if (meta_data$field_type[meta_data$field_name == v] %in% c("dropdown", "radio")){
       choice_str <- meta_data$select_choices_or_calculations[meta_data$field_name == v]
       choice_str <- unlist(strsplit(choice_str, " [|] "))
       return(stringr::str_split_fixed(choice_str, ", ", 2)[, 1])
