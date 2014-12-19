@@ -1,3 +1,7 @@
+export(allocationTable)
+S3method(allocationTable, redcapDbConnection)
+S3method(allocationTable, redcapApiConnection)
+
 export(deleteFiles)
 S3method(deleteFiles, redcapDbConnection)
 S3method(deleteFiles, redcapApiConnection)

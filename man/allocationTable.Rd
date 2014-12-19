@@ -10,15 +10,17 @@
 
 \usage{
 \method{allocationTable}{redcapDbConnection}(rcon, random, strata=NULL, 
-                                                group=NULL, dag_id=NULL, 
-                                                replicates, block.size, 
-                                                seed=NULL, 
-                                                proj=NULL, ...)
+                            group=NULL, dag.id=NULL, 
+                            replicates, block.size, 
+                            block.size.shift = 0,
+                            seed.dev=NULL, seed.prod=NULL,  
+                            proj=NULL, ...)
 \method{allocationTable}{redcapApiConnection}(rcon, random, strata=NULL, 
-                                                group=NULL, dag_id=NULL, 
-                                                replicates, block.size, 
-                                                seed=NULL, 
-                                                proj=NULL, ...)
+                            group=NULL, dag.id=NULL, 
+                            replicates, block.size, 
+                            block.size.shift = 0,
+                            seed.dev=NULL, seed.prod=NULL,  
+                            proj=NULL, ...)
 }
 
 
@@ -29,31 +31,40 @@
   \item{group}{A field name giving a group by which randomization should be 
     stratified.  This could also be listed in \code{strata}, but the argument
     is provided to remain consistent with the REDCap user interface.}
-  \item{dag_id}{Data Access Group IDs.  See the package wiki for instructions
+  \item{dag.id}{Data Access Group IDs.  See the package wiki for instructions
     on how to get the ID's. (They cannot currently be accessed via the API)}
   \item{replicates}{The number of randomizations to perform within each stratum}
   \item{block.size}{Block size for the randomization.  Blocking is recommended
-    to ensure balanced groups throughout the randomization}
-  \item{seed}{At least one value is required.  If only one value is given, 
+    to ensure balanced groups throughout the randomization.  This may be a vector
+    to indicate variable block sizes throughout the randomization.}
+  \item{block.size.shift}{A vector the same length as \code{block.size} where the
+    first element is 0.  This controls when the block size changes as a proportion
+    of the total sample size.  When \code{block.size=c(8, 4, 2)} and 
+    \code{block.size.shift = c(0, .5, .9)}, the first half of the randomization 
+    is performed in blocks of 8, then the next 40 percent of the randomization
+    is performed in blocks of 4, with the last 10 percent performed in blocks
+    of 2.}
+  \item{seed.dev}{At least one value is required.  If only one value is given, 
     it will be converted to a vector with length equal to the number of strata.
     Values will be incremented by 100 to provide independent randomizations.
     This may also have length equal to the number of strata.}
+  \item{seed.prod}{Same as \code{seed.prod}, but used to seed the production
+    allocation.  No pairwise elements of \code{seed.dev} and \code{seed.prod}
+    may be equal.  This guarantees that the two randomization schemes are 
+    unique.}
   \item{proj}{A \code{redcapProjectInfo} object.}
   \item{...}{Arguments to be passed to other methods}
 }
 
 \details{
-\code{block.size} must be a multiple of the number of groups in the randomized
-variable.  If the given \code{block.size} is inappropriate, it will be increased 
-to match.  For instance, if there are 4 options and \code{block.size = 6}, 
-the randomization will not have equal probability for each option.  
-In this case, \code{block.size} will be increased to 8 to give equal 
-probability to each of the options.
+Each element in \code{block.size} must be a multiple of the number of groups in the randomized
+variable.  
 
-\code{replicates} may also be increased slightly to ensure all blocks are complete.
-Any changes to \code{replicates} or \code{block.size} are always to increase to
-the next smallest appropriate number to ensure that the sampling allocation is 
-larger that specified. 
+The value of \code{replicates} controls how many allocations are generated.  It 
+is possible to get slightly more replicates than requested if your blocking design
+cannot exactly match replicates.  For example, if you as for 30 replicates in 
+blocks of 8, a warning will be printed and you will receive 32 replicates in the
+randomization table.
 }
 
 \author{Benjamin Nutter}
