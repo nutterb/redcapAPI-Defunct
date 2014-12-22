@@ -93,7 +93,8 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   
   #* stratification groups
   strata <- c(strata, group)
-  strata_levels <- sapply(strata, redcapChoices, meta_data)
+  strata_levels <- lapply(strata, redcapChoices, meta_data)
+  names(strata_levels) <- strata
   if (!is.null(dag.id)) strata_levels[['redcap_data_access_group']] <- dag.id
   
   #* Allocation table
