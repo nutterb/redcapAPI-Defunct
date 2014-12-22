@@ -3,3 +3,5 @@
 ^\.gitignore$
 ^\.travis.yml$
 ^\.travis\.yml$
+^\.Rinit.o$
+
