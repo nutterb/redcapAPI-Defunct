@@ -2,6 +2,7 @@
 \alias{exportRecords}
 \alias{exportRecords.redcapDbConnection}
 \alias{exportRecords.redcapApiConnection}
+\alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \description{Exports records from a REDCap Database, allowing for subsets of subjects, fields, records, and events.}
 
@@ -14,11 +15,19 @@
     survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...,
     batch.size=-1, 
     proj=NULL)
+exportRecords_offline(datafile, meta_data, factors=TRUE,
+                      fields=NULL,forms=NULL,
+                      labels=TRUE,dates=TRUE, checkboxLabels=FALSE, ...)
 } 
 
 
 \arguments{
   \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
+  \item{datafile}{For the offline version, a character string giving the location
+    of the dataset downloaded from REDCap.  Note that this should be the raw
+    (unlabeled) data set.}
+  \item{meta_data}{A text string giving the location of the data dictionary 
+    downloaded from REDCap.}
   \item{factors}{Logical.  Determines if categorical data from the database is returned as numeric codes or labelled 
     factors.}
   \item{labels}{Logical.  Determines if the variable labels are applied to the data frame.}
@@ -50,6 +59,11 @@
 }
 
 \details{A record of exports through the API is recorded in the Logging section of the project.
+
+The 'offline' version of the function operates on the raw (unlabeled) data file downloaded from 
+REDCap along with the data dictionary.  This is made available for instances where the
+API can not be accessed for some reason (such as waiting for API approval from the
+REDCap administrator).
 
 It is unnecessary to include "redcap_event_name" in the fields argument.  This field is automatically exported for any
 longitudinal database.  If the user does include it in the fields argument, it is removed quietly in the parameter checks.

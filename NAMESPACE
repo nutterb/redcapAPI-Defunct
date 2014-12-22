@@ -2,6 +2,8 @@ export(allocationTable)
 S3method(allocationTable, redcapDbConnection)
 S3method(allocationTable, redcapApiConnection)
 
+export(allocationTable_offline)
+
 export(deleteFiles)
 S3method(deleteFiles, redcapDbConnection)
 S3method(deleteFiles, redcapApiConnection)
@@ -33,6 +35,8 @@ S3method(exportMetaData, redcapApiConnection)
 export(exportRecords)
 S3method(exportRecords, redcapDbConnection)
 S3method(exportRecords, redcapApiConnection)
+
+export(exportRecords_offline)
 
 export(exportReports)
 S3method(exportReports, redcapDbConnection)
