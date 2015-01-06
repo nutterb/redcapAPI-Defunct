@@ -36,8 +36,9 @@ exportRecords_offline <-
       else #* found non-existent fields
         stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
     }
-    else #* fields were not provided, default to all fields.
+    else{ #* fields were not provided, default to all fields.
       field_names <- meta_data$field_name
+    }
    
    #* Expand 'field_names' to include fields from specified forms.    
    if (!is.null(forms)) 
@@ -87,8 +88,8 @@ exportRecords_offline <-
     #* return field_names to a vector
     field_names <- unlist(field_names)
 
-    x <- read.csv(datafile, stringsAsFactors=FALSE, na.strings="")[, field_names, drop=FALSE]
-    
+    x <- read.csv(datafile, stringsAsFactors=FALSE, na.strings="")#[, field_names, drop=FALSE]
+       
     lapply(field_names,
            function(i) 
            {
@@ -96,7 +97,14 @@ exportRecords_offline <-
                                    x[[i]],factors,dates, checkboxLabels, vname=i)
            }
     )
+   
     if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
-    x
+   
+   if ("redcap_data_access_group" %in% names(x)) field_names <- c(field_names[1], "redcap_data_access_group", field_names[-1])
+   if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
+   field_names <- c(field_names, paste0(unique(meta_data$form_name), "_complete"))
+   x <- x[, field_names, drop=FALSE]
+   
+   x
   }
 
