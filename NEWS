@@ -4,7 +4,7 @@ Changes in Version 1.2 (2015-02-01)
     allocation tables for the randomization module.
   * Offline versions for 'exportRecords' and 'allocationTable' are 
     included.  These produce output identical to the API calls, but 
-    operate based on the csv's downloaded from the user interface.
+    operate based on the csv's downloaded via the user interface.
 
 Changes in Version 1.1 (2014-10-01)
   * redcapAPI now depends on R 3.0.0 or higher
