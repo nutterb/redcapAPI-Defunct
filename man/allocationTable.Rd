@@ -2,12 +2,23 @@
 \name{allocationTable}
 \alias{allocationTable}
 \alias{allocationTable.redcapApiConnection}
+\alias{allocationTable.redcapDbConnection}
 \alias{allocationTable_offline}
 \title{Allocation Tables for the Randomization Module}
 \usage{
 allocationTable(rcon, random, strata = NULL, group = NULL, dag.id = NULL,
   replicates, block.size, block.size.shift = 0, seed.dev = NULL,
   seed.prod = NULL, proj = NULL, ...)
+
+\method{allocationTable}{redcapDbConnection}(rcon, random, strata = NULL,
+  group = NULL, dag.id = NULL, replicates, block.size,
+  block.size.shift = 0, seed.dev = NULL, seed.prod = NULL, proj = NULL,
+  ...)
+
+\method{allocationTable}{redcapApiConnection}(rcon, random, strata = NULL,
+  group = NULL, dag.id = NULL, replicates, block.size,
+  block.size.shift = 0, seed.dev = NULL, seed.prod = NULL, proj = NULL,
+  ...)
 
 allocationTable_offline(meta_data, random, strata = NULL, group = NULL,
   dag.id = NULL, replicates, block.size, block.size.shift = 0,

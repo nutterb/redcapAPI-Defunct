@@ -81,6 +81,8 @@ allocationTable <- function(rcon, random, strata=NULL,
                             proj=NULL, ...)
   UseMethod("allocationTable")
 
+#' @rdname allocationTable
+
 allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL, 
                                                group=NULL, dag.id=NULL, 
                                                replicates, block.size, 
@@ -90,6 +92,8 @@ allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL,
     message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
             "has not yet been written.  Please consider using the API.")
   }
+
+#' @rdname allocationTable
 
 allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL, 
                                                 group=NULL, dag.id=NULL, 
