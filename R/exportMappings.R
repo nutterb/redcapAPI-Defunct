@@ -2,8 +2,8 @@
 #' @aliases exportMappings.redcapApiConnection
 #' @aliases exportMappings.redcapDbConection
 #' @export exportMappings
-#' @exportMethod exportMappings.redcapApiConnection
-#' @exportMethod exportMappings.redcapDbConnection
+#' @export exportMappings.redcapApiConnection
+#' @export exportMappings.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the Event-Form Mappings for a Project

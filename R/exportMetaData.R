@@ -2,8 +2,8 @@
 #' @aliases exportMetaData.redcapApiConnection
 #' @aliases exportMetaData.redcapDbConnection
 #' @export exportMetaData
-#' @exportMethod exportMetaData.redcapApiConnection
-#' @exportMethod exportMetaData.redcapDbConnection
+#' @export exportMetaData.redcapApiConnection
+#' @export exportMetaData.redcapDbConnection
 #' @importFrom DBI dbGetQuery
 #' 
 #' @title Export Meta Data from a REDCap Database

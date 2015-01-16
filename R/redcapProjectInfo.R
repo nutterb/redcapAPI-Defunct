@@ -2,8 +2,8 @@
 #' @aliases redcapProjectInfo.redcapApiConnection
 #' @aliases redcapProjectInfo.redcapDbConnection
 #' @export redcapProjectInfo
-#' @exportMethod redcapProjectInfo.redcapApiConnection
-#' @exportMethod redcapProjectInfo.redcapDbConnection
+#' @export redcapProjectInfo.redcapApiConnection
+#' @export redcapProjectInfo.redcapDbConnection
 #' 
 #' @title Export a Project's Supplemental Information
 #' @description The meta data, users, arms, events, mappings, and REDCap 

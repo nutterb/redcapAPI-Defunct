@@ -2,8 +2,8 @@
 #' @aliases exportFiles.redcapApiConnection
 #' @aliases exportFiles.redcapDbConnection
 #' @export exportFiles
-#' @exportMethod exportFiles.redcapApiConnection
-#' @exportMethod exportFiles.redcapDbConnection
+#' @export exportFiles.redcapApiConnection
+#' @export exportFiles.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports a File attached to a Record

@@ -2,8 +2,8 @@
 #' @aliases importRecords.redcapApiConnection
 #' @aliases importRecords.redcapDbConnection
 #' @export importRecords
-#' @exportMethod importRecords.redcapApiConnection
-#' @exportMethod importRecords.redcapDbConnection
+#' @export importRecords.redcapApiConnection
+#' @export importRecords.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Import Records to a REDCap Database

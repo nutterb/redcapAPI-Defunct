@@ -1,9 +1,9 @@
 #' @name importFiles
 #' @aliases importFiles.redcapApiConnection
-#' @aliases importfiles.redcapDbConnection
+#' @aliases importFiles.redcapDbConnection
 #' @export importFiles
-#' @exportMethod importFiles.redcapApiConnection
-#' @exportMethod importfiles.redcapDbConnection
+#' @export importFiles.redcapApiConnection
+#' @export importFiles.redcapDbConnection
 #' @importFrom httr POST
 #' @importFrom httr upload_file
 #' 

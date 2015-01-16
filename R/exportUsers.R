@@ -2,8 +2,8 @@
 #' @aliases exportUsers.redcapApiConnection
 #' @aliases exportUsers.redcapDbConnection
 #' @export exportUsers
-#' @exportMethod exportUsers.redcapApiConnection
-#' @exportMethod exportUsers.redcapDbConnection
+#' @export exportUsers.redcapApiConnection
+#' @export exportUsers.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Export the Users for a Project

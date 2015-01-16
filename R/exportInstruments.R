@@ -2,8 +2,8 @@
 #' @aliases exportInstruments.redcapApiConnection
 #' @aliases exportInstruments.redcapDbConnection
 #' @export exportInstruments
-#' @exportMethod exportInstruments.redcapApiConnection
-#' @exportMethod exportInstruments.redcapDbConnection
+#' @export exportInstruments.redcapApiConnection
+#' @export exportInstruments.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Export Instrument names

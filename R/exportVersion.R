@@ -2,8 +2,8 @@
 #' @aliases exportVersion.redcapApiConnection
 #' @aliases exportVersion.redcapDbConnection
 #' @export exportVersion
-#' @exportMethod exportVersion.redcapApiConnection
-#' @exportMethod exportVersion.redcapDbConnection
+#' @export exportVersion.redcapApiConnection
+#' @export exportVersion.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the REDCap Version Number

@@ -2,7 +2,7 @@ Package: redcapAPI
 Type: Package
 Title: R interface to REDCap
 Version: 1.2
-Date: 2015-02-01
+Date: 2015-01-16
 Author: Benjamin Nutter. Initiated by Jeffrey Horner and Will Gray with
     contributions from Jeremy Stephens, and Will Beasley
 Maintainer: Benjamin Nutter <nutterb@ccf.org>

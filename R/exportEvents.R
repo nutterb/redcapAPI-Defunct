@@ -2,8 +2,8 @@
 #' @aliases exportEvents.redcapApiConnection
 #' @aliases exportEvents.redcapDbConnection
 #' @export exportEvents
-#' @exportMethod exportEvents.redcapApiConnection
-#' @exportMethod exportEvents.redcapDbConnection
+#' @export exportEvents.redcapApiConnection
+#' @export exportEvents.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Export the Events for a Project

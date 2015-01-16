@@ -2,8 +2,8 @@
 #' @aliases exportReports.redcapApiConnection
 #' @aliases exportReports.redcapDbConnection
 #' @export exportReports
-#' @exportMethod exportReports.redcapApiConnection
-#' @exportMethod exportReports.redcapDbConnection
+#' @export exportReports.redcapApiConnection
+#' @export exportReports.redcapDbConnection
 #' @importFrom httr POST
 #' @importFrom chron times
 #' @importFrom stringr str_split_fixed

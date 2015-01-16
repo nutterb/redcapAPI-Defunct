@@ -3,8 +3,8 @@
 #' @aliases allocationTable.redcapDbConneciton
 #' @aliases allocationTable_offline
 #' @export allocationTable
-#' @exportMethod allocationTable.redcapApiConnection
-#' @exportMethod allocationTable.redcapDbConnection
+#' @export allocationTable.redcapApiConnection
+#' @export allocationTable.redcapDbConnection
 #' @export allocationTable_offline
 #' @importFrom stringr str_split_fixed
 #' 

@@ -2,8 +2,8 @@
 #' @aliases exportArms.redcapApiConnection
 #' @aliases exportArms.redcapDbConnection
 #' @export exportArms
-#' @exportMethod exportArms.redcapApiConnection
-#' @exportMethod exportArms.redcapDbConnection
+#' @export exportArms.redcapApiConnection
+#' @export exportArms.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the Arms for a Project

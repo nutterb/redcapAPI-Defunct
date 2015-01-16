@@ -2,8 +2,8 @@
 #' @aliases deleteFiles.redcapApiConnection
 #' @aliases deleteFiles.redcapDbConnection
 #' @export deleteFiles
-#' @exportMethod deleteFiles.redcapApiConnection
-#' @exportMethod deleteFiles.redcapDbConnection
+#' @export deleteFiles.redcapApiConnection
+#' @export deleteFiles.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Delete a File attached to a Record
