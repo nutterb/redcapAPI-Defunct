@@ -1,3 +1,85 @@
+#' @name validateImport
+#' @importFrom chron times
+#' 
+#' @title Validate Data Frames for Import
+#' @description Validates the variables in a data frame prior to attempting 
+#'   an import to REDCap
+#'   
+#' @param field Character(1) naming the variable to be validated.
+#' @param meta_data REDCap database meta data.
+#' @param records The data frame to be validated.
+#' @param ids Character vector giving the names of fields that uniquely 
+#'   identify a record.  Usually the study id and \code{redcap_event_name}.
+#' @param logfile A character string giving the filepath to which the 
+#'   results of the validation are printed.  If \code{""}, the results 
+#'   are printed in the console.
+#'   
+#' @details
+#' \code{validateImport} is called internally by \code{importRecords} and is 
+#' not available to the user.
+#' 
+#' Each variable is validated by matching they type of variable with the type 
+#' listed in the REDCap database.  
+#' 
+#' Although the log messages will indicate a preference for dates to be in 
+#' mm/dd/yyyy format, the function will accept mm/dd/yy, yyyy-mm-dd, 
+#' yyyy/mm/dd, and yyyymmdd formats as well.  When possible, pass dates as 
+#' Date objects or POSIXct objects to avoid confusion.  Dates are also compared 
+#' to minimum and maximum values listed in the data dictionary.  Records where 
+#' a date is found out of range are allowed to import and a message 
+#' is printed in the log.
+#' 
+#' For continuous/numeric variables, the values are checked against the 
+#' minimum and maximum allowed in the data dictionary. Records where a value 
+#' is found out of range are allowed to import and a message is printed 
+#' in the log.
+#' 
+#' ZIP codes are tested to see if they fit either the 5 digit or 
+#' 5 digit + 4 format.  When these conditions are not met, the data point is 
+#' deleted and a message printed in the log.
+#' 
+#' YesNo fields permit any of the values 'yes', 'no', '0', '1' to be imported 
+#' to REDCap with 0=No, and 1=Yes.  The values are converted to lower case 
+#' for validation, so any combination of lower and upper case values 
+#' will pass (ie, the data frame is not case-sensitive).
+#' 
+#' TrueFalse fields will accept 'TRUE', 'FALSE', 0, 1, and logical values 
+#' and are also not case-sensitive.
+#' 
+#' Radio and dropdown fields may have either the coding in the data 
+#' dictionary or the labels in the data dictionary. The validation will use 
+#' the meta data to convert any matching values to the appropriate coding 
+#' before importing to REDCap.  Values that cannot be reconciled are 
+#' deleted with a message printed in the log.  Currently, these variables
+#' \emph{are} case-sensitive.
+#' 
+#' Checkbox fields require a value of "Checked", "Unchecked", "0", or "1".  
+#' These are currently case sensitive.  Values that do not match these are 
+#' deleted with a warning printed in the log.
+#' 
+#' Phone numbers are required to be 10 digit numbers.  The phone number is 
+#' broken into three parts: 1) a 3 digit area code, 2) a 3 digit exchange code, 
+#' and 3) a 4 digit station code.  The exchange code must start with a number 
+#' from 2-9, followed by 0-8, and then any third digit.  
+#' The exchange code starts with a number from 2-9, followed by any two 
+#' digits. The station code is 4 digits with no restrictions.
+#' 
+#' E-mail addresses are considered valid when they have three parts. The first 
+#' part comes before the @@ symbol, and may be number of characters from 
+#' a-z, A-Z, a period, underscore, percent, plus, or minus.  The second part
+#' comes after the @@, but before the period, and may consist of any 
+#' number of letters, numbers, periods, or dashes.  Finally, the string ends 
+#' with a period then anywhere from 2 to 6 letters.
+#' 
+#' @author Benjamin Nutter
+#' 
+#' @references
+#' See the REDCap Help and FAQ page's section on 'Text Validation Types'
+#' 
+#' Validating e-mail addresses
+#' \url{http://www.regular-expressions.info/email.html}
+#' 
+
 validateImport <- function(field, meta_data, records, ids,
                            logfile=""){
   x <- records[, field]

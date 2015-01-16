@@ -1,12 +1,59 @@
+#' @name exportReports
+#' @aliases exportReports.redcapApiConnection
+#' @aliases exportReports.redcapDbConnection
+#' @export exportReports
+#' @export exportReports.redcapApiConnection
+#' @export exportReports.redcapDbConnection
+#' @importFrom httr POST
+#' @importFrom chron times
+#' @importFrom stringr str_split_fixed
+#' @importFrom Hmisc label.default
+#' @importFrom Hmisc label.data.frame
+#' @importFrom Hmisc 'label<-.default'
+#' @importFrom Hmisc 'label<-.data.frame'
+#' @importFrom Hmisc '[.labelled'
+#' @importFrom Hmisc print.labelled
+#' 
+#' @title Export Reports from a REDCap Database
+#' @description Exports reports from a REDCap Database and formats data if requested
+#' 
+#' @param rcon A REDCap connection object as created by \code{redcapConnection}.
+#' @param report_id Integer.  Gives the report id of the desired report. 
+#' This is located on the Report Builder page of the user interface on REDCap.
+#' @param factors Logical.  Determines if categorical data from the database 
+#' is returned as numeric codes or labelled factors.
+#' @param labels Logical.  Determines if the variable labels are applied to the data frame.
+#' @param dates Logical. Determines if date variables are converted to POSIXlt format during the download.
+#' @param checkboxLabels Logical. Determines the format of labels in checkbox 
+#'   variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
+#'   If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
+#'   is the label assigned to the level in the data dictionary. This option 
+#'   is only available after REDCap version 6.0.
+#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param ... Additional arguments to be passed between methods.
+#' 
+#' @details
+#' A record of exports through the API is recorded in the Logging section of 
+#' the project.
+#' 
+#' Reports are exported based on their id number, which can be looked up in 
+#' the Reports page of a project
+#' 
+#' @author Benjamin Nutter
+
 exportReports <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...)
     UseMethod("exportReports")
-    
+
+#' @rdname exportReports
+
 exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...){
     message("Please accept my apologies.  The exportMappings method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")          
 }
+
+#' @rdname exportReports
 
 exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...,
