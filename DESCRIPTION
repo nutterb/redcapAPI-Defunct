@@ -19,12 +19,12 @@ Depends:
     R (>= 3.0.0)
 Imports:
     chron,
+    DBI,
     Hmisc (>= 3.14-6),
     httr,
     stringr
-Suggests:
-    DBI
 LazyLoad: yes
 URL: https://github.com/nutterb/redcapAPI/wiki,
     https://github.com/nutterb/redcapAPI,
     http://project-redcap.org
+BugReports: https://github.com/nutterb/redcapAPI/issues

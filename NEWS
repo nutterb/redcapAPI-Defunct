@@ -1,4 +1,5 @@
 Changes in Version 1.2 (2015-02-01)
+  * Code has been rewritten to make use of the `roxygen2` documenation style.
   * The function 'allocationTable' is added.  This assists in producing
     allocation tables for the randomization module.
   * Offline versions for 'exportRecords' and 'allocationTable' are 

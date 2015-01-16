@@ -1,3 +1,7 @@
+#' @rdname allocationTable
+#' @export allocationTable_offline
+#' @importFrom stringr str_split_fixed 
+
 allocationTable_offline <- function(meta_data, random, strata=NULL, 
                             group=NULL, dag.id=NULL, 
                             replicates, block.size, 

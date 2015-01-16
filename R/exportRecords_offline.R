@@ -1,3 +1,5 @@
+#' @rdname exportRecords
+
 exportRecords_offline <- 
   function(datafile, meta_data, factors=TRUE,fields=NULL,forms=NULL,
            labels=TRUE,dates=TRUE, checkboxLabels=FALSE, ...)
