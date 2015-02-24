@@ -1,15 +1,25 @@
-#' @name missingSummary_offline
+#' @name missingSummary
+#' @aliases missingSummary.redcapApiConnection
+#' @aliases missingSummary.redcapDbConneciton
+#' @aliases missingSummary_offline
+#' @export missingSummary
+#' @export missingSummary.redcapApiConnection
+#' @export missingSummary.redcapDbConnection
 #' @export missingSummary_offline
 #' 
 #' @title Report of Missing Values
-#' @description Returns a data frame of subject events with missing values.
+#' @description Returns a data frame of subject events with missing values. 
 #' 
+#' @param rcon A recapConnection object.
+#' @param proj A redcapProjectInfo object.
+#' @param batch.size Batch size parameter for \code{exportRecords}
 #' @param records a filename pointing to the raw records download from REDCap
 #' @param meta_data a filename pointing to the data dictionary download from REDCap
 #' @param excludeMissingForms If all of the fields in a form are missing, would 
 #'   you like to assume that they are purposefully missing?  For instance, if
 #'   a patient did not experience an adverse event, the adverse event form would
 #'   contain no data and you would not want it in this report.
+#' @param ... Additional arguments to pass to other methods.  Currently ignored.
 #'   
 #' @details The intention of this function is to generate a list of subject
 #'   events that are missing and could potentially be values that should have
@@ -29,22 +39,31 @@
 #'   
 #' @author Benjamin Nutter
 #' 
-missingSummary_offline <- function(records, meta_data,
-                           excludeMissingForms = TRUE){
 
-  records <- read.csv(records,
-                      stringsAsFactors=FALSE, 
-                      na.string="")
+missingSummary <- function(rcon, excludeMissingForms=TRUE, ...){
+  UseMethod("missingSummary")
+}
+
+#' @rdname missingSummary
+ 
+missingSummary.redcapDbConnection <- function(rcon, 
+                                              excludeMissingForms=TRUE, ...){
+  message("Please accept my apologies.  The missingSummary method for redcapDbConnection objects\n",
+          "has not yet been written.  Please consider using the API.")
+}
+
+#' @rdname missingSummary
+
+missingSummary.redcapApiConnection <- function(rcon, 
+                           excludeMissingForms = TRUE, ...,
+                           proj=NULL, batch.size=-1){
+  
+  records <- exportRecords(rcon, factors=FALSE, labels=TRUE,
+                           dates=FALSE, survey=FALSE, dag=TRUE,
+                           batch.size=batch.size)
 #   records.orig <- records
 
-  meta_data <- read.csv(meta_data,
-                        col.names=c('field_name', 'form_name', 'section_header', 
-                                    'field_type', 'field_label', 'select_choices_or_calculations', 
-                                    'field_note', 'text_validation_type_or_show_slider_number', 
-                                    'text_validation_min', 'text_validation_max', 'identifier', 
-                                    'branching_logic', 'required_field', 'custom_alignment', 
-                                    'question_number', 'matrix_group_name', 'matrix_ranking'),
-                        stringsAsFactors=FALSE)
+  meta_data <- exportMetaData(rcon)
 
   form_names <- unique(meta_data$form_name)
   form_complete_names <- paste0(form_names, "_complete")
