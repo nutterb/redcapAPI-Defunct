@@ -20,4 +20,4 @@ The redcapDbConnection methods are underdeveloped as I don't personally have acc
 
 ### Supplemental Gists
 
-* [Generate a Report of Fields with Missing Values in a REDCap Database Using the redcapAPI package](https://gist.github.com/501c370418abb58bee78.git) (includes a version for "offline" use.
+* [Generate a Report of Fields with Missing Values in a REDCap Database Using the redcapAPI package](https://gist.github.com/nutterb/501c370418abb58bee78) (includes a version for "offline" use).
