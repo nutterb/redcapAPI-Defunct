@@ -1,11 +1,11 @@
 Package: redcapAPI
 Type: Package
 Title: R interface to REDCap
-Version: 1.2
-Date: 2015-01-16
+Version: 1.3
+Date: 2015-03-10
 Author: Benjamin Nutter. Initiated by Jeffrey Horner and Will Gray with
     contributions from Jeremy Stephens, and Will Beasley
-Maintainer: Benjamin Nutter <nutterb@ccf.org>
+Maintainer: Stephen Lane <stephen.lane@barwonhealth.org.au>
 Description: Access data stored in REDCap databases using the Application
     Programming Interface (API).  REDCap (Research Electronic Data CAPture) is
     a web application for building and managing online surveys and databases

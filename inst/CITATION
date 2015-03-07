@@ -3,7 +3,7 @@ note <- sprintf("R package version %s", meta$Version)
 
 bibentry(bibtype = "Manual",
          title = "{redcapAPI}: Accessing data from REDCap projects using the API",
-         author = c(person("Benjamin", "Nutter")),
+         author = c(person("Benjamin", "Nutter"), person("Stephen", "Lane")),
          year = year,
          doi = "10.5281/zenodo.11826",
          note = note,
