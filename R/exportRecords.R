@@ -4,8 +4,6 @@
 #' @aliases exportRecords_offline
 #' @aliases queryRecords
 #' @export exportRecords
-#' @export exportRecords.redcapApiConnection
-#' @export exportRecords.redcapDbConnection
 #' @export exportRecords_offline
 #' @importFrom DBI dbGetQuery
 #' @importFrom chron times
@@ -280,6 +278,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
    UseMethod("exportRecords")
 
 #' @rdname exportRecords
+#' @export
 #' 
 exportRecords.redcapDbConnection <- 
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
@@ -347,6 +346,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,label
 }
 
 #' @rdname exportRecords
+#' @export
 
 exportRecords.redcapApiConnection <- 
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,

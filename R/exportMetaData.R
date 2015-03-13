@@ -2,8 +2,6 @@
 #' @aliases exportMetaData.redcapApiConnection
 #' @aliases exportMetaData.redcapDbConnection
 #' @export exportMetaData
-#' @export exportMetaData.redcapApiConnection
-#' @export exportMetaData.redcapDbConnection
 #' @importFrom DBI dbGetQuery
 #' 
 #' @title Export Meta Data from a REDCap Database
@@ -45,6 +43,7 @@
 exportMetaData <- function(rcon, ...) UseMethod("exportMetaData")
 
 #' @rdname exportMetaData
+#' @export
 
 exportMetaData.redcapDbConnection <- 
 function(rcon, ...)
@@ -89,6 +88,7 @@ ORDER BY field_order"
 }
 
 #' @rdname exportMetaData
+#' @export
 
 exportMetaData.redcapApiConnection <-
 function(rcon, ...)

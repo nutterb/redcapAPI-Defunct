@@ -3,8 +3,6 @@
 #' @aliases allocationTable.redcapDbConneciton
 #' @aliases allocationTable_offline
 #' @export allocationTable
-#' @export allocationTable.redcapApiConnection
-#' @export allocationTable.redcapDbConnection
 #' @export allocationTable_offline
 #' @importFrom stringr str_split_fixed
 #' 
@@ -72,7 +70,7 @@
 #' 
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-              
+          
 allocationTable <- function(rcon, random, strata=NULL, 
                             group=NULL, dag.id=NULL, 
                             replicates, block.size, 
@@ -82,6 +80,7 @@ allocationTable <- function(rcon, random, strata=NULL,
   UseMethod("allocationTable")
 
 #' @rdname allocationTable
+#' @export
 
 allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL, 
                                                group=NULL, dag.id=NULL, 
@@ -94,6 +93,7 @@ allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL,
   }
 
 #' @rdname allocationTable
+#' @export
 
 allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL, 
                                                 group=NULL, dag.id=NULL, 

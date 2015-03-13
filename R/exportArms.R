@@ -2,8 +2,6 @@
 #' @aliases exportArms.redcapApiConnection
 #' @aliases exportArms.redcapDbConnection
 #' @export exportArms
-#' @export exportArms.redcapApiConnection
-#' @export exportArms.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the Arms for a Project
@@ -52,6 +50,7 @@
 exportArms <- function(rcon, arms, ...) UseMethod("exportArms")
 
 #' @rdname exportArms
+#' @export
 
 exportArms.redcapDbConnection <- function(rcon, arms, ...){
   message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
@@ -59,6 +58,7 @@ exportArms.redcapDbConnection <- function(rcon, arms, ...){
 }
 
 #' @rdname exportArms
+#' @export
 
 exportArms.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='arm', format='csv', returnFormat='csv')

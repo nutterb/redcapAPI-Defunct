@@ -1,4 +1,5 @@
 #' @name parseBranchingLogic
+#' @export parseBranchingLogic
 #' 
 #' @title Parse Branching Logic
 #' @description Branching logic from the REDCap Data Dictionary is parsed into

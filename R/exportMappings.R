@@ -2,8 +2,6 @@
 #' @aliases exportMappings.redcapApiConnection
 #' @aliases exportMappings.redcapDbConection
 #' @export exportMappings
-#' @export exportMappings.redcapApiConnection
-#' @export exportMappings.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the Event-Form Mappings for a Project
@@ -78,6 +76,7 @@
 exportMappings <- function(rcon, arms, ...) UseMethod("exportMappings")
 
 #' @rdname exportMappings
+#' @export
 
 exportMappings.redcapDbConnection <- function(rcon, arms, ...){
   message("Please accept my apologies.  The exportMappings method for redcapDbConnection objects\n",
@@ -85,6 +84,7 @@ exportMappings.redcapDbConnection <- function(rcon, arms, ...){
 }
 
 #' @rdname exportMappings
+#' @export
 
 exportMappings.redcapApiConnection <- function(rcon, arms, ...){
   .params <- list(token=rcon$token, content='formEventMapping', format='csv')

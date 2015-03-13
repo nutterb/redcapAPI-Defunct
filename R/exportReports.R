@@ -2,8 +2,6 @@
 #' @aliases exportReports.redcapApiConnection
 #' @aliases exportReports.redcapDbConnection
 #' @export exportReports
-#' @export exportReports.redcapApiConnection
-#' @export exportReports.redcapDbConnection
 #' @importFrom httr POST
 #' @importFrom chron times
 #' @importFrom stringr str_split_fixed
@@ -46,6 +44,7 @@ exportReports <- function(rcon, report_id, factors=TRUE, labels=TRUE,
     UseMethod("exportReports")
 
 #' @rdname exportReports
+#' @export
 
 exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...){
@@ -54,6 +53,7 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 }
 
 #' @rdname exportReports
+#' @export
 
 exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
               dates=TRUE, checkboxLabels=FALSE, ...,

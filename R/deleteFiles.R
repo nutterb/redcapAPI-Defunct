@@ -2,8 +2,6 @@
 #' @aliases deleteFiles.redcapApiConnection
 #' @aliases deleteFiles.redcapDbConnection
 #' @export deleteFiles
-#' @export deleteFiles.redcapApiConnection
-#' @export deleteFiles.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Delete a File attached to a Record
@@ -48,14 +46,14 @@ deleteFiles <- function(rcon, record, field, event, ...)
   UseMethod("deleteFiles")
 
 #' @rdname deleteFiles
-#' 
+#' @export 
 deleteFiles.redcapDbConnection <- function(rcon, record, field, event, ...){
   message("Please accept my apologies.  The deleteFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
 #' @rdname deleteFiles
-#' 
+#' @export
 
 deleteFiles.redcapApiConnection <- function(rcon, record, field, event, ..., 
                                             proj=NULL){

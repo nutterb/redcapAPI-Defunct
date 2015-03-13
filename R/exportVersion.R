@@ -2,8 +2,6 @@
 #' @aliases exportVersion.redcapApiConnection
 #' @aliases exportVersion.redcapDbConnection
 #' @export exportVersion
-#' @export exportVersion.redcapApiConnection
-#' @export exportVersion.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports the REDCap Version Number
@@ -30,6 +28,7 @@
 exportVersion <- function(rcon, ...) UseMethod("exportVersion")
 
 #' @rdname exportVersion
+#' @export
 
 exportVersion.redcapDbConnection <- function(rcon, ...){
   message("Please accept my apologies.  The exportVersion method for redcapDbConnection objects\n",
@@ -37,6 +36,7 @@ exportVersion.redcapDbConnection <- function(rcon, ...){
 }
 
 #' @rdname exportVersion
+#' @export
 
 exportVersion.redcapApiConnection <- function(rcon, ...){
   .params <- list(token=rcon$token, content='version', returnFormat='csv')

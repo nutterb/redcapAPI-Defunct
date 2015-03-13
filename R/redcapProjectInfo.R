@@ -2,8 +2,6 @@
 #' @aliases redcapProjectInfo.redcapApiConnection
 #' @aliases redcapProjectInfo.redcapDbConnection
 #' @export redcapProjectInfo
-#' @export redcapProjectInfo.redcapApiConnection
-#' @export redcapProjectInfo.redcapDbConnection
 #' 
 #' @title Export a Project's Supplemental Information
 #' @description The meta data, users, arms, events, mappings, and REDCap 
@@ -58,6 +56,7 @@ redcapProjectInfo <- function(rcon, date=TRUE, label=TRUE,
                               version=TRUE, ...) UseMethod("redcapProjectInfo")
 
 #' @rdname redcapProjectInfo
+#' @export
 
 redcapProjectInfo.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, 
                               meta_data=TRUE, users=TRUE, instruments=TRUE,
@@ -68,6 +67,7 @@ redcapProjectInfo.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE,
 }
 
 #' @rdname redcapProjectInfo
+#' @export
 
 redcapProjectInfo.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, 
                               meta_data=TRUE, users=TRUE, instruments=TRUE,

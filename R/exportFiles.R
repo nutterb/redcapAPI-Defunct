@@ -2,8 +2,6 @@
 #' @aliases exportFiles.redcapApiConnection
 #' @aliases exportFiles.redcapDbConnection
 #' @export exportFiles
-#' @export exportFiles.redcapApiConnection
-#' @export exportFiles.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Exports a File attached to a Record
@@ -81,6 +79,7 @@ exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
   UseMethod("exportFiles")
 
 #' @rdname exportFiles
+#' @export
 
 exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
                         proj=NULL){
@@ -89,6 +88,7 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, file
 }
 
 #' @rdname exportFiles
+#' @export
 
 exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
                         proj=NULL){

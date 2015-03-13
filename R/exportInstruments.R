@@ -2,8 +2,6 @@
 #' @aliases exportInstruments.redcapApiConnection
 #' @aliases exportInstruments.redcapDbConnection
 #' @export exportInstruments
-#' @export exportInstruments.redcapApiConnection
-#' @export exportInstruments.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Export Instrument names
@@ -34,6 +32,7 @@
 exportInstruments <- function(rcon, ...) UseMethod("exportInstruments")
 
 #' @rdname exportInstruments
+#' @export
 
 exportInstruments.redcapDbConnection <- function(rcon, ...){
   message("Please accept my apologies.  The exportInstruments method for redcapDbConnection objects\n",
@@ -41,6 +40,7 @@ exportInstruments.redcapDbConnection <- function(rcon, ...){
 }
 
 #' @rdname exportInstruments
+#' @export
 
 exportInstruments.redcapApiConnection <- function(rcon, ...){
   x <- httr::POST(url=rcon$url, 

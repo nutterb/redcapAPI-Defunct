@@ -2,8 +2,6 @@
 #' @aliases importFiles.redcapApiConnection
 #' @aliases importFiles.redcapDbConnection
 #' @export importFiles
-#' @export importFiles.redcapApiConnection
-#' @export importFiles.redcapDbConnection
 #' @importFrom httr POST
 #' @importFrom httr upload_file
 #' 
@@ -51,6 +49,7 @@ importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
   UseMethod("importFiles")
 
 #' @rdname importFiles
+#' @export
 
 importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ..., 
                                            proj=NULL){
@@ -59,6 +58,7 @@ importFiles.redcapDbConnection <- function(rcon, file, record, field, event, ove
 }
 
 #' @rdname importFiles
+#' @export
 
 importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
                                             proj=NULL){

@@ -2,8 +2,6 @@
 #' @aliases importRecords.redcapApiConnection
 #' @aliases importRecords.redcapDbConnection
 #' @export importRecords
-#' @export importRecords.redcapApiConnection
-#' @export importRecords.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Import Records to a REDCap Database
@@ -122,6 +120,7 @@ importRecords <- function(rcon, data,
                           returnData=FALSE, logfile="", ...) UseMethod("importRecords")
 
 #' @rdname importRecords
+#' @export
 
 importRecords.redcapDbConnection <- function(rcon, data, 
                           overwriteBehavior=c('normal', 'overwrite'),
@@ -132,6 +131,7 @@ importRecords.redcapDbConnection <- function(rcon, data,
 }
 
 #' @rdname importRecords
+#' @export
 
 importRecords.redcapApiConnection <- function(rcon, data, 
                           overwriteBehavior=c('normal', 'overwrite'),

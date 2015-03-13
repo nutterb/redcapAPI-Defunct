@@ -2,8 +2,6 @@
 #' @aliases exportUsers.redcapApiConnection
 #' @aliases exportUsers.redcapDbConnection
 #' @export exportUsers
-#' @export exportUsers.redcapApiConnection
-#' @export exportUsers.redcapDbConnection
 #' @importFrom httr POST
 #' 
 #' @title Export the Users for a Project
@@ -99,6 +97,7 @@
 exportUsers <- function(rcon, ...) UseMethod("exportUsers")
 
 #' @rdname exportUsers
+#' @export
 
 exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
@@ -106,6 +105,7 @@ exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
 }
 
 #' @rdname exportUsers
+#' @export
 
 exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
   #* parameters for the Users File Export
