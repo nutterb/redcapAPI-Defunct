@@ -132,7 +132,7 @@ See also the REDCap API documentation
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
-\url{https://github.com/nutterbAPI/redcap/wiki/REDCap-API-Parameters}
+\url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
 \seealso{
 \code{\link{validateImport}}
