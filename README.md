@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11826.png)](http://dx.doi.org/10.5281/zenodo.11826)
 
-![](http://cranlogs.r-pkg.org/badges/redcapAPI)
+![](http://cranlogs.r-pkg.org/badges/grand-total/redcapAPI)
 
 redcapAPI
 ======
