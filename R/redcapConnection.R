@@ -73,7 +73,7 @@
 #' 
 
 redcapConnection <-
-function(url=getOption('redcap_api_url'),token,conn,project, config=list())
+function(url=getOption('redcap_api_url'),token,conn,project, config=httr::config())
 {
    if (is.na(url) && missing(conn))
       stop("Need one of url or conn")
