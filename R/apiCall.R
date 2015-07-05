@@ -50,6 +50,7 @@ apiCall <- function(url, body, config){
                                          config=c(list(encoding='identity'), config))
                     return(m)
                   }
+                  else stop(cond)
                 })
   return(x)
 }
