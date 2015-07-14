@@ -6,7 +6,8 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
                             group=NULL, dag.id=NULL, 
                             replicates, block.size, 
                             block.size.shift = 0,
-                            seed.dev=NULL, seed.prod=NULL, ...){
+                            seed.dev=NULL, seed.prod=NULL, 
+                            weights = NULL, ...){
   
   error.flag <- 0
   error.msg <- NULL
@@ -28,11 +29,11 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   names(meta_data) <- col.names[1:length(col.names)]
   
   #* A utility function to extract the coded values from the meta_data
-  redcapChoices <- function(v, meta_data){
+  redcapChoices <- function(v, meta_data, raw = TRUE){
     if (meta_data$field_type[meta_data$field_name == v] %in% c("dropdown", "radio")){
       choice_str <- meta_data$select_choices_or_calculations[meta_data$field_name == v]
       choice_str <- unlist(strsplit(choice_str, " [|] "))
-      return(stringr::str_split_fixed(choice_str, ", ", 2)[, 1])
+      return(stringr::str_split_fixed(choice_str, ", ", 2)[, (2-raw)])
     }
     else if (meta_data$field_type[meta_data$field_name == v] %in% c("yesno", "true_false"))
       return(0:1)
@@ -58,6 +59,9 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   #* 14. seed.dev is not NULL and has length 1 or n_strata
   #* 15. seed.prod is not NULL and has length 1 or n_strata
   #* 16. no pairwise elements of seed.dev are equal to seed.prod
+  #* 17. If 'weights' is not NULL, it is the same length as the number of levels in 'random'
+  #* 18. If 'weights' has names, the names are identical to the levels of 'random'
+  #* 19. if 'weights' doesn't have names, assume the weights were given in the order of levels(random)
   
   #* 1. Verifying that 'random' is not missing
   if (missing(random)){
@@ -96,6 +100,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   #* 5. Calculate n_levels
   #* randomization levels
   random_levels <- redcapChoices(random, meta_data)
+  random_level_names <- redcapChoices(random, meta_data, FALSE)
   n_levels <- length(random_levels)
   
   #* stratification groups
@@ -216,6 +221,37 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
                    paste0(error.msg, ": No pairwise elements of 'seed.dev' and 'seed.prod' may be equal"))
   }
   
+  #* 17. If 'weights' is not NULL, it is the same length as the number of levels in 'random'
+  if (is.null(weights)){
+    weights <- rep(1, length(random_levels))
+    names(weights) <- random_levels
+    warn.flag <- warn.flag + 1
+    warn.msg <- c(warn.msg,
+                  paste0(warn.flag, ": No 'weights' were given.  Equal weights have been assumed."))
+  }
+
+  #* 18. If 'weights' has names, the names are identical to the levels of 'random'
+  if (!is.null(names(weights))){
+    if (identical(names(weights), random_level_names)) {
+      error.flag <- error.flag + 1
+      error.msg <- c(error.msg,
+                     paste0(error.msg, ": 'weight' names must be '",
+                            paste0(random_level_names, collapse = "', '"), "'."))
+    }
+  }
+  #* 19. if 'weights' doesn't have names, assume the weights were given in the order of levels(random)
+  else {
+    names(weights) <- random_level_names
+    warn.flag <- warn.flag + 1
+    warn.msg <- c(warn.msg,
+                  paste0(warn.flag, ": No names given with 'weights'.  The names '",
+                         paste0(random_level_names, collapse = "', '"), 
+                         "' have been assumed"))
+  }
+
+  weights_orig <- weights
+  weights <- weights[random_level_names] / sum(weights)
+  
   if (length(seed.dev) == 1) seed.dev <- seed.dev + ((1:n_strata)-1)*100
   if (length(seed.prod) == 1) seed.prod <- seed.prod + ((1:n_strata)-1)*100
   
@@ -223,10 +259,11 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   if (error.flag) stop(paste(error.msg, collapse="\n"))
   
   #* Randomization function
-  Randomization <- function(choices, Blocks, seed){
+  Randomization <- function(choices, Blocks, seed, weights){
     set.seed(seed) #* set the seed
     #* Randomizations
-    do.call("c", lapply(Blocks$block.size, function(x) sample(rep(choices, length.out=x), x)))
+    choices <- makeChoices(choices, Blocks$block.size, weights)
+    do.call("c", lapply(Blocks$block.size, function(x) sample(choices, x)))
   }
   
 #   return(list(allocation, Blocks, random_levels, seed.dev))
@@ -237,7 +274,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
                          a <- allocation[r, , drop=FALSE]
                          #* extend the length of the stratum data frame to accomodate the sampling
                          a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                         a[[random]] <- Randomization(random_levels, Blocks, seed.dev[r])
+                         a[[random]] <- Randomization(random_levels, Blocks, seed.dev[r], weights)
                          return(a)
                        })
   
@@ -255,7 +292,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
                            a <- allocation[r, , drop=FALSE]
                            #* extend the length of the stratum data frame to accomodate the sampling
                            a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                           a[[random]] <- Randomization(random_levels, Blocks, seed.prod[r])
+                           a[[random]] <- Randomization(random_levels, Blocks, seed.prod[r], weights)
                            return(a)
                          })
   #* Combine the allocation tables
@@ -268,5 +305,6 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
 
   return(list(dev_allocate = dev_allocate, dev_seed = seed.dev,
               prod_allocate = prod_allocate, prod_seed = seed.prod,
-              blocks = Blocks))
+              blocks = Blocks,
+              weights = weights_orig))
 }

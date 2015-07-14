@@ -27,7 +27,7 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
-  ..., redcapVersion = NULL)
+  ...)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}

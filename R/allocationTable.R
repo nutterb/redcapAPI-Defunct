@@ -43,6 +43,12 @@
 #' may be equal.  This guarantees that the two randomization schemes are 
 #' unique.
 #' @param proj A \code{redcapProjectInfo} object.
+#' @param weights An optional vector giving the sampling weights for each of the randomization 
+#'   groups.  There must be one number for each level of the randomization variable.  If named, 
+#'   the names must match the group labels.  If unnamed, the group labels will be assigned in the
+#'   same order they appear in the data dictionary.  The weights will be normalized, so they do
+#'   not need to sum to 1.0.  In other words, \code{weights=c(3, 1)} can indicate a 3:1 sampling
+#'   ratio.
 #' @param ... Arguments to be passed to other methods
 #' 
 #' @details Each element in \code{block.size} must be a multiple of the number of groups in the randomized
@@ -76,7 +82,8 @@ allocationTable <- function(rcon, random, strata=NULL,
                             replicates, block.size, 
                             block.size.shift = 0,
                             seed.dev=NULL, seed.prod=NULL,  
-                            proj=NULL, ...)
+                            proj=NULL, 
+                            weights = NULL, ...)
   UseMethod("allocationTable")
 
 #' @rdname allocationTable
@@ -87,7 +94,8 @@ allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL,
                                                replicates, block.size, 
                                                block.size.shift = 0,
                                                seed.dev=NULL, seed.prod=NULL,  
-                                               proj=NULL, ...){
+                                               proj=NULL, 
+                                               weights = c(1, 1), ...){
     message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
             "has not yet been written.  Please consider using the API.")
   }
@@ -100,7 +108,8 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
                                                 replicates, block.size, 
                                                 block.size.shift = 0,
                                                 seed.dev=NULL, seed.prod=NULL,  
-                                                proj=NULL, ...){
+                                                proj=NULL, 
+                                                weights = c(1, 1), ...){
   
   error.flag <- 0
   error.msg <- NULL
@@ -112,11 +121,11 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   meta_data <- if (is.null(proj$meta_data)) exportMetaData(rcon) else proj$meta_data
   
   #* A utility function to extract the coded values from the meta_data
-  redcapChoices <- function(v, meta_data){
+  redcapChoices <- function(v, meta_data, raw=TRUE){
     if (meta_data$field_type[meta_data$field_name == v] %in% c("dropdown", "radio")){
       choice_str <- meta_data$select_choices_or_calculations[meta_data$field_name == v]
       choice_str <- unlist(strsplit(choice_str, " [|] "))
-      return(stringr::str_split_fixed(choice_str, ", ", 2)[, 1])
+      return(stringr::str_split_fixed(choice_str, ", ", 2)[, (2-raw)])
     }
     else if (meta_data$field_type[meta_data$field_name == v] %in% c("yesno", "true_false"))
       return(0:1)
@@ -180,6 +189,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   #* 5. Calculate n_levels
   #* randomization levels
   random_levels <- redcapChoices(random, meta_data)
+  random_level_names <- redcapChoices(random, meta_data, FALSE)
   n_levels <- length(random_levels)
   
   #* stratification groups
@@ -299,17 +309,52 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
                    paste0(error.msg, ": No pairwise elements of 'seed.dev' and 'seed.prod' may be equal"))
   }
   
+  #* 17. If 'weights' is not NULL, it is the same length as the number of levels in 'random'
+  if (is.null(weights)){
+    weights <- rep(1, length(random_levels))
+    names(weights) <- random_levels
+    warn.flag <- warn.flag + 1
+    warn.msg <- c(warn.msg,
+                  paste0(warn.flag, ": No 'weights' were given.  Equal weights have been assumed."))
+  }
+  
+  #* 18. If 'weights' has names, the names are identical to the levels of 'random'
+  if (!is.null(names(weights))){
+    if (identical(names(weights), random_level_names)) {
+      error.flag <- error.flag + 1
+      error.msg <- c(error.msg,
+                     paste0(error.msg, ": 'weight' names must be '",
+                            paste0(random_level_names, collapse = "', '"), "'."))
+    }
+  }
+  #* 19. if 'weights' doesn't have names, assume the weights were given in the order of levels(random)
+  else {
+    names(weights) <- random_level_names
+    warn.flag <- warn.flag + 1
+    warn.msg <- c(warn.msg,
+                  paste0(warn.flag, ": No names given with 'weights'.  The names '",
+                         paste0(random_level_names, collapse = "', '"), 
+                         "' have been assumed"))
+  }
+  
+  weights_orig <- weights
+  weights <- weights[random_level_names] / sum(weights)
+  
   if (length(seed.dev) == 1) seed.dev <- seed.dev + ((1:n_strata)-1)*100
   if (length(seed.prod) == 1) seed.prod <- seed.prod + ((1:n_strata)-1)*100
   
   if (warn.flag) warning(paste(warn.msg, collapse="\n"))
   if (error.flag) stop(paste(error.msg, collapse="\n"))
   
+  if (is.null(weights)) weights <- rep(1, length(random_levels))
+  weights <- weights / sum(weights)
+  
   #* Randomization function
-  Randomization <- function(choices, Blocks, seed){
+  Randomization <- function(choices, Blocks, seed, weights){
     set.seed(seed) #* set the seed
     #* Randomizations
-    do.call("c", lapply(Blocks$block.size, function(x) sample(rep(choices, length.out=x), x)))
+    choices <- makeChoices(choices, Blocks$block.size, weights)
+    do.call("c", lapply(Blocks$block.size, function(x) sample(choices, x)))
   }
   
 #   return(list(allocation, Blocks, random_levels, seed.dev))
@@ -320,7 +365,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
                          a <- allocation[r, , drop=FALSE]
                          #* extend the length of the stratum data frame to accomodate the sampling
                          a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                         a[[random]] <- Randomization(random_levels, Blocks, seed.dev[r])
+                         a[[random]] <- Randomization(random_levels, Blocks, seed.dev[r], weights)
                          return(a)
                        })
   
@@ -338,7 +383,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
                            a <- allocation[r, , drop=FALSE]
                            #* extend the length of the stratum data frame to accomodate the sampling
                            a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                           a[[random]] <- Randomization(random_levels, Blocks, seed.prod[r])
+                           a[[random]] <- Randomization(random_levels, Blocks, seed.prod[r], weights)
                            return(a)
                          })
   #* Combine the allocation tables
@@ -351,5 +396,19 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
 
   return(list(dev_allocate = dev_allocate, dev_seed = seed.dev,
               prod_allocate = prod_allocate, prod_seed = seed.prod,
-              blocks = Blocks))
+              blocks = Blocks,
+              weights = weights_orig))
+}
+
+#' @rdname allocationTable
+#' @param random_levels A vector of the randomization group level names.  Determined from the
+#'   data dictionary.
+
+makeChoices <- function(random_levels, block.size, weights){
+  group.size <- block.size * weights
+  if (sum(ceiling(group.size) - group.size) == 0)
+    choices <- rep(random_levels, times = group.size)
+  else 
+    choices <- sample(random_levels, block.size, replace=TRUE, prob=weights)
+  choices
 }
