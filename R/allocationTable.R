@@ -194,7 +194,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   
   #* stratification groups
   strata <- c(strata, group)
-  strata_levels <- sapply(strata, redcapChoices, meta_data)
+  strata_levels <- lapply(strata, redcapChoices, meta_data)
   if (!is.null(dag.id)) strata_levels[['redcap_data_access_group']] <- dag.id
   
   #* Allocation table
