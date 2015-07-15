@@ -195,6 +195,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   #* stratification groups
   strata <- c(strata, group)
   strata_levels <- lapply(strata, redcapChoices, meta_data)
+  names(strata_levels) <- c(strata, group)
   if (!is.null(dag.id)) strata_levels[['redcap_data_access_group']] <- dag.id
   
   #* Allocation table
@@ -353,12 +354,11 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   Randomization <- function(choices, Blocks, seed, weights){
     set.seed(seed) #* set the seed
     #* Randomizations
-    choices <- makeChoices(choices, Blocks$block.size, weights)
-    do.call("c", lapply(Blocks$block.size, function(x) sample(choices, x)))
+    do.call("c", lapply(Blocks$block.size, 
+                        function(x) sample(makeChoices(choices, x, weights), x)))
   }
   
 #   return(list(allocation, Blocks, random_levels, seed.dev))
-  
   #* Generate an allocation table for each stratum (Development)
   dev_allocate <- lapply(1:nrow(allocation),
                        function(r){
@@ -371,9 +371,9 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   
   #* Combine the allocation tables
   dev_allocate <- do.call("rbind", dev_allocate)
-  
+
   #* reorder the allocation table for uploading to REDCap
-  dev_allocate <- dev_allocate[, c(random, strata), drop=FALSE]
+  dev_allocate <- dev_allocate[, c(random, names(strata_levels)), drop=FALSE]
   rownames(dev_allocate) <- NULL  
   
   
@@ -390,7 +390,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   prod_allocate <- do.call("rbind", prod_allocate)
   
   #* reorder the allocation table for uploading to REDCap
-  prod_allocate <- prod_allocate[, c(random, strata), drop=FALSE]
+  prod_allocate <- prod_allocate[, c(random, names(strata_levels)), drop=FALSE]
   rownames(prod_allocate) <- NULL  
   
 

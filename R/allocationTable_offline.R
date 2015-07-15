@@ -282,7 +282,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   dev_allocate <- do.call("rbind", dev_allocate)
   
   #* reorder the allocation table for uploading to REDCap
-  dev_allocate <- dev_allocate[, c(random, strata), drop=FALSE]
+  dev_allocate <- dev_allocate[, c(random, names(strata_levels)), drop=FALSE]
   rownames(dev_allocate) <- NULL  
   
   
@@ -299,7 +299,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   prod_allocate <- do.call("rbind", prod_allocate)
   
   #* reorder the allocation table for uploading to REDCap
-  prod_allocate <- prod_allocate[, c(random, strata), drop=FALSE]
+  prod_allocate <- prod_allocate[, c(random, names(strata_levels)), drop=FALSE]
   rownames(prod_allocate) <- NULL  
   
 
