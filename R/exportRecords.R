@@ -97,6 +97,22 @@
 #' Thus, if you are concerned about tying up the server with a large, 
 #' longitudinal project, it would be prudent to use a smaller batch size.
 #' 
+#' @section Deidentified Batched Calls:
+#' Batched calls to the API are not a feature of the REDCap API, but may be imposed 
+#' by making multiple calls to the API.  The process of batching the export requires
+#' that an initial call be made to the API to retrieve only the record IDs.  The
+#' list of IDs is then broken into chunks, each about the size of \code{batch.size}.
+#' The batched calls then force the \code{records} argument in each call.
+#' 
+#' When a user's permissions require a de-identified data export, a batched call 
+#' should be expected to fail.  This is because, upon export, REDCap will hash the 
+#' identifiers.  When R attempts to pass the hashed identifiers back to REDCap, 
+#' REDCap will try to match the hashed identifiers to the unhashed identifiers in the
+#' database.  No matches will be found, and the export will fail.
+#' 
+#' Users who are exporting de-identified data will have to settle for using unbatched
+#' calls to the API (ie, \code{batch.size = -1})
+#' 
 #' @author Jeffrey Horner
 #' 
 #' @references
@@ -110,6 +126,9 @@
 #' 
 #' See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
 #' \url{https://github.com/OuhscBbmc/REDCapR}
+#' 
+#' Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
+#' create a list of arbitrary length.
 #' 
 #' @examples
 #' \dontrun{
@@ -209,320 +228,225 @@
 #' 2                NA     1.023         -1.3                         2
 #' }
 
-
-
-
-queryRecords <-
-function(rcon,fields=NULL,forms=NULL,records=NULL,events=NULL)
-{
-
-.SQL_PROJECT_DATA <- "
-select
-   *
-from 
-   %s
-where
-   project_id = %d %s %s %s
-   AND field_name NOT LIKE '%s'
-order by abs(record), record, event_id
-"
-
-   if (!is.null(fields))
-   {
-      fields <- unique(c('study_id',fields))
-      fieldsSQL <- sprintf("AND field_name in (%s)", 
-                           paste("'",fields,"'",collapse=",",sep=''))
-   }
-   else
-   {
-      fieldsSQL <- ''
-   }
-
-   if (!is.null(forms))
-   {
-      formsSQL <- ''
-   }
-   else
-   {
-      formsSQL <- ''
-   }
-
-   if (!is.null(records))
-   {
-      recordsSQL <- ''
-   }
-   else
-   {
-      recordsSQL <- ''
-   }
-
-   if (!is.null(events))
-   {
-      eventsSQL <- ''
-   }
-   else
-   {
-      eventsSQL <- ''
-   }
-
-   sql <- sprintf(.SQL_PROJECT_DATA, getOption('redcap.dataTable'),
-                  rcon$project,recordsSQL,eventsSQL,fieldsSQL,'\\_\\_%')
-   DBI::dbGetQuery(rcon$conn, sql)
-}
-
-#' @rdname exportRecords
-
 exportRecords <-
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
-   UseMethod("exportRecords")
+  function(rcon, factors = TRUE, fields = NULL, forms = NULL, records = NULL,
+           events = NULL, labels = TRUE, dates = TRUE,
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+    
+    UseMethod("exportRecords")
 
 #' @rdname exportRecords
 #' @export
 #' 
 exportRecords.redcapDbConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
-{
-   meta_data <- exportMetaData(rcon)
-   if (!is.null(fields))
-   {
-      if (is.character(fields) && 
-          length(which(meta_data$field_name %in% fields)) == length(fields))
-         field_names <- unique(c('study_id',fields))
-      else
-         stop("Non-existent fields")
-   }
-   else
-      field_names <- meta_data$field_name
-
-   field_lookup <- new.env(hash=TRUE,size=length(field_names))
-
-   raw_data <- queryRecords(rcon,fields,forms,records,events)
-   if (nrow(raw_data)>0)
-      num_rows <- length(unique(sort(raw_data$record)))
-   else
-      num_rows <- 0
-
-   x <- data.frame(
-      lapply(1:length(field_names),
-          function(i) 
-          {
-            d <- fieldToVar(as.list(meta_data[meta_data$field_name==field_names[i],]), 
-                         character(num_rows),factors,dates)
-            if (!is.null(attr(d,'redcapLevels')) && factors){
-               # REDCap allows any integer as a level for their factors, so
-               # we need to transform for R.
-               redcapLevels <- attr(d,'redcapLevels')
-
-               # C is zero based, and we normalize redcapLevels to start at index position 2,
-               # since element 0 and element 1 are occupied.
-               offset <- 2-min(redcapLevels)
-               xform <- integer(2+length(redcapLevels))
-               xform[1] <-  i
-               xform[2] <- offset
-
-               # Add 1 since R has one based indexing.
-               xform[1+offset+redcapLevels] <- seq(1,length(redcapLevels))
-               xform <- as.integer(xform)
-            } else {
-               xform <- as.integer(i)
-            }
-               
-            assign(field_names[i],xform,envir=field_lookup)
-            d
-          }
-   ),stringsAsFactors=FALSE)
-   names(x) <- field_names
-
-   if (nrow(x)>0){
-      suppressWarnings(
-      .Call(records_to_dataframe,raw_data$record,raw_data$field_name,
-            raw_data$value,field_lookup,x,factors)
-      )
-   }
-
-   x
-}
+  function(rcon, factors = TRUE, fields = NULL, forms = NULL, records = NULL,
+           events = NULL, labels = TRUE, dates = TRUE,
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+  {
+    message("Please accept my apologies.  The exportRecords method for redcapDbConnection objects\n",
+            "has not yet been written.  Please consider using the API.")
+  }
 
 #' @rdname exportRecords
 #' @export
 
 exportRecords.redcapApiConnection <- 
-  function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-           survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ..., 
-           batch.size=-1,
-           proj=NULL)
-  {
-    #Hlabel <- require(Hmisc)
-    #if (!Hlabel) stop("Please install the 'Hmisc' package.")
+  function(rcon, factors = TRUE, fields = NULL, forms = NULL,
+           records = NULL, events = NULL, labels = TRUE, dates = TRUE,
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ..., 
+           batch.size = -1,
+           proj = NULL)
+{
+  #* Error Collection Object
+  coll <- checkmate::makeAssertCollection()
     
-    #* Check that any events listed exist in the events table.
-    events_list <- if (is.null(proj$events)) exportEvents(rcon) else proj$events
-    if (class(events_list) == "data.frame" & !is.null(events)){
-      if (any(!events %in% events_list$unique_event_name)){
-        stop(paste0("'", paste(events[!events %in% events_list$unique_event_name], collapse="', '"),
-                   " are not valid event names"))
-      }
-    }
-    
-    .params <- list(token=rcon$token, content='record',
-                    format='csv', type='flat',
-                    exportSurveyFields=tolower(survey),
-                    exportDataAccessGroups=tolower(dag),
-                    returnFormat='csv')
-    
-    #* for purposes of the export, we don't need the descriptive fields. 
-    #* Including them makes the process more error prone, so we'll ignore them.
-    meta_data <- if (is.null(proj$meta_data)) exportMetaData(rcon) else proj$meta_data
-    meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
-    
-    #* Check that stated forms exist
-    if (any(!forms %in% unique(meta_data$form_name))){
-        stop(paste0("'", paste(forms[!forms %in% unique(meta_data$form_name)], collapse="', '"),
-                   " are not valid form names"))
-      }
-    
-    #* Create list of field names
-    if (!is.null(fields)) #* fields were provided
-    {
-      # redcap_event_name is automatically included in longitudinal projects
-      fields <- fields[!fields %in% "redcap_event_name"] 
-      
-      # verify all field names exist (could also be 'all(meta_data$field_name %in% fields)'
-      if (is.character(fields) && 
-            length(which(meta_data$field_name %in% fields)) == length(fields)){
-        field_names <- unique(c(fields))
-        .params[['fields']] = paste(fields,collapse=',')
-      }
-      else #* found non-existent fields
-        stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
-    }
-    else if (!is.null(forms)){
-      field_names <- meta_data$field_name[meta_data$form_name %in% forms]
-      
-    }
+  #* Secure the meta data.
+  meta_data <- 
+    if (is.null(proj$meta_data)) 
+      exportMetaData(rcon) 
+    else 
+      proj$meta_data
+  
+  #* for purposes of the export, we don't need the descriptive fields. 
+  #* Including them makes the process more error prone, so we'll ignore them.
+  meta_data <- meta_data[!meta_data$field_type %in% "descriptive", ]  
+  
+  #* Secure the events table
+  events_list <- 
+    if (is.null(proj$events)) 
+      exportEvents(rcon) 
+    else 
+      proj$events
+  
+  #* Secure the REDCap version
+  version <- 
+    if (is.null(proj$version))
+      exportVersion(rcon)
     else
-      #* fields were not provided, default to all fields.
-      field_names <- meta_data$field_name
-   
-   #* Expand 'field_names' to include fields from specified forms.    
-   if (!is.null(forms)) 
-     field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
-    
-    #* Extract label suffixes for checkbox fields
-    #* This takes the choices of the checkboxes from the meta data and organizes
-    #* To be conveniently pasted to 'field_label'
-    #* In this process, a checkbox field label is replicated as many times as it has options
-    checklabs <- function(x){
-      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
-        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-        opts <- sub("[[:space:]]+$", "", unlist(sapply(strsplit(opts, ","), '[', 2)))
-        opts <- sub("[[:space:]]+", ": ", opts)
-        return(opts)
-      }
-      return("")
-    }
-    field_labels_suffix <- unlist(sapply(field_names, checklabs))
-    
-    #* convert field_names to a list for convenience of using sapply to get field_labels
-    field_names <- lapply(field_names, identity) 
-    field_labels <- sapply(field_names, function(x) meta_data$field_label[meta_data$field_name %in% x])
-    
-    #* This function grabs the variable codings of the checkbox variables.
-    #* These need to be appended to the field names
-    #* In this process, a checkbox field name is replicated as many times as it has options
-    checkvars <- function(x){
-      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
-        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-        opts <- tryCatch(as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1))),
-                         warning = function(cond){ nm <- as.character(unlist(sapply(strsplit(opts, ","), '[', 1)))
-                                                   nm <- gsub('^\\s*','',nm,perl=TRUE)
-                                                   nm <- gsub('\\s*$','',nm,perl=TRUE)
-                                                   return(nm)})
-        x <- paste(x, opts, sep="___")
-      }
-      return(x)
-    }
-    field_names <- sapply(field_names, checkvars)
-    
-    #* Ensures field_labels is adjusted to the proper length to account for
-    #* checkbox variables and creates the labels.
-    field_labels <- rep(field_labels, sapply(field_names, length))
-    field_labels <- paste(field_labels, field_labels_suffix, sep="")
-    
-    #* return field_names to a vector
-    field_names <- unlist(field_names)
-    
-    if (!is.null(forms)) .params[['forms']] = paste(forms, collapse=",")
-    if (!is.null(events)) .params[['events']] = paste(events, collapse=",") # untested...not sure it will work (nutterb)
-    if (!is.null(records)) .params[['records']] = paste(records, collapse=",")
-    
-    #* read in one API call
-    if (batch.size < 1){
-      x <- apiCall(url=rcon$url, body=.params, config=rcon$config)
-      if (x$status_code != "200") stop(as.character(x))
-    
-      x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-    }
-    else {
-     #* Batch calls. First call requests only the record ids.
-     #* if a specific list of records was requested, only those records
-     #* are considered forbatching.
-      batch.params <- list(token=rcon$token, content='record',
-                           format='csv', type='flat',
-                           fields=meta_data$field_name[1])
-      if (!is.null(records)) batch.params[['records']] = paste(records, collapse=",")
-      
-      #* Export IDs, then limit to unique IDs (for longitudinal projects). 
-      #* There isn't really a way to extract a fixed number of records in each batch
-      #* The best we can do is a fixed number of ID's.
-      ID <- apiCall(url=rcon$url, body=batch.params, config=rcon$config)
-      if (ID$status_code != "200") stop(paste0(ID$status_code, ": ", as.character(ID)))
-      ID <- read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
-      ID <- unique(ID[, 1, drop=FALSE])
-      
-      #* Determine the number of batches. Create an index vector of the batch number.
-      n.batch <- ceiling(nrow(ID) / batch.size)
-      ID$batch.number <- rep(1:n.batch, rep(batch.size, n.batch))[1:nrow(ID)]
-      
-      #* generate a list of the batched IDs
-      batch.records <- lapply(unique(ID$batch.number), function(x) ID[ID$batch.number == x, 1])
-      
-      #* remove 'records' parameter from the API parameters. This will be replaced by an element of
-      #* the list 'batch.records'
-      if (!is.null(.params$records)) .params$records <- NULL
-      
-      #* API calls
-      x <- lapply(batch.records, 
-                  function(r) apiCall(url=rcon$url,
-                                       body=c(.params, list(records=paste(r, collapse=","))),
-                                       config=rcon$config))
-      if (x[[1]]$status_code != "200") stop(paste(x[[1]]$status_code, ": ", as.character(x[[1]])))
-      
-      #* Convert results to data.frames, then collapse into a single data.frame
-      x <- lapply(x, function(r) read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings=""))
-      x <- do.call("rbind", x)
-    }
-    
-    #* synchronize underscore codings between records and meta data
-    #* Only affects calls in REDCap versions earlier than 5.5.21
-    if (compareRedcapVersion(proj$version, "5.5.21") == -1) meta_data <- syncUnderscoreCodings(x, meta_data)
+      proj$version
 
-    #* Change field_names to match underscore codings
-    if (!is.null(attributes(meta_data)$checkbox_field_name_map)){
-      field_names[field_names %in%  attributes(meta_data)$checkbox_field_name_map[, 1]] <- 
-            attributes(meta_data)$checkbox_field_name_map[, 2]
-    }
-
-    lapply(field_names,
-           function(i) 
-           {
-             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-                                   x[[i]],factors,dates, checkboxLabels, vname=i)
-           }
-    )
-    if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
-    x
+  #* Check that all fields exist in the meta data
+  if (!is.null(fields)) 
+  {
+    bad_fields <- fields[!fields %in% meta_data$field_name]
+    if (length(bad_fields))
+      coll$push(paste0("The following are not valid field names: ",
+                       paste0(bad_fields, collapse = ", ")))
   }
+  
+  #* Check that all form names exist in the meta data
+  if (!is.null(forms))
+  {
+    bad_forms <- forms[!forms %in% meta_data$form_name]
+    if (length(bad_forms))
+      coll$push(paste0("The following are not valid form names: ",
+                       paste0(bad_forms, collapse = ", ")))
+  }
+  
+  #* Check that all event names exist in the events list
+  if (!is.null(events) && inherits(events_list, "data.frame"))
+  {
+    bad_events <- events[!events %in% events_list$unique_event_name]
+    if (length(bad_events))
+      coll$push(paste0("The following are not valid event names: ",
+                       paste0(bad_events, collapse = ", ")))
+  }
+  
+  checkmate::reportAssertions(coll)
+  
+  #* Create the vector of field names
+  if (!is.null(fields)) #* fields were provided
+  {
+    # redcap_event_name is automatically included in longitudinal projects
+    field_names <- fields[!fields %in% "redcap_event_name"] 
+  }
+  else if (!is.null(forms))
+  {
+    field_names <- meta_data$field_name[meta_data$form_name %in% forms]
+  }
+  else
+    #* fields were not provided, default to all fields.
+    field_names <- meta_data$field_name
+  
+  #* Expand 'field_names' to include fields from specified forms.    
+  if (!is.null(forms)) 
+    field_names <- 
+    unique(c(field_names, 
+             meta_data$field_name[meta_data$form_name %in% forms]))
+  
+  
+  suffixed <- checkbox_suffixes(rcon = rcon, 
+                                fields = field_names,
+                                meta_data = meta_data, 
+                                version = version)
+  
+  body <- list(token = rcon$token, 
+               content = 'record',
+               format = 'csv', 
+               type = 'flat',
+               exportSurveyFields = tolower(survey),
+               exportDataAccessGroups = tolower(dag),
+               returnFormat = 'csv')
+  
+  if (!is.null(forms)) body[['forms']] <- paste0(forms, collapse=",")
+  if (!is.null(events)) body[['events']] <- paste0(events, collapse=",") 
+  if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
+  
+  if (batch.size < 1){
+    x <- unbatched(rcon, body)
+  }
+  else 
+  {
+    x <- batched(rcon, body, batch.size, meta_data$field_name[1])
+  }
+  x
+  
+  #* STILL TO DO
+  # 7. Sync Underscore Codings (if less than 6.0.0)
+  # 8. fieldToVar
+  # 9. apply labels
+}
 
+
+
+#*** UNBATCHED EXPORT
+unbatched <- function(rcon, body)
+{
+  x <- httr::POST(url=rcon$url, 
+                  body=body, 
+                  config=rcon$config)
+  
+  if (x$status_code != 200) redcap_error(x, error_handling = "error")
+  
+  read.csv(textConnection(as.character(x)), 
+           stringsAsFactors=FALSE, 
+           na.strings="")
+}
+
+
+#*** BATCHED EXPORT
+batched <- function(rcon, body, batch.size, id)
+{
+  #* 1. Get the IDs column
+  #* 2. Restrict to unique IDs
+  #* 3. Determine if the IDs look hashed (de-identified)
+  #* 4. Give warning about potential problems joining hashed IDs
+  #* 5. Read batches
+  #* 6. Combine tables
+  #* 7. Return full data frame
+  
+  
+  #* 1. Get the IDs column
+  id_body <- body
+  id_body[['fields']] <- id
+  IDs <- httr::POST(url = rcon$url,
+                    body = id_body,
+                    config = rcon$config)
+  
+  if (IDs$status_code != 200) redcap_error(IDs, error_handling = "error")
+  
+  IDs <- read.csv(textConnection(as.character(IDs)),
+                  stringsAsFactors = FALSE,
+                  na.strings = "")
+  
+  #* 2. Restrict to unique IDs
+  unique_id <- unique(IDs[[id]])
+  
+  #* 3. Determine if the IDs look hashed (de-identified)
+  #* 4. Give warning about potential problems joining hashed IDs
+  if (all(nchar(unique_id) == 32L))
+  {
+    warning("The record IDs in this project appear to be de-identified. ",
+            "Subject data may not match across batches. ",
+            "See 'Deidentified Batched Calls' in '?exportRecords'")
+  }
+  
+  #* Determine batch numbers for the IDs.
+  batch.number <- rep(1:ceiling(length(unique_id) / batch.size),
+                      each = batch.size,
+                      length.out = length(unique_id))
+  
+  #* Make a list to hold each of the batched calls
+  #* Borrowed from http://stackoverflow.com/a/8099431/1017276
+  batch_list <- list(NULL)
+  length(batch_list) <- max(batch.number)
+
+  #* 5. Read batches
+  for (i in unique(batch.number))
+  {
+    body[['records']] <- unique_id[batch.number == i]
+    x <- httr::POST(url=rcon$url, 
+                    body=body, 
+                    config=rcon$config)
+    
+    if (x$status_code != 200) redcap_error(x, error_handling = "error")
+    
+    batch_list[[i]] <- read.csv(textConnection(as.character(x)),
+                                stringsAsFactors = FALSE,
+                                na.strings = "")
+    Sys.sleep(1)
+  }
+  
+  #* 6. Combine tables and return
+  do.call("rbind", batch_list)
+}

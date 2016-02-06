@@ -91,9 +91,6 @@
 #' }
 #'
 
-
-
-
 exportUsers <- function(rcon, ...) UseMethod("exportUsers")
 
 #' @rdname exportUsers
@@ -107,27 +104,47 @@ exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
 #' @rdname exportUsers
 #' @export
 
-exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...){
+exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...,
+                                            meta_data = NULL){
   #* parameters for the Users File Export
-  .params <- list(token=rcon$token, content='user', format='csv', returnFormat='csv')
-
+  body <- list(token=rcon$token, 
+               content='user', 
+               format='csv', 
+               returnFormat='csv')
+  
   #* Export Users file and convert to data frame
-  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
-  if (x$status_code != "200") stop(paste0(x$status_code, ": ", as.character(x)))
-  x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-
+  x <- httr::POST(url=rcon$url, 
+                  body=body, 
+                  config=rcon$config)
+  
+  if (x$status_code != "200") 
+    stop(paste0(x$status_code, ": ", as.character(x)))
+  
+  x <- read.csv(textConnection(as.character(x)),
+                stringsAsFactors = FALSE,
+                na.strings = "")
+                             
   #* convert expiration date to POSIXct class
   if (date) x$expiration <- as.POSIXct(x$expiration, format="%Y-%m-%d")
-
+  
   #* convert data export and form editing privileges to factors
   if (label){
-    x$data_export <- factor(x$data_export, c(0, 2, 1), c("No access", "De-identified", "Full data set"))
+    x$data_export <- 
+      factor(x$data_export, 
+             levels = c(0, 2, 1), 
+             labels = c("No access", "De-identified", "Full data set"))
+    
+    if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+    form_names <- unique(meta_data$form)
 
-    x[, which(names(x) == "data_export"):length(x)] <-
-        lapply(x[, which(names(x) == "data_export"):length(x)],
-            factor, c(0, 2, 1, 3),
-            c("No access", "Read only", "view records/responses and edit records", "Edit survey responses"))
+    x[, form_names] <-
+      lapply(x[, form_names, drop = FALSE],
+             FUN = factor, 
+             levels = c(0, 2, 1, 3),
+             labels = c("No access", "Read only", 
+                        "view records/responses and edit records", 
+                        "Edit survey responses"))
   }
-
-  return(x)
+  
+  x
 }
