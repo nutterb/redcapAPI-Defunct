@@ -24,6 +24,25 @@ Returns a data frame of instruments, names, etc.
 
 6.5.0 +
 }
+
+\section{REDCap API Documentation}{
+
+This function allows you to export a list of the data collection instruments
+for a project. This includes their unique instrument name as seen in the second
+column of the Data Dictionary, as well as each instrument's corresponding
+instrument label, which is seen on a project's left-hand menu when entering data.
+The instruments will be ordered according to their order in the project.
+}
+
+\section{REDCap Version}{
+
+5.8.2+
+}
+
+\section{Known REDCap Limitations}{
+
+None
+}
 \author{
 Benjamin Nutter
 }

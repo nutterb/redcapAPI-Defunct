@@ -1,10 +1,10 @@
 #' @name exportRecords
 #' @aliases exportRecords.redcapApiConnection
 #' @aliases exportRecords.redcapDbConnection
-#' @aliases exportRecords_offline
+# @aliases exportRecords_offline
 #' @aliases queryRecords
 #' @export exportRecords
-#' @export exportRecords_offline
+# @export exportRecords_offline
 #' @importFrom DBI dbGetQuery
 #' @importFrom chron times
 #' @importFrom stringr str_split_fixed
@@ -14,7 +14,6 @@
 #' @importFrom Hmisc 'label<-.data.frame'
 #' @importFrom Hmisc '[.labelled'
 #' @importFrom Hmisc print.labelled
-#' @useDynLib redcapAPI, .registration = TRUE
 #' 
 #' @title Export Records from a REDCap Database
 #' @description Exports records from a REDCap Database, allowing for 
@@ -348,6 +347,7 @@ exportRecords.redcapApiConnection <-
                exportDataAccessGroups = tolower(dag),
                returnFormat = 'csv')
   
+  body[['fields']] <- paste0(field_names, collapse=",")
   if (!is.null(forms)) body[['forms']] <- paste0(forms, collapse=",")
   if (!is.null(events)) body[['events']] <- paste0(events, collapse=",") 
   if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
@@ -359,12 +359,21 @@ exportRecords.redcapApiConnection <-
   {
     x <- batched(rcon, body, batch.size, meta_data$field_name[1])
   }
-  x
+
+  #* synchronize underscore codings between records and meta data
+  #* Only affects calls in REDCap versions earlier than 5.5.21
+  if (utils::compareVersion(version, "6.0.0") == -1) 
+    meta_data <- syncUnderscoreCodings(x, meta_data)
+
+  x <- fieldToVar(records = x, 
+                  meta_data = meta_data, 
+                  factors = factors, 
+                  dates = dates, 
+                  checkboxLabels = checkboxLabels)
   
-  #* STILL TO DO
-  # 7. Sync Underscore Codings (if less than 6.0.0)
-  # 8. fieldToVar
-  # 9. apply labels
+  if (labels) Hmisc::label(x[, suffixed$name_suffix], self=FALSE) <- suffixed$label_suffix
+  
+  x  
 }
 
 

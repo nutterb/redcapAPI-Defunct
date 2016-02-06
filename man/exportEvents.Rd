@@ -15,20 +15,24 @@ exportEvents(rcon, ...)
 
 \item{...}{Arguments to be passed to other methods.}
 
-\item{arms}{A numeric vector or arm numbers to retrieve. In REDCap 6.5.0,
-using this argument results in an empty data frame being returned.}
+\item{arms}{A numeric vector or arm numbers to retrieve.}
+}
+\value{
+Returns a data frame with six columns
+\itemize{
+  \item{\code{event_name} }{The desciptive name of the event.}
+  \item{\code{arm_num} }{The arm number in which the event occurs.}
+  \item{\code{day_offset} }{The days offset from the first event.}
+  \item{\code{offset_min} }{The minimum offset value.}
+  \item{\code{offset_max} }{The maximium offset value.}
+  \item{\code{unique_event_name} }{A unique event identifying name.}
+}
 }
 \description{
 Retrieve a data frame giving the users, expiration dates,
 and data access privileges for each user.
 }
 \details{
-From the REDCap API Documentation:
-
-This function allows you to export the Arms for a project
-
-NOTE: this only works for longitudinal projects.
-
 It is not sufficient to make the project a longitudinal project. The
 project must satisfy one of two conditions: 1) have at least two arms and
 one event defined; or 2) have one arm and at least two events defined. If
@@ -37,16 +41,21 @@ such as \code{ERROR: You cannot export arms for classic projects}, an
 error message that isn't as descriptive of the nature of the problem as
 we might like.
 }
+\section{REDCap API Documentation}{
+
+This function allows you to export the events for a project
+
+NOTE: this only works for longitudinal projects.
+}
+
 \section{REDCap Version}{
 
-6.5.0+ (perhaps earlier, need to confirm its introduction)
+5.8.2+
 }
-\examples{
-\dontrun{
-#*** Note: I cannot provide working examples without
-#*** compromising security.  Instead, I will try to
-#*** offer up sample code with the matching results
-}
+
+\section{Known REDCap Limitations}{
+
+None
 }
 \author{
 Benjamin Nutter

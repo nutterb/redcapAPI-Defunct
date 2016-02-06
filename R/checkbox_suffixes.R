@@ -15,17 +15,11 @@
 
 checkbox_suffixes <- function(rcon, fields, meta_data, version)
 {
-  name_suffix <- 
-    if (compareVersion(version, "6.5.0") > -1)
-    {
-      Fields <- exportFieldNames(rcon)
-      Fields[Fields$original_field_name %in% fields, "export_field_name"]
-    }
-    else{
-      sapply(X = fields, 
-             FUN = manual_checkbox_suffixes, 
-             meta_data)
-    }
+  #* Read the previous comment.  This should be deleted when the other
+  #* block is reinstated.
+  name_suffix <- sapply(X = fields, 
+                        FUN = manual_checkbox_suffixes, 
+                        meta_data)
 
   label_suffix <- 
     sapply(X = fields,
@@ -36,8 +30,10 @@ checkbox_suffixes <- function(rcon, fields, meta_data, version)
        label_suffix = unlist(label_suffix))
 }
 
+#***********************************************
+#* Unexported methods
 
-#* Utility function
+#* Get full variable names (appends ___[option] to checkboxes)
 manual_checkbox_suffixes <- function(x, meta_data)
 {
   #* If x is a checkbox variable
@@ -58,7 +54,7 @@ manual_checkbox_suffixes <- function(x, meta_data)
   x
 }
 
-
+#* Get full variable label (appends ": [option label]" for checkboxes)
 manual_checkbox_label_suffixes <- function(x, meta_data)
 {
   #* If x is a checkbox variable

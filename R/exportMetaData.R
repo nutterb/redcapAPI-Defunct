@@ -20,16 +20,23 @@
 #'   dictionary, and not the display names shown on the webpage.
 #' @param ... Arguments to be passed to other methods.
 #' 
-#' @section REDCap Version:
-#' 5.8.2 (probably earlier, but \code{redcapAPI} wasn't written until this version)
-#' 
 #' @details A record of this export is placed in the REDCap logging page, 
 #' but the file that is exported is not stored in the database.
+#' 
+#' @section REDCap API Documentation:
+#' This function allows you to export the metadata for a project
+#' 
+#' @section REDCap Version:
+#' 5.8.2+ (and earlier, but we don't know how much earlier)
+#' 
+#' @section Known REDCap Limitations: 
+#' The API doesn't respond to the \code{fields} and \code{forms} arguments.  It
+#' always returns the full data dictionary.
 #' 
 #' @author Jeffrey Horner
 #' 
 #' @references
-#' This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
+#' This functionality was originally developed by Jeffrey Horner in the \code{redcap} package.
 #' \url{https://github.com/vubiostat/redcap}
 #' 
 #' Please refer to your institution's API documentation.
@@ -37,17 +44,6 @@
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
-#' @examples
-#' \dontrun{
-#' #*** Note: I cannot provide working examples without
-#' #*** compromising security.  Instead, I will try to 
-#' #*** offer up sample code with the matching results
-#' 
-#' #*** Create the connection object
-#' rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' 
-#' exportMetaData(rcon)
-#' }
 
 exportMetaData <- function(rcon, ...) UseMethod("exportMetaData")
 
