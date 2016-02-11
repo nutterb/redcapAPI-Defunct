@@ -4,15 +4,23 @@
 #' @title Convert a REDCap Data Field to an R Vector
 #' @description Converts a field exported from REDCap into a valid R vector
 #' 
+#' @param records A data frame of records returned by \code{exportRecords} 
+#'   or \code{exportReports}
+#' @param meta_data A data frame giving the data dictionary, as returned 
+#'   by \code{exportMetaData}
+#' @param factors Logical, determines if checkbox, radio button, dropdown and yesno
+#'   variables are converted to factors
+#' @param dates Logical, determines if date variables are converted to POSIXct format
+#' @param checkboxLabels Logical, determines if checkbox variables are labeled as
+#'   "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}
+#' 
 #' @details This function is called internally by \code{exportRecords} and 
 #'   \code{exportReports}.  it is not available to the user.
 #'   
 #' @author Jeffrey Horner
 
-fieldToVar <- 
-  # function(m,d,factors=TRUE, dates=TRUE, checkboxLabels=FALSE, vname)
-  function(records, meta_data, 
-           factors = TRUE, dates = TRUE, checkboxLabels = FALSE)
+fieldToVar <- function(records, meta_data, factors = TRUE, 
+                       dates = TRUE, checkboxLabels = FALSE)
 { 
   for (i in seq_along(records))
   {

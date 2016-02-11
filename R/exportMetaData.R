@@ -80,5 +80,7 @@ function(rcon, fields=NULL, forms=NULL, ...)
     stop(paste0(x$status_code, ": ", as.character(x)))
   }
   
-  read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+  utils::read.csv(textConnection(as.character(x)), 
+                  stringsAsFactors = FALSE, 
+                  na.strings = "")
 }

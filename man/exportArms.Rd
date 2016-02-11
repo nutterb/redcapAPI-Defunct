@@ -21,6 +21,9 @@ exportArms(rcon, ...)
 
 \item{arms}{A numeric vector or arm numbers to retrieve. In REDCap 6.5.0,
 using this argument results in an empty data frame being returned.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \value{
 Returns a data frame with two columns

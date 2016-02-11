@@ -117,6 +117,29 @@ there are four records per patient, each batch will consist of 40 records.
 Thus, if you are concerned about tying up the server with a large,
 longitudinal project, it would be prudent to use a smaller batch size.
 }
+\section{REDCap API Documentation (6.5.0)}{
+
+This function allows you to export a set of records for a project
+
+Note about export rights (6.0.0+): Please be aware that Data Export user rights will be
+applied to this API request. For example, if you have "No Access" data export rights
+in the project, then the API data export will fail and return an error. And if you
+have "De-Identified" or "Remove all tagged Identifier fields" data export rights,
+then some data fields *might* be removed and filtered out of the data set returned
+from the API. To make sure that no data is unnecessarily filtered out of your API
+request, you should have "Full Data Set" export rights in the project.
+}
+
+\section{REDCap Version}{
+
+5.8.2 (Perhaps earlier)
+}
+
+\section{Known REDCap Limitations}{
+
+None
+}
+
 \section{Deidentified Batched Calls}{
 
 Batched calls to the API are not a feature of the REDCap API, but may be imposed
@@ -133,104 +156,6 @@ database.  No matches will be found, and the export will fail.
 
 Users who are exporting de-identified data will have to settle for using unbatched
 calls to the API (ie, \code{batch.size = -1})
-}
-\examples{
-\dontrun{
-> #*** Note: I cannot provide working examples
-> #*** without compromising security.  Instead, I will try to
-> #*** offer up sample code with the matching results
->
->
-> #*** Create the connection object
-> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
->
->
-> #*** Export the full data set
-> BMD <- exportRecords(rcon)
-> head(BMD)
-patient_id redcap_event_name      bmi patient_characteristics_complete
-1          1       entry_arm_1 38.18765                                2
-2          1  dxa_scan_1_arm_1       NA                               NA
-3          1  dxa_scan_2_arm_1       NA                               NA
-4          1  dxa_scan_3_arm_1       NA                               NA
-5          2       entry_arm_1 24.40972                                2
-6          2  dxa_scan_1_arm_1       NA                               NA
-contact_date hip_left_bmd hip_left_tscore hip_right_bmd hip_right_tscore
-1         <NA>           NA              NA            NA               NA
-2   2013-06-12           NA              NA            NA               NA
-3   2009-02-11           NA              NA            NA               NA
-4   2011-02-26           NA              NA            NA               NA
-5         <NA>           NA              NA            NA               NA
-6   2010-11-06        0.697              -2            NA               NA
-neck_left_bmd neck_left_tscore neck_right_bmd neck_right_tscore spine_bmd
-1            NA               NA             NA                NA        NA
-2         0.664             -2.0             NA                NA        NA
-3         0.675             -1.9             NA                NA        NA
-4         0.734             -1.5             NA                NA        NA
-5            NA               NA             NA                NA        NA
-6         0.521             -3.0             NA                NA     0.899
-spine_tscore dxa_scan_summary_complete
-1           NA                        NA
-2           NA                         2
-3           NA                         2
-4           NA                         2
-5           NA                        NA
-6         -1.3                         2
->
->
->
-> #*** Export only the patient_characteristics form
-> BMD <- exportRecords(rcon, forms="patient_characteristics")
-> head(BMD)
-patient_id redcap_event_name      bmi patient_characteristics_complete
-1          1       entry_arm_1 38.18765                                2
-2          1  dxa_scan_1_arm_1       NA                               NA
-3          1  dxa_scan_2_arm_1       NA                               NA
-4          1  dxa_scan_3_arm_1       NA                               NA
-5          2       entry_arm_1 24.40972                                2
-6          2  dxa_scan_1_arm_1       NA                               NA
->
->
-> #*** Export only the second scan
-> BMD <- exportRecords(rcon, events="dxa_scan_2_arm_1", forms="dxa_scan_summary")
-> head(BMD)
-patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
-1          1  dxa_scan_2_arm_1   2009-02-11           NA              NA
-2          2  dxa_scan_2_arm_1   2012-10-30        0.684            -2.1
-3          3  dxa_scan_2_arm_1   2013-02-06        1.007             0.0
-4          4  dxa_scan_2_arm_1   2007-09-20           NA              NA
-5          5  dxa_scan_2_arm_1   2006-07-07           NA              NA
-6          6  dxa_scan_2_arm_1   2006-10-25           NA              NA
-hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
-1            NA               NA         0.675             -1.9             NA
-2            NA               NA         0.524             -2.9             NA
-3            NA               NA         0.897             -1.0             NA
-4            NA               NA         0.632             -2.0             NA
-5            NA               NA         0.835             -0.1             NA
-6            NA               NA            NA               NA           0.54
-neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
-1                NA        NA           NA                         2
-2                NA     0.915         -1.2                         2
-3                NA     1.109         -0.6                         2
-4                NA     0.864         -1.7                         2
-5                NA     0.869         -1.6                         2
-6              -2.8     0.830         -2.0                         2
->
->
-> #*** Retrieve the first scan for patients 38 and 103
-> BMD <- exportRecords(rcon, records=c(38, 103),
-                       forms="dxa_scan_summary", events="dxa_scan_1_arm_1")
-> BMD
-patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
-1         38  dxa_scan_1_arm_1   2008-05-07           NA              NA
-2        103  dxa_scan_1_arm_1   2010-04-21        0.856            -1.2
-hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
-1            NA               NA         0.595             -2.3             NA
-2            NA               NA         0.789             -1.8             NA
-neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
-1                NA     0.770         -2.5                         2
-2                NA     1.023         -1.3                         2
-}
 }
 \author{
 Jeffrey Horner

@@ -16,6 +16,9 @@ exportEvents(rcon, ...)
 \item{...}{Arguments to be passed to other methods.}
 
 \item{arms}{A numeric vector or arm numbers to retrieve.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \value{
 Returns a data frame with six columns

@@ -16,18 +16,6 @@
 #' @param ... Arguments to be passed to other methods.
 #'
 #' @details
-#' From the REDCap API Documentation:
-#'
-#' Data Export: 0=no access, 2=De-Identified, 1=Full Data Set\cr
-#' Form Rights: 0=no access, 2=read only, 1=view records/responses and
-#' edit records (survey responses are read-only), 3 = edit survey responses
-#'
-#' (NOTE: At this time, only a limited amount of rights-related info will be
-#' exported (expiration, data access group ID, data export rights, and
-#' form-level rights). However, more info about a user's rights will
-#' eventually be added to the Export Users API functionality in future
-#' versions of REDCap.)
-#'
 #' For some reason I have yet to identify, some User Tables do not
 #' export correctly. In some situations, the fields are all shifted one
 #' column to the left and the form names are not always exported.
@@ -35,6 +23,38 @@
 #' I have seen one instance of a project in Production where one user had
 #' one more column given than any other user.  If you notice this behavior,
 #' please report it to me as it may help me narrow down the source of the problem
+#' 
+#' @section REDCap API Documentation (6.5.0):
+#' This function allows you to export the users for a project
+#' 
+#' @section REDCap Version:
+#' 5.8.2 (Perhaps earlier) 
+#' 
+#' @section Known REDCap Limitations:
+#' None
+#' 
+#' @return 
+#' Returns a data frame. The number of columns in the data frame will depend on your 
+#' version of REDCap.
+#' \itemize{
+#'   \item{\code{username }}{User name}
+#'   \item{\code{email }}{The user's e-mail address}
+#'   \item{\code{firstname }}{The user's first name}
+#'   \item{\code{lastname }}{The user's last name}
+#'   \item{\code{expiration }}{The expiration date of the user's access to the project}
+#'   \item{\code{data_access_group }}{The data access group the user is assigned to}
+#'   \item{\code{data_export }}{The user's data export rights. 0=no access, 
+#'     2=De-Identified, 1=Full Data Set}
+#'   \item{\code{mobile_app }}{(6.5.0+) Flag for if the user has permissions for the 
+#'     mobile application}
+#'   \item{\code{mobile_app_download_data }}{(6.5.0+) Flag for if the user may download
+#'     data from the mobile app}
+#' }
+#' 
+#' The data frame will have one additional column for each form giving the user's 
+#' form-level permissions in the project.  0=no access, 2=read only, 
+#' 1=view records/responses and
+#' edit records (survey responses are read-only), 3 = edit survey responses
 #'
 #' @author Benjamin Nutter
 #'
@@ -43,52 +63,6 @@
 #'
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-#'
-#' @examples
-#' \dontrun{
-#' > #*** Note: I cannot provide working examples without
-#' > #*** compromising security.  Instead, I will try to
-#' > #*** offer up sample code with the matching results
-#' >
-#' >
-#' > #*** Create the connection object
-#' > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' >
-#' > exportUsers(rcon)
-#' > #*** Note: I cannot provide working examples without
-#' > #*** compromising security.  Instead, I will try to
-#' > #*** offer up sample code with the matching results
-#' >
-#' >
-#' > #*** Create the connection object
-#' > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' >
-#' > exportUsers(rcon)
-#' username            email firstname lastname expiration data_access_group
-#' 1    user1 user1@@domain.org     Name1 Surname1       <NA>                NA
-#' 2    user2             <NA>      <NA>     <NA>       <NA>                NA
-#' 3    user3 user3@@domain.org     Name3 Surname3       <NA>                NA
-#' 4    user4             <NA>      <NA>     <NA>       <NA>                NA
-#' 5    user5 user5@@domain.org     Name5 Surname5       <NA>                NA
-#' 6    user6             <NA>      <NA>     <NA>       <NA>                NA
-#' 7    user7 user6@@domain.org     Name7 Surname7       <NA>                NA
-#' data_export                 patient_characteristics
-#' 1 Full data set view records/responses and edit records
-#' 2 De-identified view records/responses and edit records
-#' 3 De-identified view records/responses and edit records
-#' 4 De-identified view records/responses and edit records
-#' 5 Full data set view records/responses and edit records
-#' 6 De-identified view records/responses and edit records
-#' 7 Full data set view records/responses and edit records
-#' dxa_scan_summary
-#' 1 view records/responses and edit records
-#' 2 view records/responses and edit records
-#' 3 view records/responses and edit records
-#' 4 view records/responses and edit records
-#' 5 view records/responses and edit records
-#' 6 view records/responses and edit records
-#' 7 view records/responses and edit records
-#' }
 #'
 
 exportUsers <- function(rcon, ...) UseMethod("exportUsers")
@@ -107,22 +81,22 @@ exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
 exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...,
                                             meta_data = NULL){
   #* parameters for the Users File Export
-  body <- list(token=rcon$token, 
-               content='user', 
-               format='csv', 
-               returnFormat='csv')
+  body <- list(token = rcon$token, 
+               content = 'user', 
+               format = 'csv', 
+               returnFormat = 'csv')
   
   #* Export Users file and convert to data frame
-  x <- httr::POST(url=rcon$url, 
-                  body=body, 
-                  config=rcon$config)
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
   
   if (x$status_code != "200") 
     stop(paste0(x$status_code, ": ", as.character(x)))
   
-  x <- read.csv(textConnection(as.character(x)),
-                stringsAsFactors = FALSE,
-                na.strings = "")
+  x <- utils::read.csv(textConnection(as.character(x)),
+                       stringsAsFactors = FALSE,
+                       na.strings = "")
                              
   #* convert expiration date to POSIXct class
   if (date) x$expiration <- as.POSIXct(x$expiration, format="%Y-%m-%d")

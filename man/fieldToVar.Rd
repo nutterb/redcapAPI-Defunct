@@ -7,6 +7,21 @@
 fieldToVar(records, meta_data, factors = TRUE, dates = TRUE,
   checkboxLabels = FALSE)
 }
+\arguments{
+\item{records}{A data frame of records returned by \code{exportRecords}
+or \code{exportReports}}
+
+\item{meta_data}{A data frame giving the data dictionary, as returned
+by \code{exportMetaData}}
+
+\item{factors}{Logical, determines if checkbox, radio button, dropdown and yesno
+variables are converted to factors}
+
+\item{dates}{Logical, determines if date variables are converted to POSIXct format}
+
+\item{checkboxLabels}{Logical, determines if checkbox variables are labeled as
+  "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}}
+}
 \description{
 Converts a field exported from REDCap into a valid R vector
 }

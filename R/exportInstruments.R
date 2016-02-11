@@ -50,18 +50,20 @@ exportInstruments.redcapDbConnection <- function(rcon, ...){
 #' @export
 
 exportInstruments.redcapApiConnection <- function(rcon, ...){
-  body <- list(token=rcon$token, 
-               content='instrument',
+  body <- list(token = rcon$token, 
+               content = 'instrument',
                format = 'csv')
   
-  x <- httr::POST(url=rcon$url, 
-                  body=body, 
-                  config=rcon$config)
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
   
   if (x$status_code != 200)
   {
     stop(paste0(x$status_code, ": ", as.character(x)))
   }
   
-  read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+  utils::read.csv(textConnection(as.character(x)), 
+                  stringsAsFactors = FALSE, 
+                  na.strings = "")
 }

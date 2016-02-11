@@ -19,9 +19,9 @@ exportFieldNames(rcon, ...)
 
 \item{...}{Arguments to be passed to other methods.}
 
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
+\item{fields}{Field name to be returned.  If \code{NULL}, all fields are returned.}
 
-\item{field}{Field name to be returned.  If \code{NULL}, all fields are returned.}
+\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
 }
 \value{
 A data frame containing three fields:

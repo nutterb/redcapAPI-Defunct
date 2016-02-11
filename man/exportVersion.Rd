@@ -33,9 +33,20 @@ If this function is used in a version of REDCap that does not
   \code{'5.12.2'} is returned. This is done solely for the convenience
   of always returning a value that can be compared against other versions.
 }
+\section{REDCap API Documentation (6.5.0)}{
+
+This method returns the current REDCap version number as plain text
+(e.g., 4.13.18, 5.12.2, 6.0.0).
+}
+
 \section{REDCap Version}{
 
-6.0.0 +
+6.0.0+
+}
+
+\section{Known REDCap Limitations}{
+
+None
 }
 \author{
 Benjamin Nutter
