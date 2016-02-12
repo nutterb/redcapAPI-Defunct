@@ -14,6 +14,7 @@
 #' @param label Logical. Indicates if the data export and form access rights are
 #'   converted to factor objects.
 #' @param ... Arguments to be passed to other methods.
+#' @param bundle A \code{redcap_bundle} object.  
 #'
 #' @details
 #' For some reason I have yet to identify, some User Tables do not
@@ -79,7 +80,13 @@ exportUsers.redcapDbConnection <- function(rcon, date=TRUE, label=TRUE, ...){
 #' @export
 
 exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...,
-                                            meta_data = NULL){
+                                            bundle = getOption("redcap_bundle")){
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
+  
   #* parameters for the Users File Export
   body <- list(token = rcon$token, 
                content = 'user', 
@@ -108,7 +115,12 @@ exportUsers.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE, ...,
              levels = c(0, 2, 1), 
              labels = c("No access", "De-identified", "Full data set"))
     
-    if (is.null(meta_data)) meta_data <- exportMetaData(rcon)
+    meta_data <- 
+      if (is.null(bundle$meta_data)) 
+        exportMetaData(rcon)
+      else 
+        bundle$meta_data
+    
     form_names <- unique(meta_data$form)
 
     x[, form_names] <-

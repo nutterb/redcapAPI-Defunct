@@ -63,7 +63,7 @@ exportEvents.redcapDbConnection <- function(rcon, arms = NULL, ...){
           "has not yet been written.  Please consider using the API.")
 }
 
-#' @rdname exportUsers
+#' @rdname exportEvents
 #' @export
 
 exportEvents.redcapApiConnection <- 

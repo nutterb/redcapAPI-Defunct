@@ -3,13 +3,12 @@
 \name{exportArms}
 \alias{exportArms}
 \alias{exportArms.redcapApiConnection}
-\alias{exportUsers.redcapDbConnection}
+\alias{exportArms.redcapDbConnection}
 \title{Export the Arms for a Project}
 \usage{
 exportArms(rcon, ...)
 
-\method{exportUsers}{redcapDbConnection}(rcon, date = TRUE, label = TRUE,
-  ...)
+\method{exportArms}{redcapDbConnection}(rcon, ...)
 
 \method{exportArms}{redcapApiConnection}(rcon, arms = NULL, ...,
   error_handling = getOption("redcap_error_handling"))

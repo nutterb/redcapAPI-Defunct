@@ -73,9 +73,9 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 #' @rdname exportReports
 #' @export
 
-exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
-                                              dates=TRUE, checkboxLabels=FALSE, ...,
-                                              proj=NULL){
+exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, labels = TRUE, 
+                                              dates = TRUE, checkboxLabels = FALSE, ...,
+                                              proj = getOption("redcap_bundle")){
   
   #* Secure the meta data.
   meta_data <- 

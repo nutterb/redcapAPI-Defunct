@@ -6,7 +6,10 @@
   Please file an issue on GitHub if you feel such methods would be of use.
 * `redcapProjectInfo` is being deprecated, as it will inevitably create confusion
   with the API method `exportProjectInformation`.  The replacement function is
-  `multiExport`.
+  `exportBundle`.
+* export bundles are now placed into the option `redcap_bundle` by default.
+  For now, exportBundle will also return that same object.  This is to prevent
+  back-compatibility problems with existing code, but will change at a future date.
 * Added several new API functions.  All functions up to REDCap 6.5.0 are included.
 * Optional arguments that previously had no default now default to NULL. There 
   should be no change in behavior related to this change.

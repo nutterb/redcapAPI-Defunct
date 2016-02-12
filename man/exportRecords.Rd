@@ -18,7 +18,8 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
 \method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ..., batch.size = -1, proj = NULL)
+  checkboxLabels = FALSE, ..., batch.size = -1,
+  proj = getOption("redcap_bundle"))
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}

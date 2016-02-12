@@ -174,7 +174,7 @@ exportRecords.redcapApiConnection <-
            records = NULL, events = NULL, labels = TRUE, dates = TRUE,
            survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ..., 
            batch.size = -1,
-           proj = NULL)
+           proj = getOption("redcap_bundle"))
 {
   #* Error Collection Object
   coll <- checkmate::makeAssertCollection()

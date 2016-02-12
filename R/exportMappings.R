@@ -11,6 +11,8 @@
 #' @param arms A vector of arm numbers that you wish to pull events for (by default,
 #'   all events are pulled) 
 #' @param ... Arguments to be passed to other methods
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The data frame that is returned shows the arm number, unique 
 #' event name, and forms mapped in a project.
@@ -55,7 +57,8 @@ exportMappings.redcapDbConnection <- function(rcon, arms, ...){
 #' @rdname exportMappings
 #' @export
 
-exportMappings.redcapApiConnection <- function(rcon, arms = NULL, ...){
+exportMappings.redcapApiConnection <- function(rcon, arms = NULL, ...,
+                                               error_handling = getOption("redcap_error_handling")){
   body <- list(token = rcon$token, 
                content = 'formEventMapping', 
                format = 'csv')
@@ -66,7 +69,7 @@ exportMappings.redcapApiConnection <- function(rcon, arms = NULL, ...){
                   body = body, 
                   config = rcon$config)
   
-  if (x$status_code != 200) return(redcap_error(x, getOption("error_handling")))
+  if (x$status_code != 200) return(redcap_error(x, error_handling))
   
   utils::read.csv(textConnection(as.character(x)), 
                   stringsAsFactors = FALSE, 

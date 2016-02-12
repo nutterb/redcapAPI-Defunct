@@ -58,15 +58,15 @@
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
 
-exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
-                        proj=NULL)
+exportFiles <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ...,
+                        proj = getOption("redcap_bundle"))
   UseMethod("exportFiles")
 
 #' @rdname exportFiles
 #' @export
 
-exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
-                                           proj=NULL){
+exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ..., 
+                                           proj = getOption("redcap_bundle")){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -74,9 +74,9 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, file
 #' @rdname exportFiles
 #' @export
 
-exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, dir=NULL, 
+exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, dir=getwd(), 
                                             filePrefix=TRUE, ...,
-                                            proj=NULL){
+                                            proj = getOption("redcap_bundle")){
 
   #* Error Collection Object
   coll <- checkmate::makeAssertCollection()
@@ -119,9 +119,6 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, d
   }
   
   checkmate::reportAssertions(coll)
-  
-  #* Use working directory if 'dir' is not specified
-  if (is.null(dir)) dir <- getwd()
   
   body <- list(token = rcon$token, 
                content = 'file',

@@ -13,7 +13,8 @@ exportReports(rcon, report_id, factors = TRUE, labels = TRUE,
   labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ...)
 
 \method{exportReports}{redcapApiConnection}(rcon, report_id, factors = TRUE,
-  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ..., proj = NULL)
+  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ...,
+  proj = getOption("redcap_bundle"))
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}

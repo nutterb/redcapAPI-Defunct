@@ -49,7 +49,8 @@ redcap_error <- function(x, error_handling)
 {
   handle <- c("ERROR: The value of the parameter \"content\" is not valid",
               "ERROR: You cannot export arms for classic projects",
-              "ERROR: You cannot export events for classic projects")
+              "ERROR: You cannot export events for classic projects",
+              "ERROR: You cannot export form/event mappings for classic projects")
   if (as.character(x) %in% handle && error_handling == "null") return(NULL)
   else stop(paste0(x$status_code, ": ", as.character(x)))
 }
