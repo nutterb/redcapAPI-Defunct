@@ -77,12 +77,9 @@ ratio.}
 
 \item{...}{Arguments to be passed to other methods}
 
-<<<<<<< HEAD
-=======
 \item{random_levels}{A vector of the randomization group level names.  Determined from the
 data dictionary.}
 
->>>>>>> origin/master
 \item{meta_data}{A text string giving the location of the data 
 dictionary downloaded from REDCap.}
 }
