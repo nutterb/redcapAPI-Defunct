@@ -1,7 +1,7 @@
 Package: redcapAPI
 Type: Package
 Title: R Interface to REDCap
-Version: 1.3.3
+Version: 1.3.4
 Author: Benjamin Nutter. Initiated by Jeffrey Horner and Will Gray with
     contributions from Jeremy Stephens, and Will Beasley
 Maintainer: Stephen Lane <lane.s@unimelb.edu.au>
