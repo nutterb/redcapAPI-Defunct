@@ -15,7 +15,7 @@ allocationTable_offline <- function(meta_data, random, strata=NULL,
   warn.msg <- NULL
   
   #* Establish the meta_data table
-  meta_data <- read.csv(meta_data,
+  meta_data <- utils::read.csv(meta_data,
                         col.names=c('field_name', 'form_name', 'section_header', 
                                     'field_type', 'field_label', 'select_choices_or_calculations', 
                                     'field_note', 'text_validation_type_or_show_slider_number', 

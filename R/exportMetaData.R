@@ -98,7 +98,7 @@ function(rcon, ...)
                           format='csv', returnFormat='csv'),
                 config=rcon$config)          
 if (x$status_code == 200){
-     x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+     x <- utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
      return(x)
    }
    else stop(paste0(x$status_code, ": ", as.character(x)))

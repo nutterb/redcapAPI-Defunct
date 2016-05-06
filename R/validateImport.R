@@ -87,7 +87,7 @@ validateImport <- function(field, meta_data, records, ids,
   meta_data <- subset(meta_data, meta_data$field_name == field_meta)
   
   printLog <- function(x, file=logfile){
-    suppressWarnings(write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
+    suppressWarnings(utils::write.table(x, file, append=TRUE, sep="   ", row.names=FALSE, col.names=FALSE, quote=FALSE))
   }
   
   #*** fields with all missing values are not altered
@@ -293,7 +293,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(00:\\d{2}:\\d{2}|\\d{2}:\\d{2})", x) & !is.na(x))
-    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- sapply(strsplit(x, ":"), utils::tail, 2)
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
@@ -326,7 +326,7 @@ validateImport <- function(field, meta_data, records, ids,
     
     # Convert to character again for upload.
     x <- as.character(x)
-    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- sapply(strsplit(x, ":"), utils::tail, 2)
     x <- sapply(x, paste, collapse=":")
     x[x == "NA"] <- NA
     
@@ -339,7 +339,7 @@ validateImport <- function(field, meta_data, records, ids,
     #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(\\d{2}:\\d{2}:00|\\d{2}:\\d{2})", x) & !is.na(x))
-    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- sapply(strsplit(x, ":"), utils::head, 2)
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
@@ -372,7 +372,7 @@ validateImport <- function(field, meta_data, records, ids,
     
     # Convert to character again for upload.
     x <- as.character(x)
-    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- sapply(strsplit(x, ":"), utils::head, 2)
     x <- sapply(x, paste, collapse=":")
     x[x == "NA"] <- NA
     

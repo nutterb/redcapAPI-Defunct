@@ -66,7 +66,7 @@ exportArms.redcapApiConnection <- function(rcon, arms, ...){
   x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   
   if (x$status_code == "200")
-    return(read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))
+    return(utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))
   #*** For classic projects, we want to avoid throwing a disruptive error. Instead, we 
   #*** return the message that indicates this is a classic project.
   else if (x$status_code == "400" & as.character(x) %in% c("You cannot export arms for classic projects",

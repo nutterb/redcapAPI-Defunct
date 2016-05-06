@@ -75,7 +75,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
   x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   if (x$status_code != "200") stop(as.character(x))
     
-  x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+  x <- utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
   
   #* synchronize underscore codings between records and meta data
   meta_data <- syncUnderscoreCodings(x, meta_data)

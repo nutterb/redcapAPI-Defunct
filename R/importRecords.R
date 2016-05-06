@@ -241,7 +241,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
     data <- lapply(data, function(d) lapply(d, function(x){
                                                   if(any(is.na(x))) {x[is.na(x)] <- ""; x} else {x}}))
     out <- lapply(data, function(d){ l1 <- paste(names(d), collapse=",")
-                                      l2 <- capture.output(write.table(d, sep=",", col.names=FALSE, row.names=FALSE))
+                                      l2 <- utils::capture.output(utils::write.table(d, sep=",", col.names=FALSE, row.names=FALSE))
                                       out <- paste0(c(l1, l2, ""), collapse="\n")})
     att <- list("Content-Type" = structure(c("text/html", "utf-8"),
                                            .Names = c("", "charset")))
@@ -269,7 +269,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
     })
 
     l1 <- paste(names(data), collapse=",")
-    l2 <- capture.output(write.table(data, sep=",", col.names=FALSE, row.names=FALSE))
+    l2 <- utils::capture.output(utils::write.table(data, sep=",", col.names=FALSE, row.names=FALSE))
     out <- paste0(c(l1, l2, ""), collapse="\n")
 
   ## Reattach attributes

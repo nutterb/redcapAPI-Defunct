@@ -65,7 +65,7 @@ exportEvents.redcapApiConnection <- function(rcon, arms, ...){
   
   x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
   if (x$status_code == "200")
-    read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
+    utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE) 
   #*** For classic projects, we want to avoid throwing a disruptive error. Instead, we 
   #*** return the message that indicates this is a classic project.
   else if (x$status_code == "400" & as.character(x) %in% c("You cannot export events for classic projects",
