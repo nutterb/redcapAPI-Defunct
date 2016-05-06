@@ -8,5 +8,3 @@
 
 src/*.dll
 src/*.o
-
-/zz_lendingclub/*.*

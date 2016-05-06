@@ -86,7 +86,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
           attributes(meta_data)$checkbox_field_name_map[, 2]
   }
   
-  lapply(names(x),
+  lapply(names(x)[names(x) %in% meta_data$field_name],
       function(i) 
         {
           x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
@@ -94,7 +94,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
         }
   )
   if (labels){
-    field_names <- gsub("___[a-z,A-Z,0-9,_]+", "", names(x))
+    field_names <- gsub("___[a-z,A-Z,0-9,_]+", "", names(x)[names(x) %in% meta_data$field_name])
     
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
@@ -113,7 +113,8 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, lab
     
     #* Ensures field_labels is adjusted to the proper length to account for
     #* checkbox variables and creates the labels.
-    field_labels <- rep(field_labels, sapply(field_names, length))
+    field_labels <- rep(meta_data$field_label[meta_data$field_name %in% field_names], 
+                        sapply(field_names, length))
     field_labels <- paste0(field_labels, field_labels_suffix)
     
     Hmisc::label(x[, field_names], self=FALSE) <- field_labels
