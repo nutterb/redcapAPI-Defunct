@@ -293,7 +293,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(00:\\d{2}:\\d{2}|\\d{2}:\\d{2})", x) & !is.na(x))
-    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- lapply(strsplit(x, ":"), tail, 2)
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
@@ -326,7 +326,7 @@ validateImport <- function(field, meta_data, records, ids,
     
     # Convert to character again for upload.
     x <- as.character(x)
-    x <- sapply(strsplit(x, ":"), tail, 2)
+    x <- lapply(strsplit(x, ":"), tail, 2)
     x <- sapply(x, paste, collapse=":")
     x[x == "NA"] <- NA
     
@@ -339,7 +339,7 @@ validateImport <- function(field, meta_data, records, ids,
     #* convert times to character to ensure valid format
     x <- as.character(x)
     w <- which(!grepl("(\\d{2}:\\d{2}:00|\\d{2}:\\d{2})", x) & !is.na(x))
-    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- lapply(strsplit(x, ":"), head, 2)
     x <- sapply(x, paste, collapse=":")
     if (length(w) > 0){
       not_time_mmss_msg <- records[w, c(ids, field), drop=FALSE]
@@ -372,7 +372,7 @@ validateImport <- function(field, meta_data, records, ids,
     
     # Convert to character again for upload.
     x <- as.character(x)
-    x <- sapply(strsplit(x, ":"), head, 2)
+    x <- lapply(strsplit(x, ":"), head, 2)
     x <- sapply(x, paste, collapse=":")
     x[x == "NA"] <- NA
     
@@ -504,7 +504,7 @@ validateImport <- function(field, meta_data, records, ids,
   #* radio and dropdown fields
   else if (grepl("(select|radio|dropdown)", meta_data$field_type)){
     x <- as.character(x)
-    mapping <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
+    mapping <- trimws(stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, "[|]")), ", ", 2))
     
     #* Return labeled values to coded values
     for (i in 1:nrow(mapping)){
@@ -530,7 +530,7 @@ validateImport <- function(field, meta_data, records, ids,
     x <- as.character(x)
     
     #* Select the labeled string from the options as a valid input for the import.
-    checkChoice <- stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, " [|] ")), ", ", 2)
+    checkChoice <- trimws(stringr::str_split_fixed(unlist(strsplit(meta_data$select_choices_or_calculations, "[|]")), ", ", 2))
     checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field, "___"))[2], 2]
     
     w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice) & !is.na(x))
