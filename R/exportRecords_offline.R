@@ -38,12 +38,10 @@ exportRecords_offline <-
         field_names <- unique(c(fields))
         .params[['fields']] = paste(fields,collapse=',')
       }
-      else {
-        #* found non-existent fields
+      else #* found non-existent fields
         stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
-    } 
-    else {
-      #* fields were not provided, default to all fields.
+    }
+    else{ #* fields were not provided, default to all fields.
       field_names <- meta_data$field_name
     }
     
