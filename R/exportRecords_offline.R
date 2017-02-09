@@ -2,7 +2,7 @@
 
 exportRecords_offline <- 
   function(datafile, meta_data, factors=TRUE,fields=NULL,forms=NULL,
-           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, ...)
+           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, survey=FALSE, ...)
   {
 
     #* for purposes of the export, we don't need the descriptive fields. 
@@ -105,10 +105,12 @@ meta_data <- utils::read.csv(meta_data,
    
     if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
    
-   if ("redcap_data_access_group" %in% names(x)) field_names <- c(field_names[1], "redcap_data_access_group", field_names[-1])
-   if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
-   field_names <- c(field_names, paste0(unique(meta_data$form_name), "_complete"))
-   x <- x[, field_names, drop=FALSE]
+   if (survey == FALSE) {
+     if ("redcap_data_access_group" %in% names(x)) field_names <- c(field_names[1], "redcap_data_access_group", field_names[-1])
+     if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
+     field_names <- c(field_names, paste0(unique(meta_data$form_name), "_complete"))
+     x <- x[, field_names, drop=FALSE]
+   }
    
    x
   }
