@@ -109,7 +109,7 @@ exportRecords_offline <-
     if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
     
     # get the survey field names.
-    survey_fields <- names(x)[grepl("_survey_(identifier|timestamp)$", 
+    survey_fields <- names(x)[grepl("(_survey_identifier|_timestamp)$",
                                     names(x))]
     
     # convert survey timestamps to dates
