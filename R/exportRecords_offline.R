@@ -37,11 +37,11 @@ exportRecords_offline <-
           length(which(meta_data$field_name %in% fields)) == length(fields)){
         field_names <- unique(c(fields))
         .params[['fields']] = paste(fields,collapse=',')
-      }
-      else #* found non-existent fields
+      } else {
+        #* found non-existent fields
         stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
-    }
-    else{ #* fields were not provided, default to all fields.
+    } else {
+      #* fields were not provided, default to all fields.
       field_names <- meta_data$field_name
     }
     
@@ -111,30 +111,32 @@ exportRecords_offline <-
     # Replace the index with the index of previous item for use with append()'s 'after' argument.
     x_field_names_extra_df$index <- x_field_names_extra_df$index - 1
 
-    lapply(field_names,
-           function(i) 
-           {
-             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-                                   x[[i]],factors,dates, checkboxLabels, vname=i)
-           }
-    )
+    #lapply(field_names,
+    #       function(i) 
+    #       {
+    #         x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
+    #                               x[[i]],factors,dates, checkboxLabels, vname=i)
+    #       }
+    #)
     
-    if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
-
     # Insert the extra field names into the field_names vector in the correct position.
+    # Similarly, insert NA into field_labels for those fields not in this vector.
     if (nrow(x_field_names_extra_df) != 0) {
         for (i in 1:nrow(x_field_names_extra_df)) {
             field_names <- append(field_names, x_field_names_extra_df[i, 'field_name'], after=x_field_names_extra_df[i, 'index'])
+            field_labels <- append(field_labels, NA, after=x_field_names_extra_df[i, 'index'])
         }
     }
 
     # Rename the fields of x using the merged field_names vector.
     names(x) <- field_names
     
+    if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
+    
     # convert survey timestamps to dates
     if (dates)
     {
-      survey_date <- survey_fields[grepl("_timestamp$", field_names)]
+      survey_date <- field_names[grepl("_timestamp$", field_names)]
       x[survey_date] <- 
         lapply(x[survey_date],
                function(s) 
