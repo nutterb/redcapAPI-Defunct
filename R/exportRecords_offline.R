@@ -111,6 +111,19 @@ exportRecords_offline <-
     # get the survey field names.
     survey_fields <- names(x)[grepl("_survey_(identifier|timestamp)$", 
                                     names(x))]
+    
+    # convert survey timestamps to dates
+    if (dates)
+    {
+      survey_date <- survey_fields[grepl("timestamp$", survey_fields)]
+      x[survey_date] <- 
+        lapply(x[survey_date],
+               function(s) 
+               {
+                 s[s == "[not completed]"] <- NA
+                 as.POSIXct(s)
+               })
+    }
 
     # append survey field names to field_names
     field_names <- c(field_names, survey_fields)
