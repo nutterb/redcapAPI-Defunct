@@ -7,7 +7,7 @@ exportRecords_offline <-
     
     #* for purposes of the export, we don't need the descriptive fields. 
     #* Including them makes the process more error prone, so we'll ignore them.
-    meta_data <- utils::read.csv(meta_data,
+    meta_data <- utils::read.csv(meta_data, header=FALSE, skip=1,
                                  stringsAsFactors=FALSE)
     
     col.names=c('field_name', 'form_name', 'section_header', 
@@ -49,6 +49,9 @@ exportRecords_offline <-
     if (!is.null(forms)) 
       field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
     
+    # Save a copy of the original field_names before they are futher modified.
+    field_names_orig <- field_names
+
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
     #* To be conveniently pasted to 'field_label'
@@ -93,8 +96,21 @@ exportRecords_offline <-
     #* return field_names to a vector
     field_names <- unlist(field_names)
     
-    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="")#[, field_names, drop=FALSE]
+    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=FALSE, skip=1)#[, field_names, drop=FALSE]
     
+    # Find the original variable names in the record form dataset.
+    x_field_names <- as.vector(t(utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=FALSE, colClasses='character', nrows=1)))
+
+    # Find the extra variable names in x that are not in the metadata field_name column.
+    x_field_names_extra <- x_field_names[! x_field_names %in% field_names_orig]
+
+    # Create a dataframe of these extra variable names, storing their original index.
+    x_field_names_df <- data.frame(index=1:ncol(x), field_name=x_field_names, stringsAsFactors = FALSE)
+    x_field_names_extra_df <- x_field_names_df[x_field_names_df$field_name %in% x_field_names_extra, ]
+
+    # Replace the index with the index of previous item for use with append()'s 'after' argument.
+    x_field_names_extra_df$index <- x_field_names_extra_df$index - 1
+
     lapply(field_names,
            function(i) 
            {
@@ -104,18 +120,21 @@ exportRecords_offline <-
     )
     
     if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
-    
-    if ("redcap_data_access_group" %in% names(x)) field_names <- c(field_names[1], "redcap_data_access_group", field_names[-1])
-    if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
-    
-    # get the survey field names.
-    survey_fields <- names(x)[grepl("(_survey_identifier|_timestamp)$",
-                                    names(x))]
+
+    # Insert the extra field names into the field_names vector in the correct position.
+    if (nrow(x_field_names_extra_df) != 0) {
+        for (i in 1:nrow(x_field_names_extra_df)) {
+            field_names <- append(field_names, x_field_names_extra_df[i, 'field_name'], after=x_field_names_extra_df[i, 'index'])
+        }
+    }
+
+    # Rename the fields of x using the merged field_names vector.
+    names(x) <- field_names
     
     # convert survey timestamps to dates
     if (dates)
     {
-      survey_date <- survey_fields[grepl("timestamp$", survey_fields)]
+      survey_date <- survey_fields[grepl("_timestamp$", field_names)]
       x[survey_date] <- 
         lapply(x[survey_date],
                function(s) 
@@ -125,16 +144,6 @@ exportRecords_offline <-
                })
     }
 
-    # append survey field names to field_names
-    field_names <- c(field_names, survey_fields)
-    
-    # append the completed form fields
-    field_names <- c(field_names, paste0(unique(meta_data$form_name), "_complete"))
-    
-    # restore the field names to the original order
-    field_names <- field_names[match(names(x), field_names)]
-    x <- x[, field_names, drop=FALSE]
-    
     x
   }
 
