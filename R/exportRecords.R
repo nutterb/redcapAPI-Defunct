@@ -5,15 +5,6 @@
 #' @aliases queryRecords
 #' @export exportRecords
 # @export exportRecords_offline
-#' @importFrom DBI dbGetQuery
-#' @importFrom chron times
-#' @importFrom stringr str_split_fixed
-#' @importFrom Hmisc label.default
-#' @importFrom Hmisc label.data.frame
-#' @importFrom Hmisc 'label<-.default'
-#' @importFrom Hmisc 'label<-.data.frame'
-#' @importFrom Hmisc '[.labelled'
-#' @importFrom Hmisc print.labelled
 #' 
 #' @title Export Records from a REDCap Database
 #' @description Exports records from a REDCap Database, allowing for 
