@@ -144,6 +144,7 @@ exportRecords_offline <-
                function(s) 
                {
                  s[s == "[not completed]"] <- NA
+                 s[s == "0000-00-00 00:00:00"] <- NA
                  as.POSIXct(s)
                })
     }
