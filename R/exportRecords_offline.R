@@ -7,7 +7,7 @@ exportRecords_offline <-
     
     #* for purposes of the export, we don't need the descriptive fields. 
     #* Including them makes the process more error prone, so we'll ignore them.
-    meta_data <- utils::read.csv(meta_data,
+    meta_data <- utils::read.csv(meta_data, header=FALSE, skip=1,
                                  stringsAsFactors=FALSE)
     
     col.names=c('field_name', 'form_name', 'section_header', 
@@ -37,10 +37,10 @@ exportRecords_offline <-
           length(which(meta_data$field_name %in% fields)) == length(fields)){
         field_names <- unique(c(fields))
         .params[['fields']] = paste(fields,collapse=',')
-      }
+      } 
       else #* found non-existent fields
         stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
-    }
+    } 
     else{ #* fields were not provided, default to all fields.
       field_names <- meta_data$field_name
     }
@@ -49,6 +49,9 @@ exportRecords_offline <-
     if (!is.null(forms)) 
       field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
     
+    # Save a copy of the original field_names before they are futher modified.
+    field_names_orig <- field_names
+
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
     #* To be conveniently pasted to 'field_label'
@@ -93,7 +96,7 @@ exportRecords_offline <-
     #* return field_names to a vector
     field_names <- unlist(field_names)
     
-    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="")#[, field_names, drop=FALSE]
+    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=TRUE)#[, field_names, drop=FALSE]
     
     lapply(field_names,
            function(i) 
@@ -105,36 +108,26 @@ exportRecords_offline <-
     
     if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
     
-    if ("redcap_data_access_group" %in% names(x)) field_names <- c(field_names[1], "redcap_data_access_group", field_names[-1])
-    if ("redcap_event_name" %in% names(x)) field_names <- c(field_names[1], "redcap_event_name", field_names[-1])
-    
-    # get the survey field names.
-    survey_fields <- names(x)[grepl("_survey_(identifier|timestamp)$", 
-                                    names(x))]
+    # append extra field names in x to field_names from meta_data
+    field_names <- c(field_names, names(x)[! names(x) %in% field_names])
     
     # convert survey timestamps to dates
     if (dates)
     {
-      survey_date <- survey_fields[grepl("timestamp$", survey_fields)]
+      survey_date <- field_names[grepl("_timestamp$", field_names)]
       x[survey_date] <- 
         lapply(x[survey_date],
                function(s) 
                {
                  s[s == "[not completed]"] <- NA
+                 s[s == "0000-00-00 00:00:00"] <- NA
                  as.POSIXct(s)
                })
     }
 
-    # append survey field names to field_names
-    field_names <- c(field_names, survey_fields)
-    
-    # append the completed form fields
-    field_names <- c(field_names, paste0(unique(meta_data$form_name), "_complete"))
-    
     # restore the field names to the original order
     field_names <- field_names[match(names(x), field_names)]
     x <- x[, field_names, drop=FALSE]
-    
+
     x
   }
-
