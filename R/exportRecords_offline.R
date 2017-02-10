@@ -107,8 +107,6 @@ exportRecords_offline <-
     # Create a dataframe of these extra variable names, storing their original index.
     x_field_names_df <- data.frame(index=1:ncol(x), field_name=x_field_names, stringsAsFactors = FALSE)
     x_field_names_extra_df <- x_field_names_df[x_field_names_df$field_name %in% x_field_names_extra, ]
-    #x_field_names_df <- x_field_names_df[! x_field_names_df$field_name %in% x_field_names_extra, ]
-    #x <- x[, as.numeric(rownames(x_field_names_df))]
     
     # Replace the index with the index of previous item for use with append()'s 'after' argument.
     x_field_names_extra_df$index <- x_field_names_extra_df$index - 1
