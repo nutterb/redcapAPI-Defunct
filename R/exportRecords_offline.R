@@ -98,19 +98,6 @@ exportRecords_offline <-
     
     x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=TRUE)#[, field_names, drop=FALSE]
     
-    # Find the original variable names in the record form dataset.
-    x_field_names <- as.vector(t(utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=FALSE, colClasses='character', nrows=1)))
-
-    # Find the extra variable names in x that are not in the metadata field_name column.
-    x_field_names_extra <- x_field_names[! x_field_names %in% field_names_orig]
-
-    # Create a dataframe of these extra variable names, storing their original index.
-    x_field_names_df <- data.frame(index=1:ncol(x), field_name=x_field_names, stringsAsFactors = FALSE)
-    x_field_names_extra_df <- x_field_names_df[x_field_names_df$field_name %in% x_field_names_extra, ]
-    
-    # Replace the index with the index of previous item for use with append()'s 'after' argument.
-    x_field_names_extra_df$index <- x_field_names_extra_df$index - 1
-
     lapply(field_names,
            function(i) 
            {
@@ -119,19 +106,10 @@ exportRecords_offline <-
            }
     )
     
-    # Insert the extra field names into the field_names vector in the correct position.
-    # Similarly, insert NA into field_labels for those fields not in this vector.
-    if (nrow(x_field_names_extra_df) != 0) {
-        for (i in 1:nrow(x_field_names_extra_df)) {
-            field_names <- append(field_names, x_field_names_extra_df[i, 'field_name'], after=x_field_names_extra_df[i, 'index'])
-            field_labels <- append(field_labels, NA, after=x_field_names_extra_df[i, 'index'])
-        }
-    }
-
-    # Rename the fields of x using the merged field_names vector.
-    names(x) <- field_names
-    
     if (labels) Hmisc::label(x[, field_names], self=FALSE) <- field_labels
+    
+    # append extra field names in x to field_names from meta_data
+    field_names <- c(field_names, names(x)[! names(x) %in% field_names])
     
     # convert survey timestamps to dates
     if (dates)
@@ -147,6 +125,9 @@ exportRecords_offline <-
                })
     }
 
+    # restore the field names to the original order
+    field_names <- field_names[match(names(x), field_names)]
+    x <- x[, field_names, drop=FALSE]
+
     x
   }
-
