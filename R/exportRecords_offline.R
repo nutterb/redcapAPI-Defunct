@@ -48,9 +48,6 @@ exportRecords_offline <-
     #* Expand 'field_names' to include fields from specified forms.    
     if (!is.null(forms)) 
       field_names <- unique(c(field_names, meta_data$field_name[meta_data$form_name %in% forms]))
-    
-    # Save a copy of the original field_names before they are futher modified.
-    field_names_orig <- field_names
 
     #* Extract label suffixes for checkbox fields
     #* This takes the choices of the checkboxes from the meta data and organizes
