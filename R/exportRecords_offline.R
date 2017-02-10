@@ -37,10 +37,10 @@ exportRecords_offline <-
           length(which(meta_data$field_name %in% fields)) == length(fields)){
         field_names <- unique(c(fields))
         .params[['fields']] = paste(fields,collapse=',')
-      }
+      } 
       else #* found non-existent fields
         stop(paste("Non-existent fields:", paste(fields[!fields %in% meta_data$field_name], collapse=", "), sep=" "))
-    }
+    } 
     else{ #* fields were not provided, default to all fields.
       field_names <- meta_data$field_name
     }
@@ -96,7 +96,7 @@ exportRecords_offline <-
     #* return field_names to a vector
     field_names <- unlist(field_names)
     
-    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=FALSE, skip=1)#[, field_names, drop=FALSE]
+    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=TRUE)#[, field_names, drop=FALSE]
     
     # Find the original variable names in the record form dataset.
     x_field_names <- as.vector(t(utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=FALSE, colClasses='character', nrows=1)))
@@ -107,17 +107,19 @@ exportRecords_offline <-
     # Create a dataframe of these extra variable names, storing their original index.
     x_field_names_df <- data.frame(index=1:ncol(x), field_name=x_field_names, stringsAsFactors = FALSE)
     x_field_names_extra_df <- x_field_names_df[x_field_names_df$field_name %in% x_field_names_extra, ]
-
+    #x_field_names_df <- x_field_names_df[! x_field_names_df$field_name %in% x_field_names_extra, ]
+    #x <- x[, as.numeric(rownames(x_field_names_df))]
+    
     # Replace the index with the index of previous item for use with append()'s 'after' argument.
     x_field_names_extra_df$index <- x_field_names_extra_df$index - 1
 
-    #lapply(field_names,
-    #       function(i) 
-    #       {
-    #         x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-    #                               x[[i]],factors,dates, checkboxLabels, vname=i)
-    #       }
-    #)
+    lapply(field_names,
+           function(i) 
+           {
+             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
+                                   x[[i]],factors,dates, checkboxLabels, vname=i)
+           }
+    )
     
     # Insert the extra field names into the field_names vector in the correct position.
     # Similarly, insert NA into field_labels for those fields not in this vector.
