@@ -9,6 +9,10 @@ language: r
 warnings_are_errors: true
 sudo: setuid root
 
+before_install:
+  # Update old packages on Ubuntu: https://github.com/travis-ci/travis-ci/issues/6850
+  Rscript -e 'update.packages(ask = FALSE)'
+  
 env:
  global:
    - CRAN: http://cran.rstudio.com
