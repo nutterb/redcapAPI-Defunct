@@ -440,7 +440,9 @@ exportRecords.redcapApiConnection <-
                                                    nm <- gsub('^\\s*','',nm,perl=TRUE)
                                                    nm <- gsub('\\s*$','',nm,perl=TRUE)
                                                    return(nm)})
-        x <- paste(x, opts, sep="___")
+        # negative integers are permitted for checkbox values, 
+        # but the API converts the - to a _
+        x <- paste(x, sub("[-]", "_", opts), sep="___")
       }
       return(x)
     }
@@ -516,9 +518,9 @@ exportRecords.redcapApiConnection <-
     }
 
     lapply(field_names,
-           function(i) 
+           function(i)
            {
-             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
+             x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]),
                                    x[[i]],factors,dates, checkboxLabels, vname=i)
            }
     )
