@@ -1,8 +1,4 @@
 #' @name exportVersion
-#' @aliases exportVersion.redcapApiConnection
-#' @aliases exportVersion.redcapDbConnection
-#' @export exportVersion
-#' @importFrom httr POST
 #'
 #' @title Exports the REDCap Version Number
 #' @description Version numbers are returned as a character string.
@@ -35,7 +31,8 @@
 #'
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-#'
+#' 
+#' @export
 
 
 exportVersion <- function(rcon, ...) UseMethod("exportVersion")
@@ -53,6 +50,18 @@ exportVersion.redcapDbConnection <- function(rcon, ...){
 
 exportVersion.redcapApiConnection <- function(rcon, ...,
                                               error_handling = getOption("redcap_error_handling")){
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling,
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
   body <- list(token=rcon$token, 
                content='version')
   

@@ -1,10 +1,6 @@
 #' @name exportEvents
-#' @aliases exportEvents.redcapApiConnection
-#' @aliases exportEvents.redcapDbConnection
-#' @export exportEvents
-#' @importFrom httr POST
-#'
 #' @title Export the Events for a Project
+#' 
 #' @description Retrieve a data frame giving the users, expiration dates,
 #' and data access privileges for each user.
 #'
@@ -51,7 +47,8 @@
 #'
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-#'
+#' 
+#' @export
 
 exportEvents <- function(rcon, ...) UseMethod("exportEvents")
 
@@ -70,20 +67,34 @@ exportEvents.redcapApiConnection <-
   function(rcon, arms = NULL, ...,
            error_handling = getOption("redcap_error_handling"))
 {
-  checkmate::assertChoice(error_handling, c("null", "error"))  
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  checkmate::assert_character(x = arms,
+                              null.ok = TRUE,
+                              add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
   
   #* parameters for the Users File Export
-  body <- list(token=rcon$token, 
-               content='event', 
-               format='csv', 
-               returnFormat='csv')
+  body <- list(token = rcon$token, 
+               content = 'event', 
+               format = 'csv', 
+               returnFormat = 'csv')
   
   if (!is.null(arms)) body[['arms']] <- paste0(arms, collapse = ",")
   
   #* Export Users file and convert to data frame
-  x <- httr::POST(url=rcon$url, 
-                  body=body, 
-                  config=rcon$config)
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
   
   if (x$status_code != 200) return(redcap_error(x, error_handling))
   

@@ -1,18 +1,6 @@
-#' @name exportReports
-#' @aliases exportReports.redcapApiConnection
-#' @aliases exportReports.redcapDbConnection
-#' @export exportReports
-#' @importFrom httr POST
-#' @importFrom chron times
-#' @importFrom stringr str_split_fixed
-#' @importFrom Hmisc label.default
-#' @importFrom Hmisc label.data.frame
-#' @importFrom Hmisc 'label<-.default'
-#' @importFrom Hmisc 'label<-.data.frame'
-#' @importFrom Hmisc '[.labelled'
-#' @importFrom Hmisc print.labelled
-#' 
+#' @name exportReports 
 #' @title Export Reports from a REDCap Database
+#' 
 #' @description Exports reports from a REDCap Database and formats data if requested
 #' 
 #' @param rcon A REDCap connection object as created by \code{redcapConnection}.
@@ -56,6 +44,8 @@
 #' None
 #' 
 #' @author Benjamin Nutter
+#' 
+#' @export
 
 exportReports <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
                           dates=TRUE, checkboxLabels=FALSE, ...)
@@ -75,14 +65,48 @@ exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labe
 
 exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, labels = TRUE, 
                                               dates = TRUE, checkboxLabels = FALSE, ...,
-                                              proj = getOption("redcap_bundle")){
+                                              bundle = getOption("redcap_bundle"),
+                                              error_handling = getOption("redcap_error_handling")){
+  
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
+  
+  if (!is.numeric(report_id)) report_id <- as.numeric(report_id)
+  
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_integerish(x = report_id,
+                               len = 1,
+                               add = coll)
+  
+  massert(~ rcon + bundle,
+          fun = checkmate::assert_class,
+          classes = list(rcon = "redcapApiConnection",
+                         bundle = "redcapBundle"),
+          null.ok = list(rcon = FALSE,
+                         bundle = TRUE),
+          fixed = list(add = coll))
+  
+  massert(~ factors + labels + dates + checkboxLabels,
+          fun = checkmate::assert_logical,
+          fixed = list(len = 1,
+                       add = coll))
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
   
   #* Secure the meta data.
   meta_data <- 
-    if (is.null(proj$meta_data)) 
+    if (is.null(bundle$meta_data)) 
       exportMetaData(rcon) 
   else 
-    proj$meta_data
+    bundle$meta_data
   
   #* for purposes of the export, we don't need the descriptive fields. 
   #* Including them makes the process more error prone, so we'll ignore them.
@@ -90,10 +114,10 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
   
   #* Secure the REDCap version
   version <- 
-    if (is.null(proj$version))
+    if (is.null(bundle$version))
       exportVersion(rcon)
   else
-    proj$version
+    bundle$version
   
   body <- list(token = rcon$token, 
                content = 'report',
@@ -105,7 +129,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
                   body = body, 
                   config = rcon$config)
   
-  if (x$status_code != 200) redcap_error(x, error_handling = "error")
+  if (x$status_code != 200) redcap_error(x, error_handling)
   
   x <- utils::read.csv(textConnection(as.character(x)), 
                        stringsAsFactors = FALSE, 
@@ -129,8 +153,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
     field_names <- names(x)
     field_names <- unique(sub("___.+$", "", field_names))
     
-    suffixed <- checkbox_suffixes(rcon = rcon, 
-                                  fields = field_names,
+    suffixed <- checkbox_suffixes(fields = field_names,
                                   meta_data = meta_data, 
                                   version = version)
     

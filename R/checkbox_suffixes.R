@@ -6,17 +6,14 @@
 #'   \code{exportRecords} needs these suffixes in order to retrieve all of the 
 #'   variables and to apply the correct labels.
 #'   
-#' @param rcon The \code{redcapConnection} object
 #' @param fields The current field names of interest
 #' @param meta_data The meta data data frame.
 #' @param version The REDCap version number.
 #' 
 #' @export
 
-checkbox_suffixes <- function(rcon, fields, meta_data, version)
+checkbox_suffixes <- function(fields, meta_data, version)
 {
-  #* Read the previous comment.  This should be deleted when the other
-  #* block is reinstated.
   name_suffix <- sapply(X = fields, 
                         FUN = manual_checkbox_suffixes, 
                         meta_data)

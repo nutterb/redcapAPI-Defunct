@@ -9,15 +9,19 @@ packageStartupMessage(
 {
   options(redcap_api_url = NA,
           redcap_error_handling = "null",
-          redcap_bundle = list(
-            version = NULL,
-            meta_data = NULL,
-            users = NULL,
-            instruments = NULL,
-            events = NULL,
-            arms = NULL,
-            mappings = NULL
-          )
+          redcap_bundle = 
+            structure(
+              list(
+                version = NULL,
+                meta_data = NULL,
+                users = NULL,
+                instruments = NULL,
+                events = NULL,
+                arms = NULL,
+                mappings = NULL
+              ),
+              class = c("redcapBundle", "redcapProject", "list")
+            )
   )
 }
 

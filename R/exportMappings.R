@@ -1,9 +1,4 @@
-#' @name exportMappings
-#' @aliases exportMappings.redcapApiConnection
-#' @aliases exportMappings.redcapDbConection
-#' @export exportMappings
-#' @importFrom httr POST
-#' 
+#' @name exportMappings 
 #' @title Exports the Event-Form Mappings for a Project
 #' @description Retrieve a data frame giving the events-form mapping for a project.
 #' 
@@ -43,6 +38,7 @@
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
+#' @export 
 
 exportMappings <- function(rcon, arms, ...) UseMethod("exportMappings")
 
@@ -59,6 +55,22 @@ exportMappings.redcapDbConnection <- function(rcon, arms, ...){
 
 exportMappings.redcapApiConnection <- function(rcon, arms = NULL, ...,
                                                error_handling = getOption("redcap_error_handling")){
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  checkmate::assert_character(x = arms,
+                              null.ok = TRUE,
+                              add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling,
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
   body <- list(token = rcon$token, 
                content = 'formEventMapping', 
                format = 'csv')

@@ -1,8 +1,4 @@
 #' @name exportFiles
-#' @aliases exportFiles.redcapApiConnection
-#' @aliases exportFiles.redcapDbConnection
-#' @export exportFiles
-#' @importFrom httr POST
 #' 
 #' @title Exports a File attached to a Record
 #' @description A single file from a single record is retrieved.  The behavior 
@@ -57,16 +53,17 @@
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
+#' @export
 
 exportFiles <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ...,
-                        proj = getOption("redcap_bundle"))
+                        bundle = getOption("redcap_bundle"))
   UseMethod("exportFiles")
 
 #' @rdname exportFiles
 #' @export
 
 exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ..., 
-                                           proj = getOption("redcap_bundle")){
+                                           bundle = getOption("redcap_bundle")){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -74,25 +71,51 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = get
 #' @rdname exportFiles
 #' @export
 
-exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, dir=getwd(), 
+exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, 
+                                            dir=getwd(), 
                                             filePrefix=TRUE, ...,
-                                            proj = getOption("redcap_bundle")){
+                                            bundle = getOption("redcap_bundle")){
+  
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
 
+  if (is.numeric(record)) record <- as.character(record)
+  
   #* Error Collection Object
   coll <- checkmate::makeAssertCollection()
   
-  #* stop the function if arguments cannot not specify a unique record-event
-  if (any(vapply(list(record, field, event), length, numeric(1)) > 1))
-  {
-    coll$push("The arguments 'record', 'field', and 'event' may each only have length 1")
-  }
+  massert(~ rcon + bundle,
+          fun = checkmate::assert_class,
+          classes = list(rcon = "redcapApiConnection",
+                         bundle = "redcapBundle"),
+          null.ok = list(rcon = FALSE,
+                         bundle = TRUE),
+          fixed = list(add = coll))
+  
+  massert(~ record + field + event + dir,
+          fun = checkmate::assert_character,
+          null.ok = list(record = FALSE,
+                         field = FALSE,
+                         event = TRUE,
+                         dir = FALSE),
+          fixed = list(len = 1,
+                       add = coll))
+  
+  checkmate::assert_logical(x = filePrefix,
+                            len = 1,
+                            add = coll)
+  
+  checkmate::reportAssertions(coll)
   
   #* Secure the meta_data
   meta_data <- 
-    if (is.null(proj$meta_data)) 
+    if (is.null(bundle$meta_data)) 
       exportMetaData(rcon)
     else 
-      proj$meta_data
+      bundle$meta_data
   
   #* make sure 'field' exist in the project and are 'file' fields
   if (!field %in% meta_data$field_name) 
@@ -106,16 +129,16 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, d
   
   #* Secure the events list
   events_list <- 
-    if (is.null(proj$events))
+    if (is.null(bundle$events))
       exportEvents(rcon)
     else
-      proj$events
+      bundle$events
       
   #* make sure 'event' exists in the project
   if (inherits(events_list, "data.frame"))
   {
     if (!event %in% events_list$unique_event_name) 
-      push$coll(paste0("'", event, "' is not a valid event name in this project."))
+      coll$push(paste0("'", event, "' is not a valid event name in this project."))
   }
   
   checkmate::reportAssertions(coll)
@@ -134,7 +157,7 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, d
                   body = body, 
                   config = rcon$config)
 
-  if (x$status_code != 200) redcap_error(x, error_handling = "error")
+  if (x$status_code != 200) redcap_error(x, error_handling)
   
   #* strip the returned character string to just the file name.
   filename <- sub(pattern = "[[:print:]]+; name=", 
@@ -158,5 +181,3 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, d
   message("The file was saved to '", filename, "'")
 
 }
-
-utils::globalVariables("push")

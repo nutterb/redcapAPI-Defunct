@@ -1,8 +1,4 @@
 #' @name exportMetaData
-#' @aliases exportMetaData.redcapApiConnection
-#' @aliases exportMetaData.redcapDbConnection
-#' @export exportMetaData
-#' @importFrom DBI dbGetQuery
 #' 
 #' @title Export Meta Data from a REDCap Database
 #' @description Retrieves the meta data for a REDcap database, including 
@@ -63,6 +59,19 @@ exportMetaData.redcapDbConnection <-
 exportMetaData.redcapApiConnection <-
 function(rcon, fields=NULL, forms=NULL, ...)
 {
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  massert(~ fields + forms,
+          fun = checkmate::assert_character,
+          fixed = list(null.ok = TRUE,
+                       add = coll))
+  
+  checkmate::reportAssertions(coll)
+  
   body <- list(token = rcon$token,
                content = "metadata",
                format = "csv",
@@ -75,10 +84,7 @@ function(rcon, fields=NULL, forms=NULL, ...)
                   body = body, 
                   config = rcon$config)
 
-  if (x$status_code != 200)
-  {
-    stop(paste0(x$status_code, ": ", as.character(x)))
-  }
+  if (x$status_code != 200) return(redcap_error(x, error_handling))
   
   utils::read.csv(textConnection(as.character(x)), 
                   stringsAsFactors = FALSE, 

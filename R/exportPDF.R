@@ -1,10 +1,6 @@
 #' @name exportPDF
-#' @aliases exportPDF.redcapApiConnection
-#' @aliases exportPDF.redcapDbConnection
-#' @export exportPDF
-#' @importFrom httr POST
-#'
 #' @title Export PDF file of Data Collection Instruments (either as blank or with data)
+#' 
 #' @description This function allows you to download PDF files of data collection 
 #' instruments.  The download may be with or without collected data, and may 
 #' return a single record, multiple records, or all records.
@@ -48,6 +44,8 @@
 #' Creates a PDF file that is saved to the directory specified by the user.
 #'
 #' @author Benjamin Nutter
+#' 
+#' @export
 
 exportPDF <- function(rcon, dir = getwd(), filename = "redcap_forms_download", 
                       record = NULL, events = NULL, 
@@ -72,11 +70,35 @@ function(rcon, dir = getwd(), filename = "redcap_forms_download",
 exportPDF.redcapApiConnection <- 
 function(rcon, dir = getwd(), filename = "redcap_forms_download",
          record = NULL, events = NULL,
-         instruments = NULL, all_records = FALSE, ...)
+         instruments = NULL, all_records = FALSE, ...,
+         error_handling = getOption("redcap_error_handling"))
 {
-  body <- list(token=rcon$token, 
-               content='pdf', 
-               returnFormat='csv')
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  massert(~ dir + filename + record + events + instruments,
+          fun = checkmate::assert_character,
+          len = list(dir = 1, filename = 1),
+          fixed = list(null.ok = TRUE,
+                       add = coll))
+  
+  checkmate::assert_logical(x = all_records,
+                            len = 1,
+                            add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  
+  checkmate::reportAssertions(coll)
+  
+  body <- list(token = rcon$token, 
+               content = 'pdf', 
+               returnFormat = 'csv')
   
   if (!is.null(record)) body[['record']] <- paste0(record, collapse=",")
   if (!is.null(events)) body[['event']] <- paste0(events, collapse=",")
@@ -87,7 +109,7 @@ function(rcon, dir = getwd(), filename = "redcap_forms_download",
                   body = body,
                   config = rcon$config)
   
-  if (x$status_code != 200) return(redcap_error(x, "error"))
+  if (x$status_code != 200) return(redcap_error(x, error_handling))
   
   filename <- 
     if (all_records)
@@ -99,7 +121,7 @@ function(rcon, dir = getwd(), filename = "redcap_forms_download",
   
   writeBin(object = as.vector(x$content), 
            con = file.path(dir, filename), 
-           useBytes=TRUE)
+           useBytes = TRUE)
   
   message("The file was saved to '", file.path(dir, filename), "'")
 }

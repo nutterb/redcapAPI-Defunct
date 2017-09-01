@@ -1,10 +1,4 @@
 #' @name exportRecords
-#' @aliases exportRecords.redcapApiConnection
-#' @aliases exportRecords.redcapDbConnection
-# @aliases exportRecords_offline
-#' @aliases queryRecords
-#' @export exportRecords
-# @export exportRecords_offline
 #' 
 #' @title Export Records from a REDCap Database
 #' @description Exports records from a REDCap Database, allowing for 
@@ -137,6 +131,7 @@
 #' Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
 #' create a list of arbitrary length.
 #' 
+#' @export
 
 exportRecords <-
   function(rcon, factors = TRUE, fields = NULL, forms = NULL, records = NULL,
@@ -165,17 +160,50 @@ exportRecords.redcapApiConnection <-
            records = NULL, events = NULL, labels = TRUE, dates = TRUE,
            survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ..., 
            batch.size = -1,
-           proj = getOption("redcap_bundle"))
+           bundle = getOption("redcap_bundle"),
+           error_handling = getOption("redcap_error_handling"))
 {
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
+    
+  if (is.numeric(records)) records <- as.character(records)
+    
   #* Error Collection Object
   coll <- checkmate::makeAssertCollection()
     
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  massert(~ factors + labels + dates + survey + dag + checkboxLabels,
+          fun = checkmate::assert_logical,
+          fixed = list(len = 1,
+                       add = coll))
+  
+  massert(~ fields + forms + records + events,
+          fun = checkmate::assert_character,
+          fixed = list(null.ok = TRUE,
+                       add = coll))
+  
+  checkmate::assert_integerish(x = batch.size,
+                               len = 1,
+                               add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
   #* Secure the meta data.
   meta_data <- 
-    if (is.null(proj$meta_data)) 
+    if (is.null(bundle$meta_data)) 
       exportMetaData(rcon) 
     else 
-      proj$meta_data
+      bundle$meta_data
   
   #* for purposes of the export, we don't need the descriptive fields. 
   #* Including them makes the process more error prone, so we'll ignore them.
@@ -183,17 +211,17 @@ exportRecords.redcapApiConnection <-
   
   #* Secure the events table
   events_list <- 
-    if (is.null(proj$events)) 
+    if (is.null(bundle$events)) 
       exportEvents(rcon) 
     else 
-      proj$events
+      bundle$events
   
   #* Secure the REDCap version
   version <- 
-    if (is.null(proj$version))
+    if (is.null(bundle$version))
       exportVersion(rcon)
     else
-      proj$version
+      bundle$version
 
   #* Check that all fields exist in the meta data
   if (!is.null(fields)) 
@@ -245,8 +273,7 @@ exportRecords.redcapApiConnection <-
              meta_data$field_name[meta_data$form_name %in% forms]))
   
   
-  suffixed <- checkbox_suffixes(rcon = rcon, 
-                                fields = field_names,
+  suffixed <- checkbox_suffixes(fields = field_names,
                                 meta_data = meta_data, 
                                 version = version)
   
@@ -264,11 +291,12 @@ exportRecords.redcapApiConnection <-
   if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
   
   if (batch.size < 1){
-    x <- unbatched(rcon, body)
+    x <- unbatched(rcon, body, error_handling)
   }
   else 
   {
-    x <- batched(rcon, body, batch.size, meta_data$field_name[1])
+    x <- batched(rcon, body, batch.size, meta_data$field_name[1],
+                 error_handling = error_handling)
   }
 
   #* synchronize underscore codings between records and meta data
@@ -290,13 +318,13 @@ exportRecords.redcapApiConnection <-
 
 
 #*** UNBATCHED EXPORT
-unbatched <- function(rcon, body)
+unbatched <- function(rcon, body, error_handling)
 {
   x <- httr::POST(url = rcon$url, 
                   body = body, 
                   config = rcon$config)
   
-  if (x$status_code != 200) redcap_error(x, error_handling = "error")
+  if (x$status_code != 200) redcap_error(x, error_handling = error_handling)
   
   utils::read.csv(textConnection(as.character(x)), 
                   stringsAsFactors = FALSE, 
@@ -305,7 +333,7 @@ unbatched <- function(rcon, body)
 
 
 #*** BATCHED EXPORT
-batched <- function(rcon, body, batch.size, id)
+batched <- function(rcon, body, batch.size, id, error_handling)
 {
   #* 1. Get the IDs column
   #* 2. Restrict to unique IDs
@@ -323,7 +351,7 @@ batched <- function(rcon, body, batch.size, id)
                     body = id_body,
                     config = rcon$config)
   
-  if (IDs$status_code != 200) redcap_error(IDs, error_handling = "error")
+  if (IDs$status_code != 200) redcap_error(IDs, error_handling)
   
   IDs <- utils::read.csv(textConnection(as.character(IDs)),
                          stringsAsFactors = FALSE,
@@ -348,13 +376,12 @@ batched <- function(rcon, body, batch.size, id)
   
   #* Make a list to hold each of the batched calls
   #* Borrowed from http://stackoverflow.com/a/8099431/1017276
-  batch_list <- list(NULL)
-  length(batch_list) <- max(batch.number)
+  batch_list <- vector("list", max(batch.number))
 
   #* 5. Read batches
   for (i in unique(batch.number))
   {
-    body[['records']] <- unique_id[batch.number == i]
+    body[['records']] <- paste0(unique_id[batch.number == i], collapse = ",")
     x <- httr::POST(url = rcon$url, 
                     body = body, 
                     config = rcon$config)

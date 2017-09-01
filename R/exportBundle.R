@@ -1,9 +1,6 @@
 #' @name exportBundle
-#' @aliases exportBundle.redcapApiConnection
-#' @aliases exportBundle.redcapDbConnection
-#' @export exportBundle
-#' 
 #' @title Perform a bundle of API calls.
+#'  
 #' @description Several of the API calls return objects that can be used to perform
 #'   various validations in \code{exportRecords}, \code{exportReports}, and other
 #'   methods.  Using an export bundle allows you to call these methods once and
@@ -42,11 +39,13 @@
 #'   
 #' @author Benjamin Nutter
 #' 
+#' @export
 
 exportBundle <- function(rcon, date=TRUE, label=TRUE, 
                               meta_data=TRUE, users=TRUE, instruments=TRUE,
                               events=TRUE, arms=TRUE, mappings=TRUE,
-                              version=TRUE, ...) UseMethod("exportBundle")
+                              version=TRUE, ...) 
+  UseMethod("exportBundle")
 
 #' @rdname exportBundle
 #' @export
@@ -67,10 +66,24 @@ exportBundle.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE,
                                              events=TRUE, arms=TRUE, mappings=TRUE,
                                              version=TRUE, ..., 
                                              return_object = TRUE){
+  
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  massert(~ date + label + meta_data + users + instruments + 
+            events + arms + mappings + version + return_object,
+          fun = checkmate::assert_logical,
+          fixed = list(len = 1,
+                       add = coll))
+  
+  checkmate::reportAssertions(coll)
+  
   if (return_object)
     message("It appears you are saving your export bundle to an object.\n  ",
             "This is only necessary when working with multiple projects in the same session.\n  ",
-            "In most cases, it is adequate to use 'to_option = FALSE'.\n  ",
             "'return_object = FALSE' will become the default behavior in a future version of redcapAPI.")
   
   
@@ -78,17 +91,20 @@ exportBundle.redcapApiConnection <- function(rcon, date=TRUE, label=TRUE,
     message("In redcapAPI 2.0, the 'v.number' argument is obsolete and deprecated. ",
             "Please discontinue its use")
   
-  bundle <- list(
-    version = if (version) exportVersion(rcon) else NULL,
-    meta_data = if (meta_data) exportMetaData(rcon) else NULL,
-    users = if (users) exportUsers(rcon, date, label) else NULL,
-    instruments = if (instruments) exportInstruments(rcon) else NULL,
-    events = if (events) exportEvents(rcon) else NULL,
-    arms = if (arms) exportArms(rcon) else NULL,
-    mappings = if (mappings) exportMappings(rcon) else NULL
-  )
-  
-  class(bundle) <- c("exportBundle", "redcapProject", "list")
+  bundle <- 
+    structure(
+      list(
+        version = if (version) exportVersion(rcon) else NULL,
+        meta_data = if (meta_data) exportMetaData(rcon) else NULL,
+        users = if (users) exportUsers(rcon, date, label, 
+                                       bundle = NULL) else NULL,
+        instruments = if (instruments) exportInstruments(rcon) else NULL,
+        events = if (events) exportEvents(rcon) else NULL,
+        arms = if (arms) exportArms(rcon) else NULL,
+        mappings = if (mappings) exportMappings(rcon) else NULL
+      ),
+      class = c("redcapBundle", "redcapProject", "list")
+    )
   
   options(redcap_bundle = bundle)
   if (return_object) return(bundle)
