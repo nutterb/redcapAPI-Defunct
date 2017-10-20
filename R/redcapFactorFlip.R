@@ -23,7 +23,7 @@ redcapFactorFlip <- function(v){
   redcapLabels <- attributes(v)$redcapLabels
   redcapLevels <- attributes(v)$redcapLevels
   
-  if (!is.null(redcapLabels) | is.null(redcapLevels))
+  if (is.null(redcapLabels) | is.null(redcapLevels))
     stop("This does not appear to be a REDCap factor.")
   
   #* labelled to coded
