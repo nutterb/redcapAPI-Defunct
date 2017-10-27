@@ -38,7 +38,10 @@ is only available after REDCap version 6.0.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \description{
 Exports reports from a REDCap Database and formats data if requested

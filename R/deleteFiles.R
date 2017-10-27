@@ -10,8 +10,10 @@
 #' @param event The event name for the file.  Must be length 1.  
 #'   This applies only to longitudinal projects.  If the event is not
 #'   supplied for a longitudinal project, the API will return an error message.
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param ... Arguments to be passed to other methods
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @author Benjamin Nutter
 #'

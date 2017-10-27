@@ -17,7 +17,9 @@
 #'   name.  The prefix takes the form [record_id]-[event_name]-[file_name].  
 #'   The file name is always the same name of the file as it exists in REDCap
 #' @param ... Arguments to be passed to other methods
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The function may only export a single file.  
 #' See the examples for suggestions on exporting multiple files.
@@ -74,7 +76,8 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = get
 exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, 
                                             dir=getwd(), 
                                             filePrefix=TRUE, ...,
-                                            bundle = getOption("redcap_bundle")){
+                                            bundle = getOption("redcap_bundle"),
+                                            error_handling = getOption("redcap_error_handling")){
   
   if (!is.na(match("proj", names(list(...)))))
   {

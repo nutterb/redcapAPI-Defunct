@@ -1,4 +1,4 @@
-#' @name exportPDF
+#' @name exportPdf
 #' @title Export PDF file of Data Collection Instruments (either as blank or with data)
 #' 
 #' @description This function allows you to download PDF files of data collection 
@@ -17,6 +17,8 @@
 #' @param all_records Logical. If \code{TRUE} forms for all records are downloaded.
 #'   When \code{TRUE}, this overrides the \code{records} argument.
 #' @param ... Arguments to be passed to other methods.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details
 #' This function mimics the behavior of "Download PDF of Instruments" button on the
@@ -47,27 +49,27 @@
 #' 
 #' @export
 
-exportPDF <- function(rcon, dir = getwd(), filename = "redcap_forms_download", 
+exportPdf <- function(rcon, dir = getwd(), filename = "redcap_forms_download", 
                       record = NULL, events = NULL, 
                       instruments = NULL, all_records = FALSE, ...)
-  UseMethod("exportPDF")
+  UseMethod("exportPdf")
 
-#' @rdname exportPDF
+#' @rdname exportPdf
 #' @export
 
-exportPDF.redcapDbConnection <- 
+exportPdf.redcapDbConnection <- 
 function(rcon, dir = getwd(), filename = "redcap_forms_download", 
          record = NULL, events = NULL,
          instruments = NULL, all_records = FALSE, ...)
 {
-  message("Please accept my apologies.  The exportPDF method for redcapDbConnection objects\n",
+  message("Please accept my apologies.  The exportPdf method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
-#' @rdname exportPDF
+#' @rdname exportPdf
 #' @export
 
-exportPDF.redcapApiConnection <- 
+exportPdf.redcapApiConnection <- 
 function(rcon, dir = getwd(), filename = "redcap_forms_download",
          record = NULL, events = NULL,
          instruments = NULL, all_records = FALSE, ...,

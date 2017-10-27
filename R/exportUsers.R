@@ -11,6 +11,8 @@
 #'   converted to factor objects.
 #' @param ... Arguments to be passed to other methods.
 #' @param bundle A \code{redcap_bundle} object.  
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #'
 #' @details
 #' For some reason I have yet to identify, some User Tables do not
@@ -175,3 +177,5 @@ exportUsers.redcapApiConnection <- function(rcon, dates=TRUE, labels=TRUE, ...,
   
   x
 }
+
+utils::globalVariables(c("form_access", "form", "access"))

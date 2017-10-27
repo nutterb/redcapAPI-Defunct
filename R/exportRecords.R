@@ -49,8 +49,10 @@
 #'   If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 #'   is the label assigned to the level in the data dictionary. 
 #'   This option is only available after REDCap version 6.0.
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param ... Additional arguments to be passed between methods.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details
 #' A record of exports through the API is recorded in the Logging section 

@@ -15,6 +15,8 @@
 #'   not.  Be careful to use the form names in the second column of the data 
 #'   dictionary, and not the display names shown on the webpage.
 #' @param ... Arguments to be passed to other methods.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details A record of this export is placed in the REDCap logging page, 
 #' but the file that is exported is not stored in the database.
@@ -58,7 +60,8 @@ exportMetaData.redcapDbConnection <-
 #' @export
 
 exportMetaData.redcapApiConnection <-
-function(rcon, fields=NULL, forms=NULL, ...)
+function(rcon, fields=NULL, forms=NULL,
+         error_handling = getOption("redcap_error_handling"), ...)
 {
   coll <- checkmate::makeAssertCollection()
   

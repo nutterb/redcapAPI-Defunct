@@ -5,8 +5,8 @@
 #'
 #' @param rcon A REDCap connection object as created by \code{redcapConnection}.
 #' @param data A \code{data.frame} to be imported to the REDCap project.
-#' @param proj A \code{redcapProject} object as created by
-#'   \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by
+#'   \code{exportBundle}.
 #' @param overwriteBehavior Character string.  'normal' prevents blank
 #'   fields from overwriting populated fields.  'overwrite' causes blanks to
 #'   overwrite data in the REDCap database.
@@ -85,11 +85,18 @@ importRecords.redcapDbConnection <- function(rcon, data,
 #' @export
 
 importRecords.redcapApiConnection <- function(rcon, data,
-                                              overwriteBehavior=c('normal', 'overwrite'),
-                                              returnContent=c('count', 'ids', 'nothing'),
-                                              returnData=FALSE, logfile="", ...,
+                                              overwriteBehavior = c('normal', 'overwrite'),
+                                              returnContent = c('count', 'ids', 'nothing'),
+                                              returnData = FALSE, logfile = "", 
+                                              ...,
                                               bundle = NULL, batch.size=-1)
 {
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
+  
   coll <- checkmate::makeAssertCollection()
   
   massert(~ rcon + bundle + data,
@@ -194,8 +201,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   #** Check that the study id exists in data
   if (!meta_data$field_name[1] %in% names(data))
   {
-    coll$push(paste0(error.flag, 
-                     ": The variable '", 
+    coll$push(paste0("The variable '", 
                      meta_data$field_name[1], 
                      "' cannot be found in 'data'. ",
                      "Please include this variable and place it in the first column."))
@@ -269,13 +275,15 @@ importRecords.redcapApiConnection <- function(rcon, data,
   
   if (batch.size > 0)
   {
-    import_records_batched(data = data,
+    import_records_batched(rcon = rcon, 
+                           data = data,
                            batch.size = batch.size,
                            overwriteBehavior = overwriteBehavior)
   }
   else
   {
-    import_records_unbatched(data = data,
+    import_records_unbatched(rcon = rcon,
+                             data = data,
                              overwriteBehavior = overwriteBehavior)
   }
 }
@@ -284,7 +292,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
 ## UNEXPORTED FUNCTIONS
 #####################################################################
 
-import_records_batched <- function(data, batch.size, overwriteBehavior)
+import_records_batched <- function(rcon, data, batch.size, overwriteBehavior)
 {
   n.batch <- nrow(data) %/% batch.size + 1
   
@@ -310,6 +318,8 @@ import_records_batched <- function(data, batch.size, overwriteBehavior)
                   attributes(d) <- att; 
                   return(d)
                 })
+  
+  x <- vector("list", length = length(out))
   
   for (i in seq_along(out))
   {
@@ -343,7 +353,7 @@ import_records_batched <- function(data, batch.size, overwriteBehavior)
 }
 
 
-import_records_unbatched <- function(data, overwriteBehavior)
+import_records_unbatched <- function(rcon, data, overwriteBehavior)
 {
   data[is.na(data)] <- ""
 

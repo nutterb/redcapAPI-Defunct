@@ -40,7 +40,7 @@ massert <- function(formula, fun, ..., fixed = list())
   
   if (!all(lhs == ".")) 
   {
-    coll$push("`formula` may not have a left hand side.")
+    massert_coll$push("`formula` may not have a left hand side.")
   }
   
   checkmate::assert_function(x = fun,

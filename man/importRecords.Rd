@@ -46,11 +46,11 @@ If \code{""}, the log is printed to the console.}
 
 \item{...}{Arguments to be passed to other methods.}
 
+\item{bundle}{A \code{redcapBundle} object as created by
+\code{exportBundle}.}
+
 \item{batch.size}{Specifies size of batches.  A negative value
 indicates no batching.}
-
-\item{proj}{A \code{redcapProject} object as created by
-\code{redcapProjectInfo}.}
 }
 \description{
 Imports records from a \code{data.frame} to a REDCap Database

@@ -82,14 +82,17 @@ in each batch of a batched export.  Non-positive numbers export the
 entire project in a single batch. Batching the export may be beneficial 
 to prevent tying up smaller servers.  See details for more explanation.}
 
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
+
 \item{datafile}{For the offline version, a character string giving the location
 of the dataset downloaded from REDCap.  Note that this should be the raw
 (unlabeled) data set.}
 
 \item{meta_data}{A text string giving the location of the data dictionary 
 downloaded from REDCap.}
-
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
 }
 \description{
 Exports records from a REDCap Database, allowing for 

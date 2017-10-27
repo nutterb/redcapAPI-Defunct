@@ -27,7 +27,10 @@ supplied for a longitudinal project, the API will return an error message.}
 
 \item{...}{Arguments to be passed to other methods}
 
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \description{
 This function allows you to remove a document that has been 

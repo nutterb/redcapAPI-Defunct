@@ -16,8 +16,10 @@
 #'   file already exists for that record.  If a file exists, the function 
 #'   terminates to prevent overwriting.  When \code{TRUE}, no additional 
 #'   check is performed.
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param ... Arguments to be passed to other methods
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The function may only import a single file
 #' 
@@ -43,7 +45,8 @@ importFiles.redcapDbConnection <- function(rcon, file, record, field, event, ove
 
 importFiles.redcapApiConnection <- function(rcon, file, record, field, event = NULL, 
                                             overwrite=TRUE, ...,
-                                            bundle=NULL){
+                                            bundle=NULL,
+                                            error_handling = getOption("redcap_error_handling")){
   
   if (!is.na(match("proj", names(list(...)))))
   {
@@ -130,7 +133,7 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event = N
       error = function(cond) list(status_code = "200"))
   
   if (file$status_code != "200") 
-    redcap_error(x, error_handling)
+    redcap_error(file, error_handling)
   else 
     message("The file was successfully uploaded")
 }

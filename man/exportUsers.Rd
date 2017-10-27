@@ -27,6 +27,9 @@ exportUsers(rcon, ...)
 converted to factor objects.}
 
 \item{bundle}{A \code{redcap_bundle} object.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \value{
 Returns a data frame. The number of columns in the data frame will depend on your 

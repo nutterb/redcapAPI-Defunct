@@ -8,6 +8,8 @@
 #' @param fields Field name to be returned.  If \code{NULL}, all fields are returned.
 #' @param bundle A \code{redcapProject} object as created by \code{redcapProjectInfo}.
 #' @param ... Arguments to be passed to other methods.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #'
 #' 
 #' @section REDCap API Documentation:
@@ -65,13 +67,16 @@
 #' @export
 
 
-exportFieldNames <- function(rcon, ...) UseMethod("exportFieldNames")
+exportFieldNames <- function(rcon, ...,
+                             error_handling = getOption("redcap_error_handling")) 
+  UseMethod("exportFieldNames")
 
 #' @rdname exportFieldNames
 #' @export
 
 exportFieldNames.redcapDbConnection <- function(rcon, fields = NULL, 
-                                                bundle = NULL, ...){
+                                                bundle = NULL, ...,
+                                                error_handling = getOption("redcap_error_handling")){
   message("Please accept my apologies.  The exportFieldNames method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
