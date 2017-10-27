@@ -25,6 +25,7 @@
 #' 
 
 parseBranchingLogic <- function(l){
+  l <- gsub("\\n", " ", l)
   l <- gsub(" or ", " | ", l)
   l <- gsub(" and ", " & ", l)
   l <- gsub("[(]", "___", l)
@@ -33,3 +34,4 @@ parseBranchingLogic <- function(l){
   l <- gsub(" [=] ", " == ", l)
   lapply(l, function(x) ifelse(x=="", NA, parse(text=x)))
 }
+         
