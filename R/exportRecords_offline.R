@@ -26,7 +26,8 @@ exportRecords_offline <- function(datafile, meta_data,
   
   #* Secure the meta data.
   meta_data <- utils::read.csv(meta_data,
-                               stringsAsFactors = FALSE)
+                               stringsAsFactors = FALSE,
+                               na.strings = "")
   
   col.names=c('field_name', 'form_name', 'section_header', 
               'field_type', 'field_label', 'select_choices_or_calculations', 

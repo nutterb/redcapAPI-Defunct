@@ -87,7 +87,9 @@ function(rcon, fields=NULL, forms=NULL, ...)
 
   if (x$status_code != 200) return(redcap_error(x, error_handling))
   
-  utils::read.csv(textConnection(as.character(x)), 
+  x <- as.character(x)
+  x <- iconv(x, "utf8", "ASCII", sub = "")
+  utils::read.csv(text = x, 
                   stringsAsFactors = FALSE, 
                   na.strings = "")
 }

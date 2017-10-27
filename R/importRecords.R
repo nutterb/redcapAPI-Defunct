@@ -156,7 +156,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   #** Check that all of the variable names in 'data' exist in REDCap Database
   .checkbox <- meta_data[meta_data$field_type == "checkbox", ]
   
-  .opts <- sapply(X = .checkbox$select_choices_or_calculations, 
+  .opts <- lapply(X = .checkbox$select_choices_or_calculations, 
                   FUN = function(x) strsplit(x, 
                                              split = " [|] "))
   .opts <- lapply(X = .opts, 
@@ -327,7 +327,7 @@ import_records_batched <- function(data, batch.size, overwriteBehavior)
   if (all(unlist(sapply(X = x, 
                         FUN = function(y) y["status_code"])) == "200"))
   {
-    sapply(x, as.character)
+    vapply(x, as.character, character(1))
   }
   else 
   {

@@ -326,7 +326,9 @@ unbatched <- function(rcon, body, error_handling)
   
   if (x$status_code != 200) redcap_error(x, error_handling = error_handling)
   
-  utils::read.csv(textConnection(as.character(x)), 
+  x <- as.character(x)
+  x <- iconv(x, "utf8", "ASCII", sub = "")
+  utils::read.csv(text = x, 
                   stringsAsFactors = FALSE, 
                   na.strings = "")
 }
@@ -353,7 +355,9 @@ batched <- function(rcon, body, batch.size, id, error_handling)
   
   if (IDs$status_code != 200) redcap_error(IDs, error_handling)
   
-  IDs <- utils::read.csv(textConnection(as.character(IDs)),
+  IDs <- as.character(IDs)
+  IDs <- iconv(IDs, "utf8", "ASCII", sub = "")
+  IDs <- utils::read.csv(text = IDs,
                          stringsAsFactors = FALSE,
                          na.strings = "")
   
@@ -388,7 +392,9 @@ batched <- function(rcon, body, batch.size, id, error_handling)
     
     if (x$status_code != 200) redcap_error(x, error_handling = "error")
     
-    batch_list[[i]] <- utils::read.csv(textConnection(as.character(x)),
+    x <- as.character(x)
+    x <- iconv(x, "utf8", "ASCII", sub = "")
+    batch_list[[i]] <- utils::read.csv(text = x,
                                        stringsAsFactors = FALSE,
                                        na.strings = "")
     Sys.sleep(1)
