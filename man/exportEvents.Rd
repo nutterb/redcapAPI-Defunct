@@ -4,6 +4,7 @@
 \alias{exportEvents}
 \alias{exportEvents.redcapApiConnection}
 \alias{exportEvents.redcapDbConnection}
+\alias{exportEvents.redcapApiConnection}
 \title{Export the Events for a Project}
 \usage{
 exportEvents(rcon, arms, ...)
@@ -50,13 +51,12 @@ event_name arm_num day_offset offset_min offset_max unique_event_name
 }
 
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

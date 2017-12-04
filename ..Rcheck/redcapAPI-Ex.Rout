@@ -1,0 +1,784 @@
+
+R version 3.4.2 (2017-09-28) -- "Short Summer"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin16.7.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "redcapAPI"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "redcapAPI-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('redcapAPI')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("deleteFiles")
+> ### * deleteFiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: deleteFiles
+> ### Title: Delete a File attached to a Record
+> ### Aliases: deleteFiles deleteFiles.redcapApiConnection
+> ###   deleteFiles.redcapDbConnection deleteFiles.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D   > #*** Note: I cannot provide working examples without
+> ##D   > #*** compromising security.  Instead, I will try to 
+> ##D   > #*** offer up sample code with the matching results
+> ##D   > 
+> ##D   > #*** Create the connection object
+> ##D   > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D   > 
+> ##D   >
+> ##D   > #* Delete a file
+> ##D   > deleteFiles(rcon, record=1, field="file_upload", event="event_1_arm_1")
+> ##D   The file was successfully deleted
+> ##D   >
+> ##D   
+> ## End(Not run)
+>   
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("deleteFiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportArms")
+> ### * exportArms
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportArms
+> ### Title: Exports the Arms for a Project
+> ### Aliases: exportArms exportArms.redcapApiConnection
+> ###   exportArms.redcapDbConnection exportArms.redcapApiConnection
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D   > #*** Note: I cannot provide working examples without
+> ##D   > #*** compromising security.  Instead, I will try to 
+> ##D   > #*** offer up sample code with the matching results
+> ##D   > 
+> ##D   > 
+> ##D   > #*** Create the connection object
+> ##D   > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D   > 
+> ##D   > exportArms(rcon)
+> ##D   arm_num             name
+> ##D   1       1            Arm 1
+> ##D   2       2 Experimental Arm
+> ##D   3      10   Normal Control
+> ##D   
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportArms", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportEvents")
+> ### * exportEvents
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportEvents
+> ### Title: Export the Events for a Project
+> ### Aliases: exportEvents exportEvents.redcapApiConnection
+> ###   exportEvents.redcapDbConnection exportEvents.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D > 
+> ##D > exportEvents(rcon)
+> ##D event_name arm_num day_offset offset_min offset_max unique_event_name
+> ##D 1     Event 1       1          0          0          0     event_1_arm_1
+> ##D 2 Follow Up 1       1          1          0          0 follow_up_1_arm_1
+> ##D 3 Follow Up 2       1          2          0          0 follow_up_2_arm_1
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportEvents", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportFiles")
+> ### * exportFiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportFiles
+> ### Title: Exports a File attached to a Record
+> ### Aliases: exportFiles exportFiles.redcapApiConnection
+> ###   exportFiles.redcapDbConnection exportFiles.redcapApiConnection
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  > #*** Note: I cannot provide working examples without
+> ##D  > #*** compromising security.  Instead, I will try to 
+> ##D  > #*** offer up sample code with the matching results
+> ##D  > 
+> ##D  > #*** Create the connection object
+> ##D  > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D  > 
+> ##D  >
+> ##D  > #* Export a single file
+> ##D  > exportFiles(rcon, record=1, field="file_upload", event="event_1_arm_1")
+> ##D  The file was saved to '1-event_1_arm_1-NewOutcomes.xlsx'
+> ##D  >
+> ##D  >
+> ##D  > #* Export all files in a project
+> ##D  > #* Although this example only shows one field for files, it could work with
+> ##D  > #* an arbitrary number of file upload fields
+> ##D  > library(reshape2)
+> ##D  > Data <- exportRecords(Data)
+> ##D  > (filesToExport <- melt(Data[, c("id", "redcap_event_name", "file_upload")],
+> ##D                           c("id", "redcap_event_name")),
+> ##D                           na.rm=TRUE)
+> ##D  id redcap_event_name    variable      value
+> ##D  1  1     event_1_arm_1 file_upload [document]
+> ##D  4  2     event_1_arm_1 file_upload [document]
+> ##D  >
+> ##D  > for(i in 1:nrow(filesToExport)){
+> ##D  +   exportFiles(rcon, record=filesToExport$id[i],
+> ##D  +               field=filesToExport$variable[i],
+> ##D  +               event=filesToExport$redcap_event_name[i])
+> ##D  + }
+> ##D  The file was saved to '1-event_1_arm_1-NewOutcomes.xlsx'
+> ##D  The file was saved to '2-event_1_arm_1-Sunset2.JPG'
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportFiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportMappings")
+> ### * exportMappings
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportMappings
+> ### Title: Exports the Event-Form Mappings for a Project
+> ### Aliases: exportMappings exportMappings.redcapApiConnection
+> ###   exportMappings.redcapDbConnection exportMappings.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D >
+> ##D > exportMappings(rcon)
+> ##D arm_num        unique_event_name                 form_name
+> ##D 1        1            event_1_arm_1              demographics
+> ##D 2        1            event_1_arm_1 all_the_different_options
+> ##D 3        1            event_1_arm_1        uploading_decimals
+> ##D 4        1            event_1_arm_1              calculations
+> ##D 5        1        follow_up_1_arm_1              calculations
+> ##D 6        1        follow_up_2_arm_1              calculations
+> ##D 7        2 experimental_inter_arm_2              demographics
+> ##D 8        2 experimental_inter_arm_2        uploading_decimals
+> ##D 9        2 experimental_follo_arm_2 all_the_different_options
+> ##D 10       2 experimental_follo_arm_2        uploading_decimals
+> ##D 11       2 experimental_follo_arm_2              calculations
+> ##D 12      10          baseline_arm_10              demographics
+> ##D 13      10          baseline_arm_10        uploading_decimals
+> ##D > 
+> ##D > exportMappings(rcon, 1:2)
+> ##D arm_num        unique_event_name                 form_name
+> ##D 1        1            event_1_arm_1              demographics
+> ##D 2        1            event_1_arm_1 all_the_different_options
+> ##D 3        1            event_1_arm_1        uploading_decimals
+> ##D 4        1            event_1_arm_1              calculations
+> ##D 5        1        follow_up_1_arm_1              calculations
+> ##D 6        1        follow_up_2_arm_1              calculations
+> ##D 7        2 experimental_inter_arm_2              demographics
+> ##D 8        2 experimental_inter_arm_2        uploading_decimals
+> ##D 9        2 experimental_follo_arm_2 all_the_different_options
+> ##D 10       2 experimental_follo_arm_2        uploading_decimals
+> ##D 11       2 experimental_follo_arm_2              calculations
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportMappings", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportMetaData")
+> ### * exportMetaData
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportMetaData
+> ### Title: Export Meta Data from a REDCap Database
+> ### Aliases: exportMetaData exportMetaData.redcapApiConnection
+> ###   exportMetaData.redcapDbConnection exportMetaData.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D #*** Note: I cannot provide working examples without
+> ##D #*** compromising security.  Instead, I will try to 
+> ##D #*** offer up sample code with the matching results
+> ##D 
+> ##D #*** Create the connection object
+> ##D rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D 
+> ##D exportMetaData(rcon)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportMetaData", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportRecords")
+> ### * exportRecords
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportRecords
+> ### Title: Export Records from a REDCap Database
+> ### Aliases: exportRecords queryRecords exportRecords.redcapApiConnection
+> ###   exportRecords exportRecords.redcapDbConnection
+> ###   exportRecords.redcapApiConnection exportRecords_offline
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples
+> ##D > #*** without compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D > 
+> ##D > 
+> ##D > #*** Export the full data set
+> ##D > BMD <- exportRecords(rcon)
+> ##D > head(BMD)
+> ##D patient_id redcap_event_name      bmi patient_characteristics_complete
+> ##D 1          1       entry_arm_1 38.18765                                2
+> ##D 2          1  dxa_scan_1_arm_1       NA                               NA
+> ##D 3          1  dxa_scan_2_arm_1       NA                               NA
+> ##D 4          1  dxa_scan_3_arm_1       NA                               NA
+> ##D 5          2       entry_arm_1 24.40972                                2
+> ##D 6          2  dxa_scan_1_arm_1       NA                               NA
+> ##D contact_date hip_left_bmd hip_left_tscore hip_right_bmd hip_right_tscore
+> ##D 1         <NA>           NA              NA            NA               NA
+> ##D 2   2013-06-12           NA              NA            NA               NA
+> ##D 3   2009-02-11           NA              NA            NA               NA
+> ##D 4   2011-02-26           NA              NA            NA               NA
+> ##D 5         <NA>           NA              NA            NA               NA
+> ##D 6   2010-11-06        0.697              -2            NA               NA
+> ##D neck_left_bmd neck_left_tscore neck_right_bmd neck_right_tscore spine_bmd
+> ##D 1            NA               NA             NA                NA        NA
+> ##D 2         0.664             -2.0             NA                NA        NA
+> ##D 3         0.675             -1.9             NA                NA        NA
+> ##D 4         0.734             -1.5             NA                NA        NA
+> ##D 5            NA               NA             NA                NA        NA
+> ##D 6         0.521             -3.0             NA                NA     0.899
+> ##D spine_tscore dxa_scan_summary_complete
+> ##D 1           NA                        NA
+> ##D 2           NA                         2
+> ##D 3           NA                         2
+> ##D 4           NA                         2
+> ##D 5           NA                        NA
+> ##D 6         -1.3                         2
+> ##D > 
+> ##D > 
+> ##D > 
+> ##D > #*** Export only the patient_characteristics form
+> ##D > BMD <- exportRecords(rcon, forms="patient_characteristics")
+> ##D > head(BMD)
+> ##D patient_id redcap_event_name      bmi patient_characteristics_complete
+> ##D 1          1       entry_arm_1 38.18765                                2
+> ##D 2          1  dxa_scan_1_arm_1       NA                               NA
+> ##D 3          1  dxa_scan_2_arm_1       NA                               NA
+> ##D 4          1  dxa_scan_3_arm_1       NA                               NA
+> ##D 5          2       entry_arm_1 24.40972                                2
+> ##D 6          2  dxa_scan_1_arm_1       NA                               NA
+> ##D > 
+> ##D > 
+> ##D > #*** Export only the second scan 
+> ##D > BMD <- exportRecords(rcon, events="dxa_scan_2_arm_1", forms="dxa_scan_summary")
+> ##D > head(BMD)
+> ##D patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
+> ##D 1          1  dxa_scan_2_arm_1   2009-02-11           NA              NA
+> ##D 2          2  dxa_scan_2_arm_1   2012-10-30        0.684            -2.1
+> ##D 3          3  dxa_scan_2_arm_1   2013-02-06        1.007             0.0
+> ##D 4          4  dxa_scan_2_arm_1   2007-09-20           NA              NA
+> ##D 5          5  dxa_scan_2_arm_1   2006-07-07           NA              NA
+> ##D 6          6  dxa_scan_2_arm_1   2006-10-25           NA              NA
+> ##D hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
+> ##D 1            NA               NA         0.675             -1.9             NA
+> ##D 2            NA               NA         0.524             -2.9             NA
+> ##D 3            NA               NA         0.897             -1.0             NA
+> ##D 4            NA               NA         0.632             -2.0             NA
+> ##D 5            NA               NA         0.835             -0.1             NA
+> ##D 6            NA               NA            NA               NA           0.54
+> ##D neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
+> ##D 1                NA        NA           NA                         2
+> ##D 2                NA     0.915         -1.2                         2
+> ##D 3                NA     1.109         -0.6                         2
+> ##D 4                NA     0.864         -1.7                         2
+> ##D 5                NA     0.869         -1.6                         2
+> ##D 6              -2.8     0.830         -2.0                         2
+> ##D > 
+> ##D > 
+> ##D > #*** Retrieve the first scan for patients 38 and 103
+> ##D > BMD <- exportRecords(rcon, records=c(38, 103), 
+> ##D                        forms="dxa_scan_summary", events="dxa_scan_1_arm_1")
+> ##D > BMD
+> ##D patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
+> ##D 1         38  dxa_scan_1_arm_1   2008-05-07           NA              NA
+> ##D 2        103  dxa_scan_1_arm_1   2010-04-21        0.856            -1.2
+> ##D hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
+> ##D 1            NA               NA         0.595             -2.3             NA
+> ##D 2            NA               NA         0.789             -1.8             NA
+> ##D neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
+> ##D 1                NA     0.770         -2.5                         2
+> ##D 2                NA     1.023         -1.3                         2
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportRecords", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("exportUsers")
+> ### * exportUsers
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: exportUsers
+> ### Title: Export the Users for a Project
+> ### Aliases: exportUsers exportUsers.redcapApiConnection
+> ###   exportUsers.redcapDbConnection exportUsers.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to
+> ##D > #*** offer up sample code with the matching results
+> ##D >
+> ##D >
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D >
+> ##D > exportUsers(rcon)
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to
+> ##D > #*** offer up sample code with the matching results
+> ##D >
+> ##D >
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D >
+> ##D > exportUsers(rcon)
+> ##D username            email firstname lastname expiration data_access_group
+> ##D 1    user1 user1@domain.org     Name1 Surname1       <NA>                NA
+> ##D 2    user2             <NA>      <NA>     <NA>       <NA>                NA
+> ##D 3    user3 user3@domain.org     Name3 Surname3       <NA>                NA
+> ##D 4    user4             <NA>      <NA>     <NA>       <NA>                NA
+> ##D 5    user5 user5@domain.org     Name5 Surname5       <NA>                NA
+> ##D 6    user6             <NA>      <NA>     <NA>       <NA>                NA
+> ##D 7    user7 user6@domain.org     Name7 Surname7       <NA>                NA
+> ##D data_export                 patient_characteristics
+> ##D 1 Full data set view records/responses and edit records
+> ##D 2 De-identified view records/responses and edit records
+> ##D 3 De-identified view records/responses and edit records
+> ##D 4 De-identified view records/responses and edit records
+> ##D 5 Full data set view records/responses and edit records
+> ##D 6 De-identified view records/responses and edit records
+> ##D 7 Full data set view records/responses and edit records
+> ##D dxa_scan_summary
+> ##D 1 view records/responses and edit records
+> ##D 2 view records/responses and edit records
+> ##D 3 view records/responses and edit records
+> ##D 4 view records/responses and edit records
+> ##D 5 view records/responses and edit records
+> ##D 6 view records/responses and edit records
+> ##D 7 view records/responses and edit records
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportUsers", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("importFiles")
+> ### * importFiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: importFiles
+> ### Title: Imports a File to REDCap to Attach to a Record
+> ### Aliases: importFiles importFiles.redcapApiConnection
+> ###   importFiles.redcapDbConnection importFiles.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D > 
+> ##D >
+> ##D > #* Import a single file
+> ##D > importFiles(rcon, "Image.jpg", record=1, field="file_upload", event="event_1_arm_1")
+> ##D The file was successfully uploaded
+> ##D >
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("importFiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("importRecords")
+> ### * importRecords
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: importRecords
+> ### Title: Import Records to a REDCap Database
+> ### Aliases: importRecords importRecords.redcapApiConnection
+> ###   importRecords.redcapDbConnection importRecords.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to
+> ##D > #*** offer up sample code with the matching results
+> ##D >
+> ##D >
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D >
+> ##D >
+> ##D > #*** Import a record for a new patient
+> ##D > NewScan <- data.frame(patient_id = 1022,
+> ##D +                       redcap_event_name = "entry_arm_1",
+> ##D +                       bmi = 24.689,
+> ##D +                       patient_characteristics_complete = 1)
+> ##D >
+> ##D > importRecords(rcon, NewScan)
+> ##D REDCap Data Import Log: 2014-06-20 16:08:31
+> ##D The following (if any) conditions were noted about the data.
+> ##D 
+> ##D 
+> ##D 1
+> ##D > ## No conditions were noted, 1 record was uploaded
+> ##D >
+> ##D >
+> ##D >
+> ##D >
+> ##D >
+> ##D > #*** Import a record for a new patient with an erroneous BMI value
+> ##D > NewScan <- data.frame(patient_id = 1022,
+> ##D +                       redcap_event_name = "entry_arm_1",
+> ##D +                       bmi = 244.689,
+> ##D +                       patient_characteristics_complete = 4)
+> ##D >
+> ##D > importRecords(rcon, NewScan)
+> ##D REDCap Data Import Log: 2014-06-20 16:08:33
+> ##D The following (if any) conditions were noted about the data.
+> ##D 
+> ##D 
+> ##D 1022   entry_arm_1   244.689   Entry for 'bmi' is larger than
+> ##D the acceptable maximum.  Please confirm.
+> ##D 1
+> ##D > ## One condition was noted.  Notice that the BMI value was still
+> ##D > ## uploaded to REDCap.
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("importRecords", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("recodeCheck")
+> ### * recodeCheck
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: recodeCheck
+> ### Title: Change labelling of 'checkbox' variables
+> ### Aliases: recodeCheck
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D > 
+> ##D > #* Default appearance after export
+> ##D > Prenatal <- exportRecords(rcon, fields=c("maternal_mrn", "consults"))
+> ##D Warning message:
+> ##D   In exportMetaData.redcapApiConnection(rcon) : NAs introduced by coercion
+> ##D > head(Prenatal)
+> ##D maternal_mrn   redcap_event_name consults___1
+> ##D 1 0d714b1efc778d8e738c7f8eb399d224 mfm_episode_1_arm_1    Unchecked
+> ##D 2 0ef1975c93365e2246038d317838816d mfm_episode_1_arm_1    Unchecked
+> ##D 3 a0d81f6f1e55de0770825f460e8e4894 mfm_episode_1_arm_1      Checked
+> ##D 4 a1a0a470c658d05e7df636607fc89bd4 mfm_episode_1_arm_1      Checked
+> ##D 5 a577d8066a12536adb97df9d66ad7d39 mfm_episode_1_arm_1      Checked
+> ##D 6 a5e9beb28c9883b8bd8961481064037e mfm_episode_1_arm_1    Unchecked
+> ##D consults___2 consults___3 consults___4 consults___5 consults___6 consults___7
+> ##D 1    Unchecked      Checked    Unchecked    Unchecked      Checked    Unchecked
+> ##D 2      Checked      Checked    Unchecked    Unchecked    Unchecked    Unchecked
+> ##D 3    Unchecked      Checked    Unchecked    Unchecked    Unchecked    Unchecked
+> ##D 4    Unchecked    Unchecked    Unchecked    Unchecked    Unchecked    Unchecked
+> ##D 5    Unchecked      Checked    Unchecked    Unchecked    Unchecked    Unchecked
+> ##D 6    Unchecked    Unchecked    Unchecked    Unchecked    Unchecked    Unchecked
+> ##D consults___8 consults___9 consults___10 consults___11 consults___12
+> ##D 1    Unchecked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D 2    Unchecked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D 3    Unchecked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D 4    Unchecked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D 5      Checked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D 6    Unchecked    Unchecked     Unchecked     Unchecked     Unchecked
+> ##D consults___13 consults___14 consults___90
+> ##D 1     Unchecked     Unchecked     Unchecked
+> ##D 2     Unchecked     Unchecked       Checked
+> ##D 3     Unchecked     Unchecked     Unchecked
+> ##D 4     Unchecked     Unchecked     Unchecked
+> ##D 5     Unchecked     Unchecked     Unchecked
+> ##D 6     Unchecked     Unchecked       Checked
+> ##D > 
+> ##D > 
+> ##D > #* Use the default settings to recode as No/Yes
+> ##D > Prenatal2 <- recodeCheck(Prenatal)
+> ##D > head(Prenatal2)
+> ##D maternal_mrn   redcap_event_name consults___1
+> ##D 1 0d714b1efc778d8e738c7f8eb399d224 mfm_episode_1_arm_1           No
+> ##D 2 0ef1975c93365e2246038d317838816d mfm_episode_1_arm_1           No
+> ##D 3 a0d81f6f1e55de0770825f460e8e4894 mfm_episode_1_arm_1          Yes
+> ##D 4 a1a0a470c658d05e7df636607fc89bd4 mfm_episode_1_arm_1          Yes
+> ##D 5 a577d8066a12536adb97df9d66ad7d39 mfm_episode_1_arm_1          Yes
+> ##D 6 a5e9beb28c9883b8bd8961481064037e mfm_episode_1_arm_1           No
+> ##D consults___2 consults___3 consults___4 consults___5 consults___6 consults___7
+> ##D 1           No          Yes           No           No          Yes           No
+> ##D 2          Yes          Yes           No           No           No           No
+> ##D 3           No          Yes           No           No           No           No
+> ##D 4           No           No           No           No           No           No
+> ##D 5           No          Yes           No           No           No           No
+> ##D 6           No           No           No           No           No           No
+> ##D consults___8 consults___9 consults___10 consults___11 consults___12
+> ##D 1           No           No            No            No            No
+> ##D 2           No           No            No            No            No
+> ##D 3           No           No            No            No            No
+> ##D 4           No           No            No            No            No
+> ##D 5          Yes           No            No            No            No
+> ##D 6           No           No            No            No            No
+> ##D consults___13 consults___14 consults___90
+> ##D 1            No            No            No
+> ##D 2            No            No           Yes
+> ##D 3            No            No            No
+> ##D 4            No            No            No
+> ##D 5            No            No            No
+> ##D 6            No            No           Yes
+> ##D > 
+> ##D > 
+> ##D > 
+> ##D > #* Alter the defaults to recode as Received Consult/No Consult Necessary
+> ##D > Prenatal3 <- recodeCheck(Prenatal, 
+> ##D +                          levels=c("Checked", "Unchecked"), 
+> ##D +                          labels=c("Received Consult", "No Consult Necessary"))
+> ##D > head(Prenatal3)
+> ##D maternal_mrn   redcap_event_name         consults___1
+> ##D 1 0d714b1efc778d8e738c7f8eb399d224 mfm_episode_1_arm_1 No Consult Necessary
+> ##D 2 0ef1975c93365e2246038d317838816d mfm_episode_1_arm_1 No Consult Necessary
+> ##D 3 a0d81f6f1e55de0770825f460e8e4894 mfm_episode_1_arm_1     Received Consult
+> ##D 4 a1a0a470c658d05e7df636607fc89bd4 mfm_episode_1_arm_1     Received Consult
+> ##D 5 a577d8066a12536adb97df9d66ad7d39 mfm_episode_1_arm_1     Received Consult
+> ##D 6 a5e9beb28c9883b8bd8961481064037e mfm_episode_1_arm_1 No Consult Necessary
+> ##D consults___2         consults___3         consults___4
+> ##D 1 No Consult Necessary     Received Consult No Consult Necessary
+> ##D 2     Received Consult     Received Consult No Consult Necessary
+> ##D 3 No Consult Necessary     Received Consult No Consult Necessary
+> ##D 4 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 5 No Consult Necessary     Received Consult No Consult Necessary
+> ##D 6 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D consults___5         consults___6         consults___7
+> ##D 1 No Consult Necessary     Received Consult No Consult Necessary
+> ##D 2 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 3 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 4 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 5 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 6 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D consults___8         consults___9        consults___10
+> ##D 1 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 2 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 3 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 4 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 5     Received Consult No Consult Necessary No Consult Necessary
+> ##D 6 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D consults___11        consults___12        consults___13
+> ##D 1 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 2 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 3 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 4 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 5 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D 6 No Consult Necessary No Consult Necessary No Consult Necessary
+> ##D consults___14        consults___90
+> ##D 1 No Consult Necessary No Consult Necessary
+> ##D 2 No Consult Necessary     Received Consult
+> ##D 3 No Consult Necessary No Consult Necessary
+> ##D 4 No Consult Necessary No Consult Necessary
+> ##D 5 No Consult Necessary No Consult Necessary
+> ##D 6 No Consult Necessary     Received Consult
+> ##D > 
+> ##D > 
+> ##D > 
+> ##D > ## The order of the levels can be rearranged if desired
+> ##D > levels(Prenatal2$consults___90)
+> ##D [1] "No"  "Yes"
+> ##D > levels(Prenatal3$consults___90)
+> ##D [1] "Received Consult"     "No Consult Necessary"
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("recodeCheck", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("redcapConnection")
+> ### * redcapConnection
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: redcapConnection
+> ### Title: Connect to a REDCap Database
+> ### Aliases: redcapConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D 
+> ##D options(redcap_api_url=[YOUR_REDCAP_URL])
+> ##D rcon <- redcapConnection(token=[API_TOKEN])
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("redcapConnection", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("redcapProjectInfo")
+> ### * redcapProjectInfo
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: redcapProjectInfo
+> ### Title: Export a Project's Supplemental Information
+> ### Aliases: redcapProjectInfo redcapProjectInfo.redcapApiConnection
+> ###   redcapProjectInfo.redcapDbConnection
+> ###   redcapProjectInfo.redcapApiConnection
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D > #*** Note: I cannot provide working examples without
+> ##D > #*** compromising security.  Instead, I will try to 
+> ##D > #*** offer up sample code with the matching results
+> ##D > 
+> ##D > 
+> ##D > #*** Create the connection object
+> ##D > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+> ##D > 
+> ##D > redcapProjectInfo(rcon)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("redcapProjectInfo", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  1.226 0.063 1.293 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

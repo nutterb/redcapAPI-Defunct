@@ -66,6 +66,7 @@
 #'   is the label assigned to the level in the data dictionary. 
 #'   This option is only available after REDCap version 6.0.
 #' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param colClasses A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.
 #' @param ... Additional arguments to be passed between methods.
 #' 
 #' @details
@@ -274,7 +275,7 @@ order by abs(record), record, event_id
 
 exportRecords <-
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ...)
+         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, colClasses=NULL, ...)
    UseMethod("exportRecords")
 
 #' @rdname exportRecords
@@ -352,7 +353,8 @@ exportRecords.redcapApiConnection <-
   function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
            survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ..., 
            batch.size=-1,
-           proj=NULL)
+           proj=NULL,
+           colClasses=NULL)
   {
     #Hlabel <- require(Hmisc)
     #if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -465,7 +467,7 @@ exportRecords.redcapApiConnection <-
       x <- apiCall(url=rcon$url, body=.params, config=rcon$config)
       if (x$status_code != "200") stop(as.character(x))
     
-      x <- utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+      x <- utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="", colClasses=colClasses)
     }
     else {
      #* Batch calls. First call requests only the record ids.
@@ -481,7 +483,7 @@ exportRecords.redcapApiConnection <-
       #* The best we can do is a fixed number of ID's.
       ID <- apiCall(url=rcon$url, body=batch.params, config=rcon$config)
       if (ID$status_code != "200") stop(paste0(ID$status_code, ": ", as.character(ID)))
-      ID <- utils::read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="")
+      ID <- utils::read.csv(textConnection(as.character(ID)), stringsAsFactors=FALSE, na.strings="", colClasses=colClasses)
       ID <- unique(ID[, 1, drop=FALSE])
       
       #* Determine the number of batches. Create an index vector of the batch number.
@@ -503,7 +505,7 @@ exportRecords.redcapApiConnection <-
       if (x[[1]]$status_code != "200") stop(paste(x[[1]]$status_code, ": ", as.character(x[[1]])))
       
       #* Convert results to data.frames, then collapse into a single data.frame
-      x <- lapply(x, function(r) utils::read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings=""))
+      x <- lapply(x, function(r) utils::read.csv(textConnection(as.character(r)), stringsAsFactors=FALSE, na.strings="", colClasses=colClasses))
       x <- do.call("rbind", x)
     }
     

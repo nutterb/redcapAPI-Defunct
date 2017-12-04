@@ -4,6 +4,7 @@
 \alias{exportFiles}
 \alias{exportFiles.redcapApiConnection}
 \alias{exportFiles.redcapDbConnection}
+\alias{exportFiles.redcapApiConnection}
 \title{Exports a File attached to a Record}
 \usage{
 exportFiles(rcon, record, field, event, dir, filePrefix = TRUE, ...,
@@ -86,13 +87,12 @@ may be appended as a prefix
  The file was saved to '2-event_1_arm_1-Sunset2.JPG'
  }
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

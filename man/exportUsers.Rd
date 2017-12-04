@@ -4,6 +4,7 @@
 \alias{exportUsers}
 \alias{exportUsers.redcapApiConnection}
 \alias{exportUsers.redcapDbConnection}
+\alias{exportUsers.redcapApiConnection}
 \title{Export the Users for a Project}
 \usage{
 exportUsers(rcon, ...)
@@ -97,13 +98,12 @@ dxa_scan_summary
 }
 
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

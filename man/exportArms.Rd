@@ -4,6 +4,7 @@
 \alias{exportArms}
 \alias{exportArms.redcapApiConnection}
 \alias{exportArms.redcapDbConnection}
+\alias{exportArms.redcapApiConnection}
 \title{Exports the Arms for a Project}
 \usage{
 exportArms(rcon, arms, ...)
@@ -51,13 +52,12 @@ allows more flexible error checks in certain functions.
   3      10   Normal Control
   }
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
   
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

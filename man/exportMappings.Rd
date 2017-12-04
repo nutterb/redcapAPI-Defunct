@@ -4,6 +4,7 @@
 \alias{exportMappings}
 \alias{exportMappings.redcapApiConnection}
 \alias{exportMappings.redcapDbConnection}
+\alias{exportMappings.redcapApiConnection}
 \title{Exports the Event-Form Mappings for a Project}
 \usage{
 exportMappings(rcon, arms, ...)
@@ -74,13 +75,12 @@ arm_num        unique_event_name                 form_name
 }
 
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

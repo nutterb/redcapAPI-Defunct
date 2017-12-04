@@ -4,6 +4,7 @@
 \alias{redcapProjectInfo}
 \alias{redcapProjectInfo.redcapApiConnection}
 \alias{redcapProjectInfo.redcapDbConnection}
+\alias{redcapProjectInfo.redcapApiConnection}
 \title{Export a Project's Supplemental Information}
 \usage{
 redcapProjectInfo(rcon, date = TRUE, label = TRUE, meta_data = TRUE,
@@ -80,4 +81,3 @@ The project information is stored in the option
 \author{
 Benjamin Nutter
 }
-
