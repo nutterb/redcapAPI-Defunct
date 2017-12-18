@@ -15,7 +15,7 @@ queryRecords(rcon, fields = NULL, forms = NULL, records = NULL,
 
 exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, colClasses = NULL,
+  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, colClasses = NA,
   ...)
 
 \method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
@@ -27,11 +27,11 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
   checkboxLabels = FALSE, ..., batch.size = -1, proj = NULL,
-  colClasses = NULL)
+  colClasses = NA)
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
-  colClasses = NULL, ...)
+  colClasses = NA, ...)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
@@ -81,7 +81,7 @@ If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label]
 is the label assigned to the level in the data dictionary. 
 This option is only available after REDCap version 6.0.}
 
-\item{colClasses}{A (named) vector of colum classes passed to \code{read.csv()} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
+\item{colClasses}{A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
