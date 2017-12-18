@@ -275,7 +275,7 @@ order by abs(record), record, event_id
 
 exportRecords <-
 function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,labels=TRUE,dates=TRUE,
-         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, colClasses=NULL, ...)
+         survey=TRUE, dag=TRUE, checkboxLabels=FALSE, colClasses=NA, ...)
    UseMethod("exportRecords")
 
 #' @rdname exportRecords
@@ -354,7 +354,7 @@ exportRecords.redcapApiConnection <-
            survey=TRUE, dag=TRUE, checkboxLabels=FALSE, ..., 
            batch.size=-1,
            proj=NULL,
-           colClasses=NULL)
+           colClasses=NA)
   {
     #Hlabel <- require(Hmisc)
     #if (!Hlabel) stop("Please install the 'Hmisc' package.")
@@ -437,14 +437,15 @@ exportRecords.redcapApiConnection <-
     checkvars <- function(x){
       if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
         opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-        opts <- tryCatch(as.numeric(unlist(sapply(strsplit(opts, ","), '[', 1))),
+        opts <- tryCatch(as.character(unlist(sapply(strsplit(opts, ","), '[', 1))),
                          warning = function(cond){ nm <- as.character(unlist(sapply(strsplit(opts, ","), '[', 1)))
                                                    nm <- gsub('^\\s*','',nm,perl=TRUE)
                                                    nm <- gsub('\\s*$','',nm,perl=TRUE)
                                                    return(nm)})
         # negative integers are permitted for checkbox values, 
         # but the API converts the - to a _
-        x <- paste(x, sub("[-]", "_", opts), sep="___")
+	# and whitespaces are trimmed from characters
+        x <- paste(x, trimws(sub("[-]", "_", opts)), sep="___")
       }
       return(x)
     }
