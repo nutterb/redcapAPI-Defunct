@@ -2,7 +2,7 @@
 
 exportRecords_offline <- 
   function(datafile, meta_data, factors=TRUE,fields=NULL,forms=NULL,
-           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, colClasses=NULL, ...)
+           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, colClasses=NA, ...)
   {
     
     #* for purposes of the export, we don't need the descriptive fields. 
