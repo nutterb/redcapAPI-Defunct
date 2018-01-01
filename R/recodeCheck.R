@@ -1,11 +1,5 @@
 #' @name recodeCheck
 #' @export recodeCheck
-#' @importFrom Hmisc label.default
-#' @importFrom Hmisc label.data.frame
-#' @importFrom Hmisc 'label<-.default'
-#' @importFrom Hmisc 'label<-.data.frame'
-#' @importFrom Hmisc '[.labelled'
-#' @importFrom Hmisc print.labelled
 #' 
 #' @title Change labelling of \code{checkbox} variables
 #' @description Rewrites the labelling of \code{checkbox} variables from 
@@ -68,7 +62,10 @@ recodeCheck <- function(df, vars,
     checkbox <- vars[vars_are_check]
   }
   
-  var.label <- Hmisc::label(df[checkbox])
+  var.label <- 
+    vapply(X = df,
+           FUN = labelVector::get_label,
+           FUN.VALUE = character(1))
   
   #* Utility function for recoding check variables
   recodeFn <- function(v, old=old, new=new, reverse=reverse){
@@ -83,7 +80,13 @@ recodeCheck <- function(df, vars,
                          FUN = recodeFn, 
                          old, new, reverse)
   
-  Hmisc::label(df[, checkbox], self=FALSE) <- var.label
+  df[checkbox] <-
+    mapply(nm = checkbox,
+           lab = var.label,
+           FUN = function(nm, lab){
+             labelVector::set_label(df[[nm]], lab)
+           },
+           SIMPLIFY = FALSE)
   
   df
 }

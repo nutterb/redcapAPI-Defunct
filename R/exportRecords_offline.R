@@ -101,8 +101,15 @@ exportRecords_offline <- function(datafile, meta_data,
                   dates = dates, 
                   checkboxLabels = checkboxLabels)
   
-  if (labels) Hmisc::label(x[, suffixed$name_suffix], self=FALSE) <- suffixed$label_suffix
-  
+  if (labels){
+    x[suffixed$name_suffix] <-
+      mapply(nm = suffixed$name_suffix,
+             lab = suffixed$label_suffix,
+             FUN = function(nm, lab){
+               labelVector::set_label(x[[nm]], lab)
+             },
+             SIMPLIFY = FALSE)
+  }
   x  
 }
 

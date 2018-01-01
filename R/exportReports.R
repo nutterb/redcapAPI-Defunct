@@ -159,7 +159,13 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
                                   meta_data = meta_data, 
                                   version = version)
     
-    Hmisc::label(x[, suffixed$name_suffix], self=FALSE) <- suffixed$label_suffix
+    x[suffixed$name_suffix] <-
+      mapply(nm = suffixed$name_suffix,
+             lab = suffixed$label_suffix,
+             FUN = function(nm, lab){
+               labelVector::set_label(x[[nm]], lab)
+             },
+             SIMPLIFY = FALSE)
   }
   
   x 
