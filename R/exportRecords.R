@@ -66,7 +66,7 @@
 #'   is the label assigned to the level in the data dictionary. 
 #'   This option is only available after REDCap version 6.0.
 #' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
-#' @param colClasses A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.
+#' @param colClasses A (named) vector of colum classes passed to \code{\link[utils]{read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.
 #' @param ... Additional arguments to be passed between methods.
 #' 
 #' @details
