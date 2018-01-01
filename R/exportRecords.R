@@ -50,6 +50,10 @@
 #'   is the label assigned to the level in the data dictionary. 
 #'   This option is only available after REDCap version 6.0.
 #' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
+#' @param colClasses A (named) vector of colum classes passed to 
+#'   \code{\link[utils]{read.csv}} calls. 
+#'   Useful to force the interpretation of a column in a specific type and 
+#'   avoid an unexpected recast.
 #' @param ... Additional arguments to be passed between methods.
 #' @param error_handling An option for how to handle errors returned by the API.
 #'   see \code{\link{redcap_error}}
@@ -138,7 +142,8 @@
 exportRecords <-
   function(rcon, factors = TRUE, fields = NULL, forms = NULL, records = NULL,
            events = NULL, labels = TRUE, dates = TRUE,
-           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, 
+           colClasses = NA, ...)
     
     UseMethod("exportRecords")
 
@@ -148,7 +153,8 @@ exportRecords <-
 exportRecords.redcapDbConnection <- 
   function(rcon, factors = TRUE, fields = NULL, forms = NULL, records = NULL,
            events = NULL, labels = TRUE, dates = TRUE,
-           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, 
+           colClasses = NA, ...)
   {
     message("Please accept my apologies.  The exportRecords method for redcapDbConnection objects\n",
             "has not yet been written.  Please consider using the API.")
@@ -160,7 +166,8 @@ exportRecords.redcapDbConnection <-
 exportRecords.redcapApiConnection <- 
   function(rcon, factors = TRUE, fields = NULL, forms = NULL,
            records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ..., 
+           survey = TRUE, dag = TRUE, checkboxLabels = FALSE, 
+           colClasses = NA, ..., 
            batch.size = -1,
            bundle = getOption("redcap_bundle"),
            error_handling = getOption("redcap_error_handling"))
@@ -293,11 +300,12 @@ exportRecords.redcapApiConnection <-
   if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
   
   if (batch.size < 1){
-    x <- unbatched(rcon, body, error_handling)
+    x <- unbatched(rcon, body, colClasses = colClasses, error_handling)
   }
   else 
   {
     x <- batched(rcon, body, batch.size, meta_data$field_name[1],
+                 colClasses = colClasses,
                  error_handling = error_handling)
   }
 
@@ -320,7 +328,7 @@ exportRecords.redcapApiConnection <-
 
 
 #*** UNBATCHED EXPORT
-unbatched <- function(rcon, body, error_handling)
+unbatched <- function(rcon, body, colClasses, error_handling)
 {
   x <- httr::POST(url = rcon$url, 
                   body = body, 
@@ -332,12 +340,13 @@ unbatched <- function(rcon, body, error_handling)
   x <- iconv(x, "utf8", "ASCII", sub = "")
   utils::read.csv(text = x, 
                   stringsAsFactors = FALSE, 
-                  na.strings = "")
+                  na.strings = "",
+                  colClasses = colClasses)
 }
 
 
 #*** BATCHED EXPORT
-batched <- function(rcon, body, batch.size, id, error_handling)
+batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
 {
   #* 1. Get the IDs column
   #* 2. Restrict to unique IDs
@@ -398,7 +407,8 @@ batched <- function(rcon, body, batch.size, id, error_handling)
     x <- iconv(x, "utf8", "ASCII", sub = "")
     batch_list[[i]] <- utils::read.csv(text = x,
                                        stringsAsFactors = FALSE,
-                                       na.strings = "")
+                                       na.strings = "",
+                                       colClasses = colClasses)
     Sys.sleep(1)
   }
   

@@ -5,6 +5,7 @@ exportRecords_offline <- function(datafile, meta_data,
                                   factors = TRUE, fields = NULL,
                                   forms=NULL, labels = TRUE,
                                   dates = TRUE, checkboxLabels = FALSE, 
+                                  colClasses = NA,
                                   ...)
 {
   #* Error Collection Object
@@ -91,7 +92,8 @@ exportRecords_offline <- function(datafile, meta_data,
   
   
   x <- utils::read.csv(datafile, 
-                       stringsAsFactors = FALSE)[suffixed$name_suffix]
+                       stringsAsFactors = FALSE,
+                       colClasses = colClasses)[suffixed$name_suffix]
   
   x <- fieldToVar(records = x, 
                   meta_data = meta_data, 

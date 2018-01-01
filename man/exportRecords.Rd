@@ -2,30 +2,31 @@
 % Please edit documentation in R/exportRecords.R, R/exportRecords_offline.R
 \name{exportRecords}
 \alias{exportRecords}
-\alias{exportRecords.redcapApiConnection}
 \alias{exportRecords.redcapDbConnection}
+\alias{exportRecords.redcapApiConnection}
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
 exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, colClasses = NA,
+  ...)
 
 \method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ...)
+  checkboxLabels = FALSE, colClasses = NA, ...)
 
 \method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ..., batch.size = -1,
+  checkboxLabels = FALSE, colClasses = NA, ..., batch.size = -1,
   bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
-  ...)
+  colClasses = NA, ...)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
@@ -74,6 +75,11 @@ variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".
 If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
 This option is only available after REDCap version 6.0.}
+
+\item{colClasses}{A (named) vector of colum classes passed to 
+\code{\link[utils]{read.csv}} calls. 
+Useful to force the interpretation of a column in a specific type and 
+avoid an unexpected recast.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
@@ -167,9 +173,7 @@ database.  No matches will be found, and the export will fail.
 Users who are exporting de-identified data will have to settle for using unbatched
 calls to the API (ie, \code{batch.size = -1})
 }
-\author{
-Jeffrey Horner
-}
+
 \references{
 Please refer to your institution's API documentation.
 
@@ -185,4 +189,6 @@ See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasle
 Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
 create a list of arbitrary length.
 }
-
+\author{
+Jeffrey Horner
+}
