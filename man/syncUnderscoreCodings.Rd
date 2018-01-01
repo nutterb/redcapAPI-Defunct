@@ -52,4 +52,3 @@ REDCap expects the underscore codings to be used.
 \author{
 Benjamin Nutter
 }
-

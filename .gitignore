@@ -8,3 +8,6 @@
 
 src/*.dll
 src/*.o
+
+# OSX-generated files
+.DS_Store

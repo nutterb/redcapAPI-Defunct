@@ -4,6 +4,7 @@
 \alias{importFiles}
 \alias{importFiles.redcapApiConnection}
 \alias{importFiles.redcapDbConnection}
+\alias{importFiles.redcapApiConnection}
 \title{Imports a File to REDCap to Attach to a Record}
 \usage{
 importFiles(rcon, file, record, field, event, overwrite = TRUE, ...,
@@ -64,4 +65,3 @@ The file was successfully uploaded
 \author{
 Benjamin Nutter
 }
-

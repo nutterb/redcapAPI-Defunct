@@ -4,6 +4,7 @@
 \alias{exportVersion}
 \alias{exportVersion.redcapApiConnection}
 \alias{exportVersion.redcapDbConnection}
+\alias{exportVersion.redcapApiConnection}
 \title{Exports the REDCap Version Number}
 \usage{
 exportVersion(rcon, ...)
@@ -26,13 +27,12 @@ If this function is used in a version of REDCap that does not
   support the Export Version Number function, the character string
   \code{'Version Unknown'} is returned.
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

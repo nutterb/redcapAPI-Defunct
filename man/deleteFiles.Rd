@@ -4,6 +4,7 @@
 \alias{deleteFiles}
 \alias{deleteFiles.redcapApiConnection}
 \alias{deleteFiles.redcapDbConnection}
+\alias{deleteFiles.redcapApiConnection}
 \title{Delete a File attached to a Record}
 \usage{
 deleteFiles(rcon, record, field, event, ...)
@@ -49,13 +50,12 @@ attached to an individual record
   }
   
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

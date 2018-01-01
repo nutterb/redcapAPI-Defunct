@@ -4,6 +4,7 @@
 \alias{importRecords}
 \alias{importRecords.redcapApiConnection}
 \alias{importRecords.redcapDbConnection}
+\alias{importRecords.redcapApiConnection}
 \title{Import Records to a REDCap Database}
 \usage{
 importRecords(rcon, data, overwriteBehavior = c("normal", "overwrite"),
@@ -121,10 +122,6 @@ the acceptable maximum.  Please confirm.
 > ## uploaded to REDCap.
 }
 }
-\author{
-Benjamin Nutter\cr
-with thanks to Josh O'Brien and etb (see references)
-}
 \references{
 \url{http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389}\cr
 \url{https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R}\cr
@@ -137,4 +134,7 @@ Additional details on API parameters are found on the package wiki at
 \seealso{
 \code{\link{validateImport}}
 }
-
+\author{
+Benjamin Nutter\cr
+with thanks to Josh O'Brien and etb (see references)
+}

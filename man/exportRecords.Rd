@@ -2,10 +2,12 @@
 % Please edit documentation in R/exportRecords.R, R/exportRecords_offline.R
 \name{exportRecords}
 \alias{exportRecords}
-\alias{exportRecords.redcapApiConnection}
-\alias{exportRecords.redcapDbConnection}
-\alias{exportRecords_offline}
 \alias{queryRecords}
+\alias{exportRecords.redcapApiConnection}
+\alias{exportRecords}
+\alias{exportRecords.redcapDbConnection}
+\alias{exportRecords.redcapApiConnection}
+\alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
 queryRecords(rcon, fields = NULL, forms = NULL, records = NULL,
@@ -13,7 +15,8 @@ queryRecords(rcon, fields = NULL, forms = NULL, records = NULL,
 
 exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, ...)
+  survey = TRUE, dag = TRUE, checkboxLabels = FALSE, colClasses = NA,
+  ...)
 
 \method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
@@ -23,11 +26,12 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
 \method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ..., batch.size = -1, proj = NULL)
+  checkboxLabels = FALSE, ..., batch.size = -1, proj = NULL,
+  colClasses = NA)
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
-  ...)
+  colClasses = NA, ...)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
@@ -76,6 +80,8 @@ variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".
 If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
 This option is only available after REDCap version 6.0.}
+
+\item{colClasses}{A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
@@ -224,9 +230,6 @@ neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
 2                NA     1.023         -1.3                         2
 }
 }
-\author{
-Jeffrey Horner
-}
 \references{
 Please refer to your institution's API documentation.
 
@@ -239,4 +242,6 @@ This functionality were originally developed by Jeffrey Horner in the \code{redc
 See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
 \url{https://github.com/OuhscBbmc/REDCapR}
 }
-
+\author{
+Jeffrey Horner
+}

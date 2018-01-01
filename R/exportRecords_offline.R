@@ -2,13 +2,13 @@
 
 exportRecords_offline <- 
   function(datafile, meta_data, factors=TRUE,fields=NULL,forms=NULL,
-           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, ...)
+           labels=TRUE,dates=TRUE, checkboxLabels=FALSE, colClasses=NA, ...)
   {
     
     #* for purposes of the export, we don't need the descriptive fields. 
     #* Including them makes the process more error prone, so we'll ignore them.
     meta_data <- utils::read.csv(meta_data, header=FALSE, skip=1,
-                                 stringsAsFactors=FALSE)
+                                 stringsAsFactors=FALSE, colClasses=colClasses)
     
     col.names=c('field_name', 'form_name', 'section_header', 
                 'field_type', 'field_label', 'select_choices_or_calculations', 
@@ -93,7 +93,7 @@ exportRecords_offline <-
     #* return field_names to a vector
     field_names <- unlist(field_names)
     
-    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=TRUE)#[, field_names, drop=FALSE]
+    x <- utils::read.csv(datafile, stringsAsFactors=FALSE, na.strings="", header=TRUE, colClasses=colClasses)#[, field_names, drop=FALSE]
     
     lapply(field_names,
            function(i) 

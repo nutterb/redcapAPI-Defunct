@@ -4,6 +4,7 @@
 \alias{exportInstruments}
 \alias{exportInstruments.redcapApiConnection}
 \alias{exportInstruments.redcapDbConnection}
+\alias{exportInstruments.redcapApiConnection}
 \title{Export Instrument names}
 \usage{
 exportInstruments(rcon, ...)
@@ -31,13 +32,12 @@ according to their order in the project.
 This function was introduced to the API in version 5.9.  An error will be 
 returned if called to an instance earlier than 5.9.
 }
-\author{
-Benjamin Nutter
-}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}
