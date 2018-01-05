@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportPDF.R
 \name{exportPdf}
 \alias{exportPdf}
-\alias{exportPdf.redcapDbConnection}
 \alias{exportPdf.redcapApiConnection}
+\alias{exportPdf.redcapDbConnection}
 \title{Export PDF file of Data Collection Instruments (either as blank or with data)}
 \usage{
 exportPdf(rcon, dir = getwd(), filename = "redcap_forms_download",
@@ -78,7 +78,7 @@ export rights, they will not be able to use this method, and an error will be re
 
 None
 }
-
 \author{
 Benjamin Nutter
 }
+

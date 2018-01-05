@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportRecords.R, R/exportRecords_offline.R
 \name{exportRecords}
 \alias{exportRecords}
-\alias{exportRecords.redcapDbConnection}
 \alias{exportRecords.redcapApiConnection}
+\alias{exportRecords.redcapDbConnection}
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
@@ -32,7 +32,8 @@ exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
 
 \item{factors}{Logical.  Determines if categorical data from the database is 
-returned as numeric codes or labelled factors.}
+returned as numeric codes or labelled factors. See 'Checkbox Variables'
+for more on how this interacts with the \code{checkboxLabels} argument.}
 
 \item{fields}{A character vector of fields to be returned.  If \code{NULL}, 
 all fields are returned.}
@@ -74,7 +75,8 @@ flag will revert to its default value.}
 variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
 If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
-This option is only available after REDCap version 6.0.}
+This option is only available after REDCap version 6.0.  See Checkbox Variables
+for more on how this interacts with the \code{factors} argument.}
 
 \item{colClasses}{A (named) vector of colum classes passed to 
 \code{\link[utils]{read.csv}} calls. 
@@ -133,6 +135,25 @@ there are four records per patient, each batch will consist of 40 records.
 Thus, if you are concerned about tying up the server with a large, 
 longitudinal project, it would be prudent to use a smaller batch size.
 }
+\section{Checkbox Variables}{
+
+
+There are four ways the data from checkbox variables may be 
+represented depending on the values of \code{factors} and 
+\code{checkboxLabels}. The most common are the first and third 
+rows of the table below.  When \code{checkboxLabels = TRUE}, either 
+the coded value or the labelled value is returned if the box is 
+checked, or an empty string if it is not.
+
+\tabular{lll}{
+\code{factors} \tab \code{checkboxLabels} \tab Output \cr
+\code{FALSE}   \tab \code{FALSE}          \tab 0 / 1 \cr
+\code{FALSE}   \tab \code{TRUE}           \tab "" / value \cr
+\code{TRUE}    \tab \code{FALSE}          \tab Unchecked / Checked \cr
+\code{TRUE}    \tab \code{TRUE}           \tab "" / label 
+}
+}
+
 \section{REDCap API Documentation (6.5.0)}{
 
 This function allows you to export a set of records for a project
@@ -173,7 +194,9 @@ database.  No matches will be found, and the export will fail.
 Users who are exporting de-identified data will have to settle for using unbatched
 calls to the API (ie, \code{batch.size = -1})
 }
-
+\author{
+Jeffrey Horner
+}
 \references{
 Please refer to your institution's API documentation.
 
@@ -189,6 +212,4 @@ See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasle
 Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
 create a list of arbitrary length.
 }
-\author{
-Jeffrey Horner
-}
+

@@ -2,8 +2,8 @@
 % Please edit documentation in R/importFiles.R
 \name{importFiles}
 \alias{importFiles}
-\alias{importFiles.redcapDbConnection}
 \alias{importFiles.redcapApiConnection}
+\alias{importFiles.redcapDbConnection}
 \title{Imports a File to REDCap to Attach to a Record}
 \usage{
 importFiles(rcon, file, record, field, event, overwrite = TRUE, ...,
@@ -52,3 +52,4 @@ The function may only import a single file
 \author{
 Benjamin Nutter
 }
+

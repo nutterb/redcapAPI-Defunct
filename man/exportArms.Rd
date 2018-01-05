@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportArms.R
 \name{exportArms}
 \alias{exportArms}
-\alias{exportArms.redcapDbConnection}
 \alias{exportArms.redcapApiConnection}
+\alias{exportArms.redcapDbConnection}
 \title{Export the Arms for a Project}
 \usage{
 exportArms(rcon, ...)
@@ -69,13 +69,13 @@ In most cases, the number or arms is fairly small, so there is no real performan
 benefit to only selecting a subset of the arms.  The safest course of action is 
 to export all of the arms (the default behavior)
 }
-
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+

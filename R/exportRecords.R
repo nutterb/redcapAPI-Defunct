@@ -11,7 +11,8 @@
 #' @param meta_data A text string giving the location of the data dictionary 
 #'   downloaded from REDCap.
 #' @param factors Logical.  Determines if categorical data from the database is 
-#'   returned as numeric codes or labelled factors.
+#'   returned as numeric codes or labelled factors. See 'Checkbox Variables'
+#'   for more on how this interacts with the \code{checkboxLabels} argument.
 #' @param labels Logical.  Determines if the variable labels are applied to 
 #'   the data frame.
 #' @param dates Logical. Determines if date variables are converted to POSIXct 
@@ -48,7 +49,8 @@
 #'   variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
 #'   If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 #'   is the label assigned to the level in the data dictionary. 
-#'   This option is only available after REDCap version 6.0.
+#'   This option is only available after REDCap version 6.0.  See Checkbox Variables
+#'   for more on how this interacts with the \code{factors} argument.
 #' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param colClasses A (named) vector of colum classes passed to 
 #'   \code{\link[utils]{read.csv}} calls. 
@@ -86,6 +88,23 @@
 #' there are four records per patient, each batch will consist of 40 records.  
 #' Thus, if you are concerned about tying up the server with a large, 
 #' longitudinal project, it would be prudent to use a smaller batch size.
+#' 
+#' @section Checkbox Variables:
+#' 
+#' There are four ways the data from checkbox variables may be 
+#' represented depending on the values of \code{factors} and 
+#' \code{checkboxLabels}. The most common are the first and third 
+#' rows of the table below.  When \code{checkboxLabels = TRUE}, either 
+#' the coded value or the labelled value is returned if the box is 
+#' checked, or an empty string if it is not.
+#' 
+#' \tabular{lll}{
+#' \code{factors} \tab \code{checkboxLabels} \tab Output \cr
+#' \code{FALSE}   \tab \code{FALSE}          \tab 0 / 1 \cr
+#' \code{FALSE}   \tab \code{TRUE}           \tab "" / value \cr
+#' \code{TRUE}    \tab \code{FALSE}          \tab Unchecked / Checked \cr
+#' \code{TRUE}    \tab \code{TRUE}           \tab "" / label 
+#' }
 #' 
 #' @section REDCap API Documentation (6.5.0):
 #' This function allows you to export a set of records for a project

@@ -25,3 +25,4 @@ such as 0/1 for death, or if a yes is worth 6 points (instead of 1).
 \author{
 Benjamin Nutter
 }
+

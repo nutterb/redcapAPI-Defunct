@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportFieldNames.R
 \name{exportFieldNames}
 \alias{exportFieldNames}
-\alias{exportFieldNames.redcapDbConnection}
 \alias{exportFieldNames.redcapApiConnection}
+\alias{exportFieldNames.redcapDbConnection}
 \title{Export the Export Field Names for a Project}
 \usage{
 exportFieldNames(rcon, ...,
@@ -79,7 +79,9 @@ Signature fields are also not included, but these are effectively the same as
 "file" fields.  This isn't a true limitation, but is documented here just to
 avoid confusion.
 }
-
+\author{
+Stephen Lane
+}
 \references{
 Please refer to your institution's API documentation
 (https://YOUR_REDCAP_URL/redcap/api/help)
@@ -87,6 +89,4 @@ Please refer to your institution's API documentation
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Stephen Lane
-}
+
