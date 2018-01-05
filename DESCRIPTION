@@ -3,9 +3,15 @@ Type: Package
 Title: R Interface to REDCap
 Version: 2.0
 Date: 2015-03-10
-Author: Benjamin Nutter. Initiated by Jeffrey Horner and Will Gray with
-    contributions from Jeremy Stephens, and Will Beasley
-Maintainer: Stephen Lane <stephen.lane@barwonhealth.org.au>
+Authors@R: c(
+    person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
+           role = c("aut", "ctb", "cre")),
+    person("Stephen", "Lane", role = "ctb"),
+    person("Will", "Beasley", role = "ctb"),
+    person("Jeffrey", "Horner", role = "ctb"),
+    person("Will", "Gray", role = "ctb"),
+    person("Jeremy", "Stephens", role = "ctb"))
+Maintainer: Benjamin Nutter <benjamin.nutter@gmail.com>
 Description: Access data stored in REDCap databases using the Application
     Programming Interface (API).  REDCap (Research Electronic Data CAPture) is
     a web application for building and managing online surveys and databases
@@ -31,4 +37,4 @@ URL: https://github.com/nutterb/redcapAPI/wiki,
     https://github.com/nutterb/redcapAPI,
     http://project-redcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

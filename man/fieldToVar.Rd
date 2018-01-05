@@ -32,4 +32,3 @@ This function is called internally by \code{exportRecords} and
 \author{
 Jeffrey Horner
 }
-

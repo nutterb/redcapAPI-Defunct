@@ -2,7 +2,6 @@
 #' @aliases allocationTable.redcapApiConnection
 #' @aliases allocationTable.redcapDbConneciton
 #' @aliases allocationTable_offline
-#' @importFrom stringr str_split_fixed
 #' 
 #' @title Allocation Tables for the Randomization Module
 #' @description Generate allocation table for the REDCap 
