@@ -6,8 +6,8 @@
 ## R CMD check results
 There is a note about the change in Maintainer.  Stephen Lane is no longer 
 involved in the development of redcapAPI. Benjamin Nutter will resume the 
-role of Maintainer.  I have not been able to reach Dr. Lane to have him 
-notify CRAN of this intent.  
+role of Maintainer.  Dr. Lane notified CRAN of his consent via e-mail on 
+7 Jan 2018.
 
 There were no other notes, warnings, or errors produced by CHECK.
 
