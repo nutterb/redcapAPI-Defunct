@@ -6,16 +6,14 @@
 \alias{exportFiles.redcapApiConnection}
 \title{Exports a File attached to a Record}
 \usage{
-exportFiles(rcon, record, field, event, dir = getwd(), filePrefix = TRUE,
-  ..., bundle = getOption("redcap_bundle"))
-
-\method{exportFiles}{redcapDbConnection}(rcon, record, field, event,
-  dir = getwd(), filePrefix = TRUE, ...,
+exportFiles(rcon, record, field, event, dir, filePrefix = TRUE, ...,
   bundle = getOption("redcap_bundle"))
 
+\method{exportFiles}{redcapDbConnection}(rcon, record, field, event, dir,
+  filePrefix = TRUE, ..., bundle = getOption("redcap_bundle"))
+
 \method{exportFiles}{redcapApiConnection}(rcon, record, field, event = NULL,
-  dir = getwd(), filePrefix = TRUE, ...,
-  bundle = getOption("redcap_bundle"),
+  dir, filePrefix = TRUE, ..., bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 }
 \arguments{

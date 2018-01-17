@@ -49,7 +49,7 @@
 #' 
 #' @export
 
-exportPdf <- function(rcon, dir = getwd(), filename = "redcap_forms_download", 
+exportPdf <- function(rcon, dir, filename = "redcap_forms_download", 
                       record = NULL, events = NULL, 
                       instruments = NULL, all_records = FALSE, ...)
   UseMethod("exportPdf")
@@ -58,7 +58,7 @@ exportPdf <- function(rcon, dir = getwd(), filename = "redcap_forms_download",
 #' @export
 
 exportPdf.redcapDbConnection <- 
-function(rcon, dir = getwd(), filename = "redcap_forms_download", 
+function(rcon, dir, filename = "redcap_forms_download", 
          record = NULL, events = NULL,
          instruments = NULL, all_records = FALSE, ...)
 {
@@ -70,7 +70,7 @@ function(rcon, dir = getwd(), filename = "redcap_forms_download",
 #' @export
 
 exportPdf.redcapApiConnection <- 
-function(rcon, dir = getwd(), filename = "redcap_forms_download",
+function(rcon, dir, filename = "redcap_forms_download",
          record = NULL, events = NULL,
          instruments = NULL, all_records = FALSE, ...,
          error_handling = getOption("redcap_error_handling"))
@@ -81,7 +81,22 @@ function(rcon, dir = getwd(), filename = "redcap_forms_download",
                           classes = "redcapApiConnection",
                           add = coll)
   
-  massert(~ dir + filename + record + events + instruments,
+  if (missing(dir)){
+    coll$push("'dir' must have a character(1) value")
+  }
+  else{
+    checkmate::assert_character(x = dir,
+                                len = 1, 
+                                add = coll)
+    
+    if (is.character(dir)){
+      if (!dir.exists(dir)){
+        coll$push("'dir' is not an existing directory")
+      }
+    }
+  }
+  
+  massert(~ filename + record + events + instruments,
           fun = checkmate::assert_character,
           len = list(dir = 1, filename = 1),
           fixed = list(null.ok = TRUE,

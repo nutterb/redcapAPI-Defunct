@@ -1,8 +1,8 @@
 Package: redcapAPI
 Type: Package
-Title: R Interface to REDCap
+Title: Interface to 'REDCap'
 Version: 2.0
-Date: 2015-03-10
+Date: 2018-01-17
 Authors@R: c(
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
            role = c("aut", "ctb", "cre")),
@@ -12,12 +12,13 @@ Authors@R: c(
     person("Will", "Gray", role = "ctb"),
     person("Jeremy", "Stephens", role = "ctb"))
 Maintainer: Benjamin Nutter <benjamin.nutter@gmail.com>
-Description: Access data stored in REDCap databases using the Application
-    Programming Interface (API).  REDCap (Research Electronic Data CAPture) is
+Description: Access data stored in 'REDCap' databases using the Application
+    Programming Interface (API).  'REDCap' (Research Electronic Data CAPture;
+    https://projectredcap.org) is
     a web application for building and managing online surveys and databases
     developed at Vanderbilt University.  The API allows users to access data
     and project meta data (such as the data dictionary) from the web
-    programmatically.  The redcapAPI package facilitates the process of
+    programmatically.  The 'redcapAPI' package facilitates the process of
     accessing data with options to prepare an analysis-ready data set
     consistent with the definitions in a database's data dictionary.
 License: GPL-2
@@ -35,6 +36,6 @@ Imports:
 LazyLoad: yes
 URL: https://github.com/nutterb/redcapAPI/wiki,
     https://github.com/nutterb/redcapAPI,
-    http://project-redcap.org
+    https://projectredcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues
 RoxygenNote: 6.0.1

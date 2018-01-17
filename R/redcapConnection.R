@@ -69,6 +69,8 @@
 #' 
 #' options(redcap_api_url=[YOUR_REDCAP_URL])
 #' rcon <- redcapConnection(token=[API_TOKEN])
+#' 
+#' exportRecords(rcon)
 #' }
 #' 
 

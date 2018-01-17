@@ -61,6 +61,8 @@ rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
 
 options(redcap_api_url=[YOUR_REDCAP_URL])
 rcon <- redcapConnection(token=[API_TOKEN])
+
+exportRecords(rcon)
 }
 
 }

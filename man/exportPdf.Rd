@@ -6,15 +6,14 @@
 \alias{exportPdf.redcapApiConnection}
 \title{Export PDF file of Data Collection Instruments (either as blank or with data)}
 \usage{
-exportPdf(rcon, dir = getwd(), filename = "redcap_forms_download",
-  record = NULL, events = NULL, instruments = NULL, all_records = FALSE,
-  ...)
+exportPdf(rcon, dir, filename = "redcap_forms_download", record = NULL,
+  events = NULL, instruments = NULL, all_records = FALSE, ...)
 
-\method{exportPdf}{redcapDbConnection}(rcon, dir = getwd(),
+\method{exportPdf}{redcapDbConnection}(rcon, dir,
   filename = "redcap_forms_download", record = NULL, events = NULL,
   instruments = NULL, all_records = FALSE, ...)
 
-\method{exportPdf}{redcapApiConnection}(rcon, dir = getwd(),
+\method{exportPdf}{redcapApiConnection}(rcon, dir,
   filename = "redcap_forms_download", record = NULL, events = NULL,
   instruments = NULL, all_records = FALSE, ...,
   error_handling = getOption("redcap_error_handling"))

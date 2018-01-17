@@ -57,14 +57,14 @@
 #' 
 #' @export
 
-exportFiles <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ...,
+exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
                         bundle = getOption("redcap_bundle"))
   UseMethod("exportFiles")
 
 #' @rdname exportFiles
 #' @export
 
-exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = getwd(), filePrefix=TRUE, ..., 
+exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
                                            bundle = getOption("redcap_bundle")){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
@@ -74,7 +74,7 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir = get
 #' @export
 
 exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, 
-                                            dir=getwd(), 
+                                            dir, 
                                             filePrefix=TRUE, ...,
                                             bundle = getOption("redcap_bundle"),
                                             error_handling = getOption("redcap_error_handling")){
@@ -98,14 +98,28 @@ exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL,
                          bundle = TRUE),
           fixed = list(add = coll))
   
-  massert(~ record + field + event + dir,
+  massert(~ record + field + event,
           fun = checkmate::assert_character,
           null.ok = list(record = FALSE,
                          field = FALSE,
-                         event = TRUE,
-                         dir = FALSE),
+                         event = TRUE),
           fixed = list(len = 1,
                        add = coll))
+  
+  if (missing(dir)){
+    coll$push("'dir' must have a character(1) value")
+  }
+  else{
+    checkmate::assert_character(x = dir,
+                                len = 1, 
+                                add = coll)
+    
+    if (is.character(dir)){
+      if (!dir.exists(dir)){
+        coll$push("'dir' is not an existing directory")
+      }
+    }
+  }
   
   checkmate::assert_logical(x = filePrefix,
                             len = 1,
