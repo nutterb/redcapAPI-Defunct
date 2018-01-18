@@ -2,9 +2,6 @@
 #' @aliases allocationTable.redcapApiConnection
 #' @aliases allocationTable.redcapDbConneciton
 #' @aliases allocationTable_offline
-#' @export allocationTable
-#' @export allocationTable_offline
-#' @importFrom stringr str_split_fixed
 #' 
 #' @title Allocation Tables for the Randomization Module
 #' @description Generate allocation table for the REDCap 
@@ -42,7 +39,7 @@
 #' allocation.  No pairwise elements of \code{seed.dev} and \code{seed.prod}
 #' may be equal.  This guarantees that the two randomization schemes are 
 #' unique.
-#' @param proj A \code{redcapProjectInfo} object.
+#' @param bundle A \code{redcapBundle} object.
 #' @param weights An optional vector giving the sampling weights for each of the randomization 
 #'   groups.  There must be one number for each level of the randomization variable.  If named, 
 #'   the names must match the group labels.  If unnamed, the group labels will be assigned in the
@@ -76,52 +73,58 @@
 #' 
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-          
-allocationTable <- function(rcon, random, strata=NULL, 
-                            group=NULL, dag.id=NULL, 
+
+allocationTable <- function(rcon, random, strata = NULL, 
+                            group = NULL, dag.id = NULL, 
                             replicates, block.size, 
                             block.size.shift = 0,
-                            seed.dev=NULL, seed.prod=NULL,  
-                            proj=NULL, 
+                            seed.dev = NULL, seed.prod = NULL,  
+                            bundle = NULL, 
                             weights = NULL, ...)
   UseMethod("allocationTable")
 
 #' @rdname allocationTable
 #' @export
 
-allocationTable.redcapDbConnection <- function(rcon, random, strata=NULL, 
-                                               group=NULL, dag.id=NULL, 
+allocationTable.redcapDbConnection <- function(rcon, random, strata = NULL, 
+                                               group = NULL, dag.id = NULL, 
                                                replicates, block.size, 
                                                block.size.shift = 0,
-                                               seed.dev=NULL, seed.prod=NULL,  
-                                               proj=NULL, 
+                                               seed.dev = NULL, seed.prod = NULL,  
+                                               bundle = NULL, 
                                                weights = c(1, 1), ...){
-    message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
-            "has not yet been written.  Please consider using the API.")
-  }
+  message("Please accept my apologies.  The exportUsers method for redcapDbConnection objects\n",
+          "has not yet been written.  Please consider using the API.")
+}
 
 #' @rdname allocationTable
 #' @export
 
-allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL, 
-                                                group=NULL, dag.id=NULL, 
+allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL, 
+                                                group = NULL, dag.id = NULL, 
                                                 replicates, block.size, 
                                                 block.size.shift = 0,
-                                                seed.dev=NULL, seed.prod=NULL,  
-                                                proj=NULL, 
-                                                weights = c(1, 1), ...){
+                                                seed.dev = NULL, seed.prod = NULL,  
+                                                bundle = NULL, 
+                                                weights = c(1, 1), ...)
+{
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
   
-  error.flag <- 0
-  error.msg <- NULL
-  
-  warn.flag <- 0
-  warn.msg <- NULL
+  coll <- checkmate::makeAssertCollection()
   
   #* Establish the meta_data table
-  meta_data <- if (is.null(proj$meta_data)) exportMetaData(rcon) else proj$meta_data
+  meta_data <- 
+    if (is.null(bundle$meta_data)) 
+      exportMetaData(rcon) 
+    else bundle$meta_data
   
   #* A utility function to extract the coded values from the meta_data
-  redcapChoices <- function(v, meta_data, raw=TRUE){
+  redcapChoices <- function(v, meta_data, raw=TRUE)
+  {
     if (meta_data$field_type[meta_data$field_name == v] %in% c("dropdown", "radio")){
       choice_str <- meta_data$select_choices_or_calculations[meta_data$field_name == v]
       choice_str <- unlist(strsplit(choice_str, " [|] "))
@@ -153,43 +156,37 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   #* 16. no pairwise elements of seed.dev are equal to seed.prod
   
   #* 1. Verifying that 'random' is not missing
-  if (missing(random)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.flag, ": No value is given for 'random'"))
-  }
+  checkmate::assert_character(x = random,
+                              len = 1,
+                              add = coll)
   
   #* 2. random, strata and group are characters
-  if (!all(sapply(c(random, strata, group), is.character))){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.flag, ": 'random', 'strata', and 'group' must ",
-                          "all be character class"))
-  }
+  checkmate::assert_character(x = strata,
+                              add = coll)
   
-  #* 3. random and group have length 1
-  if (!all(sapply(c(random, group), length) == 1)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.flag, ": 'random' and 'group' must have length 1"))
-  }
+  checkmate::assert_character(x = group,
+                              len = 1,
+                              add = coll)
   
   #* 4. all fields in 'random', 'strata', and 'group' exist in meta_data
   #* Verify that all given fields exist in the database
-  if (!all(c(random, strata, group) %in% meta_data$field_name)){
-    not_found <- c(random, strata, group)
-    not_found <- not_found[!not_found %in% meta_data$field_name]
-    
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.flag, ": '", paste0(not_found, collapse="', '"), 
-                          "' are not found in the REDCap database"))
-  }
-    
+  checkmate::assert_subset(x = random,
+                           choices = meta_data$field_name,
+                           add = coll)
+  
+  checkmate::assert_subset(x = strata,
+                           choices = meta_data$field_name,
+                           add = coll)
+  
+  checkmate::assert_subset(x = group,
+                           choices = meta_data$field_name,
+                           add = coll)
+
+  
   #* 5. Calculate n_levels
   #* randomization levels
   random_levels <- redcapChoices(random, meta_data)
-  random_level_names <- redcapChoices(random, meta_data, FALSE)
+  random_level_names <- redcapChoices(random, meta_data, raw = FALSE)
   n_levels <- length(random_levels)
   
   #* stratification groups
@@ -201,59 +198,43 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   #* Allocation table
   allocation <- expand.grid(strata_levels)
   if (nrow(allocation) == 0) allocation <- data.frame(place.holding.strata=1)
-    
+  
   n_strata <- nrow(allocation)
   
   #* 6. Verify 'replicates' is not missing and is numeric
-  if (ifelse(missing(replicates), TRUE, !is.numeric(replicates))){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.flag, ": 'replicates' is a required argument and must be numeric"))
-  }
+  checkmate::assert_integerish(x = replicates,
+                               len = 1,
+                               add = coll)
   
   #* 7. If 'block.size' is missing, set it equal to 'replicates'.
   if (missing(block.size)){
     block.size <- replicates
-    warn.flag <- warn.flag + 1
-    warn.msg <- c(warn.msg,
-                  paste0(warn.flag, ": 'block.size' was not provided.  The value of 'replicates' is used"))
+    warning("'block.size' was not provided.  The value of 'replicates' is used")
   }
   else{
-    if (!is.numeric(block.size)){
-      error.flag <- error.flag + 1
-      error.msg <- c(error.msg,
-                     paste0(error.msg, ": 'block.size' must be numeric."))
-    }
+    checkmate::assert_integerish(x = block.size,
+                                 add = coll)
   }
   
   #* 8. block.size must be a multiple of n_levels
   if (any((block.size %% n_levels) != 0)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.msg, ": 'block.size' must be a multiple of ", n_levels))
+    coll$push(paste0("'block.size' must be a multiple of ", n_levels))
   }
   
   #* 9. First element in block.size.shift must be 0
   if (block.size.shift[1] != 0){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.msg, ": The first element of 'block.size.shift' must be 0"))
+    coll$push(": The first element of 'block.size.shift' must be 0")
   }
-
+  
   #* 10. block.size.shift must be strictly increasing in the interval [0, 1)
   if (!all(block.size.shift >= 0) | !all(block.size.shift < 1) | 
-        !all(diff(block.size.shift) > 0)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.msg, ": 'block.size.shift' must be strictly increasing ",
-                          "on the interval [0, 1)"))
+      !all(diff(block.size.shift) > 0)){
+    coll$push("'block.size.shift' must be strictly increasing on the interval [0, 1)")
   }
   
   #* 11. block.size.shift must have the same length as block.size
   if (length(block.size) != length(block.size.shift)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.msg, ": 'block.size' and 'block.size.shift' must have the same length"))
+    coll$push(": 'block.size' and 'block.size.shift' must have the same length")
   }
   
   #* 12. The sum of all of the blocks must add up to replicates
@@ -275,77 +256,61 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   Blocks$conform <- with(Blocks, cum.n <= max.n)
   
   if (sum(Blocks$block.size) != replicates){
-    warn.flag <- warn.flag + 1
-    warn.msg <- c(warn.msg,
-                   paste0(warn.flag, ": The sum of the block sizes should add up to 'replicates'\n",
-                          "  Please review the Blocks attribute and consider changing your blocking scheme"))
+    warning("The sum of the block sizes should add up to 'replicates'\n",
+            "  Please review the Blocks attribute and consider changing your blocking scheme")
   }
   
   #* 13. Check if all blocks conform to blocking design (warning produced)
   if (!all(Blocks$conform)){
-    warn.flag <- warn.flag + 1
-    warn.msg <- c(warn.msg,
-                  paste0(warn.flag, ": The blocking design did not conform exactly to specifications\n",
-                         "  Please review the Blocks attribute and consider changing your blocking scheme"))
+    warning("The blocking design did not conform exactly to specifications\n",
+             "  Please review the Blocks attribute and consider changing your blocking scheme")
   }
   
   #* 14. seed.dev is not NULL and has length 1 or n_strata
   if (ifelse(is.null(seed.dev), TRUE, !length(seed.dev) %in% c(1, n_strata))){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg, 
-                   paste0(error.flag, ": 'seed.dev' is a required argument and must be length 1 or ", n_strata))
+    coll$pusch(paste0("'seed.dev' is a required argument and must be length 1 or ", n_strata))
   }
   
   #* 15. seed.prod is not NULL and has length 1 or n_strata
   if (ifelse(is.null(seed.prod), TRUE, !length(seed.prod) %in% c(1, n_strata))){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg, 
-                   paste0(error.flag, ": 'seed.prod' is a required argument and must be length 1 or ", n_strata))
+    coll$push(paste0("'seed.prod' is a required argument and must be length 1 or ", n_strata))
   }
   
   #* 16. no pairwise elements of seed.dev are equal to seed.prod
   if (any(seed.dev == seed.prod)){
-    error.flag <- error.flag + 1
-    error.msg <- c(error.msg,
-                   paste0(error.msg, ": No pairwise elements of 'seed.dev' and 'seed.prod' may be equal"))
+    coll$push("No pairwise elements of 'seed.dev' and 'seed.prod' may be equal")
   }
   
   #* 17. If 'weights' is not NULL, it is the same length as the number of levels in 'random'
   if (is.null(weights)){
     weights <- rep(1, length(random_levels))
     names(weights) <- random_levels
-    warn.flag <- warn.flag + 1
-    warn.msg <- c(warn.msg,
-                  paste0(warn.flag, ": No 'weights' were given.  Equal weights have been assumed."))
+    warning("No 'weights' were given.  Equal weights have been assumed.")
   }
   
   #* 18. If 'weights' has names, the names are identical to the levels of 'random'
   if (!is.null(names(weights))){
     if (identical(names(weights), random_level_names)) {
-      error.flag <- error.flag + 1
-      error.msg <- c(error.msg,
-                     paste0(error.msg, ": 'weight' names must be '",
-                            paste0(random_level_names, collapse = "', '"), "'."))
+      coll$push(paste0("'weight' names must be '",
+                       paste0(random_level_names, collapse = "', '"), 
+                       "'."))
     }
   }
   #* 19. if 'weights' doesn't have names, assume the weights were given in the order of levels(random)
   else {
     names(weights) <- random_level_names
-    warn.flag <- warn.flag + 1
-    warn.msg <- c(warn.msg,
-                  paste0(warn.flag, ": No names given with 'weights'.  The names '",
-                         paste0(random_level_names, collapse = "', '"), 
-                         "' have been assumed"))
+    warning(paste0("No names given with 'weights'.  The names '",
+                   paste0(random_level_names, collapse = "', '"), 
+                   "' have been assumed"))
   }
   
   weights_orig <- weights
   weights <- weights[random_level_names] / sum(weights)
   
+  checkmate::reportAssertions(coll)
+  
   if (length(seed.dev) == 1) seed.dev <- seed.dev + ((1:n_strata)-1)*100
   if (length(seed.prod) == 1) seed.prod <- seed.prod + ((1:n_strata)-1)*100
-  
-  if (warn.flag) warning(paste(warn.msg, collapse="\n"))
-  if (error.flag) stop(paste(error.msg, collapse="\n"))
   
   if (is.null(weights)) weights <- rep(1, length(random_levels))
   weights <- weights / sum(weights)
@@ -354,48 +319,60 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
   Randomization <- function(choices, Blocks, seed, weights){
     set.seed(seed) #* set the seed
     #* Randomizations
-    do.call("c", lapply(Blocks$block.size, 
-                        function(x) sample(makeChoices(choices, x, weights), x)))
+    do.call("c", 
+            lapply(X = Blocks$block.size, 
+                   FUN = function(x) sample(makeChoices(choices, x, weights), 
+                                            size = x)))
   }
   
-#   return(list(allocation, Blocks, random_levels, seed.dev))
+  #   return(list(allocation, Blocks, random_levels, seed.dev))
   #* Generate an allocation table for each stratum (Development)
-  dev_allocate <- lapply(1:nrow(allocation),
-                       function(r){
-                         a <- allocation[r, , drop=FALSE]
-                         #* extend the length of the stratum data frame to accomodate the sampling
-                         a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                         a[[random]] <- Randomization(random_levels, Blocks, seed.dev[r], weights)
-                         return(a)
-                       })
+  dev_allocate <- 
+    lapply(X = 1:nrow(allocation),
+           FUN = function(r){
+             a <- allocation[r, , drop=FALSE]
+             #* extend the length of the stratum data frame to accomodate the sampling
+             a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
+             a[[random]] <- Randomization(choices = random_levels, 
+                                          Blocks = Blocks, 
+                                          seed = seed.dev[r], 
+                                          weights = weights)
+             return(a)
+           })
   
   #* Combine the allocation tables
   dev_allocate <- do.call("rbind", dev_allocate)
-
+  
   #* reorder the allocation table for uploading to REDCap
   dev_allocate <- dev_allocate[, c(random, names(strata_levels)), drop=FALSE]
   rownames(dev_allocate) <- NULL  
   
   
   #* Generate an allocation table for each stratum (Production)
-  prod_allocate <- lapply(1:nrow(allocation),
-                         function(r){
-                           a <- allocation[r, , drop=FALSE]
-                           #* extend the length of the stratum data frame to accomodate the sampling
-                           a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
-                           a[[random]] <- Randomization(random_levels, Blocks, seed.prod[r], weights)
-                           return(a)
-                         })
+  prod_allocate <- 
+    lapply(X = 1:nrow(allocation),
+           FUN = function(r){
+             a <- allocation[r, , drop=FALSE]
+             #* extend the length of the stratum data frame to accomodate the sampling
+             a <-  a[rep(row.names(a), sum(Blocks$block.size)), , drop=FALSE]
+             a[[random]] <- Randomization(choices = random_levels, 
+                                          Blocks = Blocks, 
+                                          seed = seed.prod[r], 
+                                          weights = weights)
+             return(a)
+           })
   #* Combine the allocation tables
   prod_allocate <- do.call("rbind", prod_allocate)
   
   #* reorder the allocation table for uploading to REDCap
-  prod_allocate <- prod_allocate[, c(random, names(strata_levels)), drop=FALSE]
+  prod_allocate <- prod_allocate[c(random, names(strata_levels))]
   rownames(prod_allocate) <- NULL  
   
-
-  return(list(dev_allocate = dev_allocate, dev_seed = seed.dev,
-              prod_allocate = prod_allocate, prod_seed = seed.prod,
+  
+  return(list(dev_allocate = dev_allocate, 
+              dev_seed = seed.dev,
+              prod_allocate = prod_allocate, 
+              prod_seed = seed.prod,
               blocks = Blocks,
               weights = weights_orig))
 }
@@ -407,8 +384,50 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata=NULL,
 makeChoices <- function(random_levels, block.size, weights){
   group.size <- block.size * weights
   if (sum(ceiling(group.size) - group.size) == 0)
-    choices <- rep(random_levels, times = group.size)
+    choices <- rep(random_levels, 
+                   times = group.size)
   else 
-    choices <- sample(random_levels, block.size, replace=TRUE, prob=weights)
+    choices <- sample(random_levels, 
+                      size = block.size, 
+                      replace = TRUE, 
+                      prob = weights)
   choices
+}
+
+#' @rdname allocationTable
+#' @export
+
+allocationTable_offline <- function(meta_data, random, strata = NULL, 
+                                    group = NULL, dag.id = NULL, 
+                                    replicates, block.size, 
+                                    block.size.shift = 0,
+                                    seed.dev = NULL, seed.prod = NULL,  
+                                    bundle = NULL, 
+                                    weights = c(1, 1), ...){
+  meta_data <- utils::read.csv(meta_data,
+                               stringsAsFactors=FALSE,
+                               na.strings = "")
+  
+  col.names=c('field_name', 'form_name', 'section_header', 
+              'field_type', 'field_label', 'select_choices_or_calculations', 
+              'field_note', 'text_validation_type_or_show_slider_number', 
+              'text_validation_min', 'text_validation_max', 'identifier', 
+              'branching_logic', 'required_field', 'custom_alignment', 
+              'question_number', 'matrix_group_name', 'matrix_ranking',
+              'field_annotation')
+  names(meta_data) <- col.names[1:length(col.names)]
+  
+  allocationTable.redcapApiConnection(rcon = NULL,
+                                      random = random,
+                                      strata = strata,
+                                      group = group,
+                                      dag.id = dag.id,
+                                      replicates = replicates,
+                                      block.size = block.size,
+                                      block.size.shift = block.size.shift,
+                                      seed.dev = seed.dev,
+                                      seed.prod = seed.prod,
+                                      bundle = list(meta_data = meta_data),
+                                      weights = weights, 
+                                      ...)
 }

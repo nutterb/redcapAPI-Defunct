@@ -1,3 +1,46 @@
+## Changes in Version 2.0 (2016-04-30)
+* redcapDbConnection methods are being deprecated.  To our knowledge, no one
+  is using these methods, and we do not believe they would work as previously 
+  coded anyway. The methods definitions continue to be reserved although 
+  they will likely not be developed in the forseeable future (if at all).
+  Please file an issue on GitHub if you feel such methods would be of use.
+* `redcapProjectInfo` is being deprecated, as it will inevitably create confusion
+  with the API method `exportProjectInformation`.  The replacement function is
+  `exportBundle`.
+* export bundles are now placed into the option `redcap_bundle` by default.
+  For now, exportBundle will also return that same object.  This is to prevent
+  back-compatibility problems with existing code, but will change at a future date.
+* Added several new API functions.  All functions up to REDCap 6.5.0 are included.
+* Optional arguments that previously had no default now default to NULL. There 
+  should be no change in behavior related to this change.
+* Further standardization to documentation.  Each function has three new sections: 
+  "From the REDCap Documentation" which gives the description of the function as
+  taken from the REDCap documentation; "REDCap Version" which gives the versions of
+  REDCap for which the function is known to operate; and "Known REDCap Limitations"
+  which documents any bugs or other limitations that may be encountered when working
+  with the API
+* the `fieldToVar` function now operates on a switch statement instead of a sequence
+  of `if else` blocks.  It also incorporates a `for` loop in place of the 
+  `lapply` and `<<-` structure.
+* Error checking, when feasible, makes use of the `checkmate` package.
+* `exportVersion` will now return "5.12.2" for all versions of REDCap less than 6.0.0.
+  While it is admittedly odd, this allows for consistent logical comparisons of 
+  of versions and allows better control of the package's behavior over multiple 
+  versions of REDCap.
+* REDCap variables that can reasonably be treated as factors are given an additional
+  class, `redcapFactor`, that inherits whatever class the variable becomes on 
+  export. For example, if `factors = TRUE`, the new class will be 
+  `c("redcapFactor", "factor")`, otherwise, it may be something similar to 
+  `c("redcapFactor", "numeric")`.  This is done to assist in converting factors 
+  back and forth between classes as needed (particular when using `redcapFactorFlip`).
+* An package option is added for how to manage errors returned by the API.  This is
+  used to assist in dealing with errors relating to bugs in the API and/or the user's
+  version of REDCap.  For instance, if an API method doesn't exist for the user's 
+  version of REDCap, the user can control if a hard error is returned, or if a 
+  `NULL` value is returned. See `?redcap_error` for details.
+* Codebase has been standardized and given a cleaner format (yeah, that's totally 
+  subjective)
+
 Changes in Version 1.3.5 (2017-01-20)
   * Bug fixes from @tobadia. (Issue #79)
 
@@ -19,7 +62,7 @@ Changes in Version 1.3 (2015-03-04)
     of returning the character string with the error.  The bug fix accomodates
     the error messages from both 5.x and 6.0+.
 
-Changes in Version 1.2 (2015-02-01)
+## Changes in Version 1.2 (2015-02-01)
   * Code has been rewritten to make use of the `roxygen2` documenation style.
   * The function 'allocationTable' is added.  This assists in producing
     allocation tables for the randomization module.
@@ -27,7 +70,7 @@ Changes in Version 1.2 (2015-02-01)
     included.  These produce output identical to the API calls, but 
     operate based on the csv's downloaded via the user interface.
 
-Changes in Version 1.1 (2014-10-01)
+## Changes in Version 1.1 (2014-10-01)
   * redcapAPI now depends on R 3.0.0 or higher
   * A bug fix was added.  When specifying the 'fields' and 'forms' arguments 
     in 'exportRecords', only the variables in 'fields' were being converted
@@ -38,7 +81,7 @@ Changes in Version 1.1 (2014-10-01)
     field.  This reflects the addition of some of the label functions in 
     Hmisc being explicitly exported, making them available to import.  
 
-Changes in Version 1.0.1 (2014-10-20)
+## Changes in Version 1.0.1 (2014-10-20)
   * Bug fix: in `importRecords` meta data was not previously exported 
     when a project info object was not provided.  This is now corrected
   * Bug fix: in `exportRecords` and `exportReports`, the checkbox labels

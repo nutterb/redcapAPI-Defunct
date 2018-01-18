@@ -4,30 +4,23 @@
 \alias{fieldToVar}
 \title{Convert a REDCap Data Field to an R Vector}
 \usage{
-fieldToVar(m, d, factors = TRUE, dates = TRUE, checkboxLabels = FALSE,
-  vname)
+fieldToVar(records, meta_data, factors = TRUE, dates = TRUE,
+  checkboxLabels = FALSE)
 }
 \arguments{
-\item{m}{a metadata file, as returned by \code{exportMetaData}}
+\item{records}{A data frame of records returned by \code{exportRecords} 
+or \code{exportReports}}
 
-\item{d}{A data files, as returned by \code{exportRecords}}
+\item{meta_data}{A data frame giving the data dictionary, as returned 
+by \code{exportMetaData}}
 
-\item{factors}{Logical.  Determines if categorical factors from REDCap are 
-returned with their numeric codes or as labelled factors.}
+\item{factors}{Logical, determines if checkbox, radio button, dropdown and yesno
+variables are converted to factors}
 
-\item{dates}{Logical. Determines if date variables from REDCap are converted
-to POSIXct format.  The API returns dates as character strings by default
-in YYYY-MM-DD format.}
+\item{dates}{Logical, determines if date variables are converted to POSIXct format}
 
-\item{checkboxLabels}{Logical. Determines the format of labels in checkbox 
-variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
-If \code{TRUE}, they are applied as ""/"[field_label]" where [field_label] 
-is the label assigned to the level in the data dictionary.  
-This option only applies when \code{factors=TRUE} and only to 
-REDCap versions 6.0 and higher}
-
-\item{vname}{The variable name being converted.  This is used only when 
-\code{checkboxLabels=TRUE} in order to extract the checkbox label.}
+\item{checkboxLabels}{Logical, determines if checkbox variables are labeled as
+"Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}}
 }
 \description{
 Converts a field exported from REDCap into a valid R vector

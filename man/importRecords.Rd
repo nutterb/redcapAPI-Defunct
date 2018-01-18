@@ -2,7 +2,6 @@
 % Please edit documentation in R/importRecords.R
 \name{importRecords}
 \alias{importRecords}
-\alias{importRecords.redcapApiConnection}
 \alias{importRecords.redcapDbConnection}
 \alias{importRecords.redcapApiConnection}
 \title{Import Records to a REDCap Database}
@@ -17,7 +16,7 @@ importRecords(rcon, data, overwriteBehavior = c("normal", "overwrite"),
 
 \method{importRecords}{redcapApiConnection}(rcon, data,
   overwriteBehavior = c("normal", "overwrite"), returnContent = c("count",
-  "ids", "nothing"), returnData = FALSE, logfile = "", ..., proj = NULL,
+  "ids", "nothing"), returnData = FALSE, logfile = "", ..., bundle = NULL,
   batch.size = -1)
 }
 \arguments{
@@ -47,8 +46,8 @@ If \code{""}, the log is printed to the console.}
 
 \item{...}{Arguments to be passed to other methods.}
 
-\item{proj}{A \code{redcapProject} object as created by
-\code{redcapProjectInfo}.}
+\item{bundle}{A \code{redcapBundle} object as created by
+\code{exportBundle}.}
 
 \item{batch.size}{Specifies size of batches.  A negative value
 indicates no batching.}
@@ -75,53 +74,7 @@ data before attempting the import.  Namely
 See the documentation for \code{\link{validateImport}} for detailed
 explanations of the validation.
 }
-\examples{
-\dontrun{
-> #*** Note: I cannot provide working examples without
-> #*** compromising security.  Instead, I will try to
-> #*** offer up sample code with the matching results
->
->
-> #*** Create the connection object
-> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
->
->
-> #*** Import a record for a new patient
-> NewScan <- data.frame(patient_id = 1022,
-+                       redcap_event_name = "entry_arm_1",
-+                       bmi = 24.689,
-+                       patient_characteristics_complete = 1)
->
-> importRecords(rcon, NewScan)
-REDCap Data Import Log: 2014-06-20 16:08:31
-The following (if any) conditions were noted about the data.
 
-
-1
-> ## No conditions were noted, 1 record was uploaded
->
->
->
->
->
-> #*** Import a record for a new patient with an erroneous BMI value
-> NewScan <- data.frame(patient_id = 1022,
-+                       redcap_event_name = "entry_arm_1",
-+                       bmi = 244.689,
-+                       patient_characteristics_complete = 4)
->
-> importRecords(rcon, NewScan)
-REDCap Data Import Log: 2014-06-20 16:08:33
-The following (if any) conditions were noted about the data.
-
-
-1022   entry_arm_1   244.689   Entry for 'bmi' is larger than
-the acceptable maximum.  Please confirm.
-1
-> ## One condition was noted.  Notice that the BMI value was still
-> ## uploaded to REDCap.
-}
-}
 \references{
 \url{http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389}\cr
 \url{https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R}\cr

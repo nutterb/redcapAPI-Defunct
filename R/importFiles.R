@@ -1,11 +1,6 @@
 #' @name importFiles
-#' @aliases importFiles.redcapApiConnection
-#' @aliases importFiles.redcapDbConnection
-#' @export importFiles
-#' @importFrom httr POST
-#' @importFrom httr upload_file
-#' 
 #' @title Imports a File to REDCap to Attach to a Record
+#' 
 #' @description A single file may be attached to a single record.  The 
 #'   behavior of this function is consistent with the
 #'   behavior of the API, which only allows one file to be uploaded at a time
@@ -21,38 +16,26 @@
 #'   file already exists for that record.  If a file exists, the function 
 #'   terminates to prevent overwriting.  When \code{TRUE}, no additional 
 #'   check is performed.
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param ... Arguments to be passed to other methods
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The function may only import a single file
 #' 
 #' @author Benjamin Nutter
 #' 
-#' @examples
-#' \dontrun{
-#' > #*** Note: I cannot provide working examples without
-#' > #*** compromising security.  Instead, I will try to 
-#' > #*** offer up sample code with the matching results
-#' > 
-#' > #*** Create the connection object
-#' > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' > 
-#' >
-#' > #* Import a single file
-#' > importFiles(rcon, "Image.jpg", record=1, field="file_upload", event="event_1_arm_1")
-#' The file was successfully uploaded
-#' >
-#' }
+#' @export
 
 importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
-                        proj=NULL)
+                        bundle=NULL)
   UseMethod("importFiles")
 
 #' @rdname importFiles
 #' @export
 
 importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ..., 
-                                           proj=NULL){
+                                           bundle=NULL){
   message("Please accept my apologies.  The importFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -60,43 +43,97 @@ importFiles.redcapDbConnection <- function(rcon, file, record, field, event, ove
 #' @rdname importFiles
 #' @export
 
-importFiles.redcapApiConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
-                                            proj=NULL){
-  #* Use working directory if 'dir' is not specified
-  if (!file.exists(file)) stop(paste0("No file found at '", file, "'"))
+importFiles.redcapApiConnection <- function(rcon, file, record, field, event = NULL, 
+                                            overwrite=TRUE, ...,
+                                            bundle=NULL,
+                                            error_handling = getOption("redcap_error_handling")){
   
-  #* stop the function if arguments do not specify a unique record-event
-  if (missing(event)) event <- ""
-  if (any(sapply(list(record, field, event), length) > 1)){
-    stop("The arguments 'record', 'field', and 'event' may each only have length 1")
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
   }
   
+  if (is.numeric(record)) record <- as.character(record)
+  
+  coll <- checkmate::makeAssertCollection()
+  
+  massert(~ rcon + bundle,
+          fun = checkmate::assert_class,
+          classes = list(rcon = "redcapApiConnection",
+                         bundle = "redcapBundle"),
+          null.ok = list(rcon = FALSE,
+                         bundle = TRUE),
+          fixed = list(add = coll))
+  
+  massert(~ file + record + field + event,
+          fun = checkmate::assert_character,
+          null.ok = list(event = TRUE),
+          fixed = list(len = 1, 
+                       add = coll))
+  
+  checkmate::assert_logical(x = overwrite,
+                            len = 1,
+                            add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  
+  #* Use working directory if 'dir' is not specified
+  if (!file.exists(file)) 
+    coll$push(paste0("No file found at '", file, "'"))
+  
   #* make sure 'field' exist in the project and are 'file' fields
-  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
-  if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
+  if (is.null(bundle$meta_data)) 
+    meta_data <- exportMetaData(rcon)
+  
+  if (!field %in% meta_data$field_name) 
+    coll$push(paste("'", field, "' does not exist in the project.", sep=""))
+  
   if (meta_data$field_type[meta_data$field_name == field] != "file")
-    stop(paste0("'", field, "' is not of field type 'file'"))
+    coll$push(paste0("'", field, "' is not of field type 'file'"))
   
   #* make sure 'event' exists in the project
-  if (is.null(proj$events)) events_list <- exportEvents(rcon)
+  if (is.null(bundle$events)) 
+    events_list <- exportEvents(rcon)
+  
   if (class(events_list) == 'data.frame'){
     if (!event %in% events_list$unique_event_name) 
-      stop(paste0("'", event, "' is not a valid event name in this project."))
+      coll$push(paste0("'", event, "' is not a valid event name in this project."))
   }
   
   if (!overwrite){
-    fileThere <- exportRecords(rcon, records=record, fields=field, events=event)
-    if (!is.na(fileThere[field])) stop("A file exists and overwrite=FALSE")
+    fileThere <- exportRecords(rcon, 
+                               records = record, 
+                               fields = field, 
+                               events = event)
+    if (!is.na(fileThere[field])) 
+      coll$push("A file exists and overwrite=FALSE")
   }
   
-  .params <- list(token=rcon$token, content='file',
-                  action='import', record=record,
-                  field=field, file=httr::upload_file(file), returnFormat='csv')
-  if (event != "") .params[['event']] <- event
+  checkmate::reportAssertions(coll)
+  
+  body <- list(token = rcon$token, 
+               content = 'file',
+               action = 'import', 
+               record = record,
+               field = field, 
+               file = httr::upload_file(file), 
+               returnFormat = 'csv')
+  
+  if (!is.null(event)) body[['event']] <- event
   
   #* Export the file
-  file <- tryCatch(httr::POST(url=rcon$url, body=.params, config=rcon$config),
-            error=function(cond) list(status_code = "200"))
-  if (file$status_code != "200") stop(paste0(file$status_code, ": ", as.character(file)))
-  else message("The file was successfully uploaded")
+  file <- 
+    tryCatch(
+      httr::POST(
+        url = rcon$url, 
+        body = body,
+        config = rcon$config),
+      error = function(cond) list(status_code = "200"))
+  
+  if (file$status_code != "200") 
+    redcap_error(file, error_handling)
+  else 
+    message("The file was successfully uploaded")
 }

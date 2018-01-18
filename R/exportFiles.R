@@ -1,8 +1,4 @@
 #' @name exportFiles
-#' @aliases exportFiles.redcapApiConnection
-#' @aliases exportFiles.redcapDbConnection
-#' @export exportFiles
-#' @importFrom httr POST
 #' 
 #' @title Exports a File attached to a Record
 #' @description A single file from a single record is retrieved.  The behavior 
@@ -21,7 +17,9 @@
 #'   name.  The prefix takes the form [record_id]-[event_name]-[file_name].  
 #'   The file name is always the same name of the file as it exists in REDCap
 #' @param ... Arguments to be passed to other methods
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The function may only export a single file.  
 #' See the examples for suggestions on exporting multiple files.
@@ -29,6 +27,25 @@
 #' Note that the name of the file can not be changed.  Whatever name exists in 
 #' REDCap is the name that will be used, although the record ID and event name 
 #' may be appended as a prefix
+#' 
+#' @section REDCap API Documentation (6.5.0):
+#' This method allows you to download a document that has been attached to an 
+#' individual record for a File Upload field. Please note that this method may also 
+#' be used for Signature fields (i.e. File Upload fields with "signature" validation type).
+#' 
+#' Note about export rights: Please be aware that Data Export user rights will be 
+#' applied to this API request. For example, if you have "No Access" data export rights 
+#' in the project, then the API file export will fail and return an error. And if you 
+#' have "De-Identified" or "Remove all tagged Identifier fields" data export rights, 
+#' then the API file export will fail and return an error *only if* the File Upload 
+#' field has been tagged as an Identifier field. To make sure that your API request 
+#' does not return an error, you should have "Full Data Set" export rights in the project.
+#' 
+#' @section REDCap Version:
+#' 5.8.2+ 
+#' 
+#' @section Known REDCap Limitations:
+#' None
 #' 
 #' @author Benjamin Nutter
 #' 
@@ -38,51 +55,17 @@
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
-#' @examples
-#'  \dontrun{
-#'  > #*** Note: I cannot provide working examples without
-#'  > #*** compromising security.  Instead, I will try to 
-#'  > #*** offer up sample code with the matching results
-#'  > 
-#'  > #*** Create the connection object
-#'  > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#'  > 
-#'  >
-#'  > #* Export a single file
-#'  > exportFiles(rcon, record=1, field="file_upload", event="event_1_arm_1")
-#'  The file was saved to '1-event_1_arm_1-NewOutcomes.xlsx'
-#'  >
-#'  >
-#'  > #* Export all files in a project
-#'  > #* Although this example only shows one field for files, it could work with
-#'  > #* an arbitrary number of file upload fields
-#'  > library(reshape2)
-#'  > Data <- exportRecords(Data)
-#'  > (filesToExport <- melt(Data[, c("id", "redcap_event_name", "file_upload")],
-#'                           c("id", "redcap_event_name")),
-#'                           na.rm=TRUE)
-#'  id redcap_event_name    variable      value
-#'  1  1     event_1_arm_1 file_upload [document]
-#'  4  2     event_1_arm_1 file_upload [document]
-#'  >
-#'  > for(i in 1:nrow(filesToExport)){
-#'  +   exportFiles(rcon, record=filesToExport$id[i],
-#'  +               field=filesToExport$variable[i],
-#'  +               event=filesToExport$redcap_event_name[i])
-#'  + }
-#'  The file was saved to '1-event_1_arm_1-NewOutcomes.xlsx'
-#'  The file was saved to '2-event_1_arm_1-Sunset2.JPG'
-#'  }
-  
+#' @export
+
 exportFiles <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
-                        proj=NULL)
+                        bundle = getOption("redcap_bundle"))
   UseMethod("exportFiles")
 
 #' @rdname exportFiles
 #' @export
 
 exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ..., 
-                        proj=NULL){
+                                           bundle = getOption("redcap_bundle")){
   message("Please accept my apologies.  The exportFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -90,53 +73,128 @@ exportFiles.redcapDbConnection <- function(rcon, record, field, event, dir, file
 #' @rdname exportFiles
 #' @export
 
-exportFiles.redcapApiConnection <- function(rcon, record, field, event, dir, filePrefix=TRUE, ...,
-                        proj=NULL){
-  #* Use working directory if 'dir' is not specified
-  if (missing(dir)) dir <- getwd()
+exportFiles.redcapApiConnection <- function(rcon, record, field, event = NULL, 
+                                            dir, 
+                                            filePrefix=TRUE, ...,
+                                            bundle = getOption("redcap_bundle"),
+                                            error_handling = getOption("redcap_error_handling")){
   
-  #* stop the function if arguments do not specify a unique record-event
-  if (missing(event)) event <- ""
-  if (any(sapply(list(record, field, event), length) > 1)){
-    stop("The arguments 'record', 'field', and 'event' may each only have length 1")
-  }
-  
-  #* make sure 'field' exist in the project and are 'file' fields
-  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
-  if (!field %in% meta_data$field_name) stop(paste("'", field, "' does not exist in the project.", sep=""))
-  if (meta_data$field_type[meta_data$field_name == field] != "file")
-      stop(paste0("'", field, "' is not of field type 'file'"))
-      
-  #* make sure 'event' exists in the project
-  if (is.null(proj$events)) events_list <- exportEvents(rcon)
-  if (class(events_list) == 'data.frame'){
-    if (!event %in% events_list$unique_event_name) 
-      stop(paste0("'", event, "' is not a valid event name in this project."))
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
   }
 
-  .params <- list(token=rcon$token, content='file',
-                  action='export', returnFormat='csv',
-                  record=record,
-                  field=field)
-  if (event != "") .params[['event']] <- event
+  if (is.numeric(record)) record <- as.character(record)
+  
+  #* Error Collection Object
+  coll <- checkmate::makeAssertCollection()
+  
+  massert(~ rcon + bundle,
+          fun = checkmate::assert_class,
+          classes = list(rcon = "redcapApiConnection",
+                         bundle = "redcapBundle"),
+          null.ok = list(rcon = FALSE,
+                         bundle = TRUE),
+          fixed = list(add = coll))
+  
+  massert(~ record + field + event,
+          fun = checkmate::assert_character,
+          null.ok = list(record = FALSE,
+                         field = FALSE,
+                         event = TRUE),
+          fixed = list(len = 1,
+                       add = coll))
+  
+  if (missing(dir)){
+    coll$push("'dir' must have a character(1) value")
+  }
+  else{
+    checkmate::assert_character(x = dir,
+                                len = 1, 
+                                add = coll)
+    
+    if (is.character(dir)){
+      if (!dir.exists(dir)){
+        coll$push("'dir' is not an existing directory")
+      }
+    }
+  }
+  
+  checkmate::assert_logical(x = filePrefix,
+                            len = 1,
+                            add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  #* Secure the meta_data
+  meta_data <- 
+    if (is.null(bundle$meta_data)) 
+      exportMetaData(rcon)
+    else 
+      bundle$meta_data
+  
+  #* make sure 'field' exist in the project and are 'file' fields
+  if (!field %in% meta_data$field_name) 
+  {
+    coll$push(paste("'", field, "' does not exist in the project.", sep=""))
+  }
+  else if (meta_data$field_type[meta_data$field_name == field] != "file")
+  {
+    coll$push(paste0("'", field, "' is not of field type 'file'"))
+  }
+  
+  #* Secure the events list
+  events_list <- 
+    if (is.null(bundle$events))
+      exportEvents(rcon)
+    else
+      bundle$events
+      
+  #* make sure 'event' exists in the project
+  if (inherits(events_list, "data.frame"))
+  {
+    if (!event %in% events_list$unique_event_name) 
+      coll$push(paste0("'", event, "' is not a valid event name in this project."))
+  }
+  
+  checkmate::reportAssertions(coll)
+  
+  body <- list(token = rcon$token, 
+               content = 'file',
+               action = 'export', 
+               returnFormat = 'csv',
+               record = record,
+               field = field)
+  
+  if (!is.null(event)) body[['event']] <- event
   
   #* Export the file
-  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
-  if (x$status_code == 200){
-    #* strip the returned character string to just the file name.
-    filename = sub("[[:print:]]+; name=", "", x$headers$'content-type')
-    filename = gsub("\"", "", filename)
-    filename <- sub(";charset[[:print:]]+", "", filename)
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
+
+  if (x$status_code != 200) redcap_error(x, error_handling)
+  
+  #* strip the returned character string to just the file name.
+  filename <- sub(pattern = "[[:print:]]+; name=", 
+                 replacement = "", 
+                 x = x$headers$'content-type')
+  filename <- gsub(pattern = "\"", 
+                   replacement = "", 
+                   filename)
+  filename <- sub(pattern = ";charset[[:print:]]+", 
+                  replacement = "", 
+                  x = filename)
     
-    #* Add the prefix
-    if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
+  #* Add the prefix
+  if (filePrefix) filename <- paste(record, "-", event, "-", filename, sep="")
     
-    #* Write to a file
-    writeBin(as.vector(x$content), file.path(dir, filename), 
-             useBytes=TRUE)
-    message(paste("The file was saved to '", filename, "'", sep=""))
-  }
-  else{                 
-   stop(paste0(x$status_code, ": ", as.character(x)))
-  }
+  #* Write to a file
+  writeBin(object = as.vector(x$content), 
+           con = file.path(dir, filename), 
+           useBytes=TRUE)
+  
+  message("The file was saved to '", filename, "'")
+
 }

@@ -2,17 +2,11 @@
 % Please edit documentation in R/exportRecords.R, R/exportRecords_offline.R
 \name{exportRecords}
 \alias{exportRecords}
-\alias{queryRecords}
-\alias{exportRecords.redcapApiConnection}
-\alias{exportRecords}
 \alias{exportRecords.redcapDbConnection}
 \alias{exportRecords.redcapApiConnection}
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
-queryRecords(rcon, fields = NULL, forms = NULL, records = NULL,
-  events = NULL)
-
 exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   records = NULL, events = NULL, labels = TRUE, dates = TRUE,
   survey = TRUE, dag = TRUE, checkboxLabels = FALSE, colClasses = NA,
@@ -21,13 +15,14 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
 \method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ...)
+  checkboxLabels = FALSE, colClasses = NA, ...)
 
 \method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
   fields = NULL, forms = NULL, records = NULL, events = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, ..., batch.size = -1, proj = NULL,
-  colClasses = NA)
+  checkboxLabels = FALSE, colClasses = NA, ..., batch.size = -1,
+  bundle = getOption("redcap_bundle"),
+  error_handling = getOption("redcap_error_handling"))
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
@@ -35,6 +30,10 @@ exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
+
+\item{factors}{Logical.  Determines if categorical data from the database is 
+returned as numeric codes or labelled factors. See 'Checkbox Variables'
+for more on how this interacts with the \code{checkboxLabels} argument.}
 
 \item{fields}{A character vector of fields to be returned.  If \code{NULL}, 
 all fields are returned.}
@@ -47,9 +46,6 @@ subjects are returned.}
 
 \item{events}{A character vector of events to be returned from a 
 longitudinal database.  If \code{NULL}, all events are returned.}
-
-\item{factors}{Logical.  Determines if categorical data from the database is 
-returned as numeric codes or labelled factors.}
 
 \item{labels}{Logical.  Determines if the variable labels are applied to 
 the data frame.}
@@ -79,7 +75,14 @@ flag will revert to its default value.}
 variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
 If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
-This option is only available after REDCap version 6.0.}
+
+This option is only available after REDCap version 6.0.  See Checkbox Variables
+for more on how this interacts with the \code{factors} argument.}
+
+\item{colClasses}{A (named) vector of colum classes passed to 
+\code{\link[utils]{read.csv}} calls. 
+Useful to force the interpretation of a column in a specific type and 
+avoid an unexpected recast.}
 
 \item{colClasses}{A (named) vector of colum classes passed to \code{\link[utils]{read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
 
@@ -90,7 +93,10 @@ in each batch of a batched export.  Non-positive numbers export the
 entire project in a single batch. Batching the export may be beneficial 
 to prevent tying up smaller servers.  See details for more explanation.}
 
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 
 \item{datafile}{For the offline version, a character string giving the location
 of the dataset downloaded from REDCap.  Note that this should be the raw
@@ -132,104 +138,68 @@ there are four records per patient, each batch will consist of 40 records.
 Thus, if you are concerned about tying up the server with a large, 
 longitudinal project, it would be prudent to use a smaller batch size.
 }
-\examples{
-\dontrun{
-> #*** Note: I cannot provide working examples
-> #*** without compromising security.  Instead, I will try to 
-> #*** offer up sample code with the matching results
-> 
-> 
-> #*** Create the connection object
-> rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-> 
-> 
-> #*** Export the full data set
-> BMD <- exportRecords(rcon)
-> head(BMD)
-patient_id redcap_event_name      bmi patient_characteristics_complete
-1          1       entry_arm_1 38.18765                                2
-2          1  dxa_scan_1_arm_1       NA                               NA
-3          1  dxa_scan_2_arm_1       NA                               NA
-4          1  dxa_scan_3_arm_1       NA                               NA
-5          2       entry_arm_1 24.40972                                2
-6          2  dxa_scan_1_arm_1       NA                               NA
-contact_date hip_left_bmd hip_left_tscore hip_right_bmd hip_right_tscore
-1         <NA>           NA              NA            NA               NA
-2   2013-06-12           NA              NA            NA               NA
-3   2009-02-11           NA              NA            NA               NA
-4   2011-02-26           NA              NA            NA               NA
-5         <NA>           NA              NA            NA               NA
-6   2010-11-06        0.697              -2            NA               NA
-neck_left_bmd neck_left_tscore neck_right_bmd neck_right_tscore spine_bmd
-1            NA               NA             NA                NA        NA
-2         0.664             -2.0             NA                NA        NA
-3         0.675             -1.9             NA                NA        NA
-4         0.734             -1.5             NA                NA        NA
-5            NA               NA             NA                NA        NA
-6         0.521             -3.0             NA                NA     0.899
-spine_tscore dxa_scan_summary_complete
-1           NA                        NA
-2           NA                         2
-3           NA                         2
-4           NA                         2
-5           NA                        NA
-6         -1.3                         2
-> 
-> 
-> 
-> #*** Export only the patient_characteristics form
-> BMD <- exportRecords(rcon, forms="patient_characteristics")
-> head(BMD)
-patient_id redcap_event_name      bmi patient_characteristics_complete
-1          1       entry_arm_1 38.18765                                2
-2          1  dxa_scan_1_arm_1       NA                               NA
-3          1  dxa_scan_2_arm_1       NA                               NA
-4          1  dxa_scan_3_arm_1       NA                               NA
-5          2       entry_arm_1 24.40972                                2
-6          2  dxa_scan_1_arm_1       NA                               NA
-> 
-> 
-> #*** Export only the second scan 
-> BMD <- exportRecords(rcon, events="dxa_scan_2_arm_1", forms="dxa_scan_summary")
-> head(BMD)
-patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
-1          1  dxa_scan_2_arm_1   2009-02-11           NA              NA
-2          2  dxa_scan_2_arm_1   2012-10-30        0.684            -2.1
-3          3  dxa_scan_2_arm_1   2013-02-06        1.007             0.0
-4          4  dxa_scan_2_arm_1   2007-09-20           NA              NA
-5          5  dxa_scan_2_arm_1   2006-07-07           NA              NA
-6          6  dxa_scan_2_arm_1   2006-10-25           NA              NA
-hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
-1            NA               NA         0.675             -1.9             NA
-2            NA               NA         0.524             -2.9             NA
-3            NA               NA         0.897             -1.0             NA
-4            NA               NA         0.632             -2.0             NA
-5            NA               NA         0.835             -0.1             NA
-6            NA               NA            NA               NA           0.54
-neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
-1                NA        NA           NA                         2
-2                NA     0.915         -1.2                         2
-3                NA     1.109         -0.6                         2
-4                NA     0.864         -1.7                         2
-5                NA     0.869         -1.6                         2
-6              -2.8     0.830         -2.0                         2
-> 
-> 
-> #*** Retrieve the first scan for patients 38 and 103
-> BMD <- exportRecords(rcon, records=c(38, 103), 
-                       forms="dxa_scan_summary", events="dxa_scan_1_arm_1")
-> BMD
-patient_id redcap_event_name contact_date hip_left_bmd hip_left_tscore
-1         38  dxa_scan_1_arm_1   2008-05-07           NA              NA
-2        103  dxa_scan_1_arm_1   2010-04-21        0.856            -1.2
-hip_right_bmd hip_right_tscore neck_left_bmd neck_left_tscore neck_right_bmd
-1            NA               NA         0.595             -2.3             NA
-2            NA               NA         0.789             -1.8             NA
-neck_right_tscore spine_bmd spine_tscore dxa_scan_summary_complete
-1                NA     0.770         -2.5                         2
-2                NA     1.023         -1.3                         2
+
+\section{Checkbox Variables}{
+
+
+There are four ways the data from checkbox variables may be 
+represented depending on the values of \code{factors} and 
+\code{checkboxLabels}. The most common are the first and third 
+rows of the table below.  When \code{checkboxLabels = TRUE}, either 
+the coded value or the labelled value is returned if the box is 
+checked, or an empty string if it is not.
+
+\tabular{lll}{
+\code{factors} \tab \code{checkboxLabels} \tab Output \cr
+\code{FALSE}   \tab \code{FALSE}          \tab 0 / 1 \cr
+\code{FALSE}   \tab \code{TRUE}           \tab "" / value \cr
+\code{TRUE}    \tab \code{FALSE}          \tab Unchecked / Checked \cr
+\code{TRUE}    \tab \code{TRUE}           \tab "" / label 
 }
 }
+
+\section{REDCap API Documentation (6.5.0)}{
+
+This function allows you to export a set of records for a project
+
+Note about export rights (6.0.0+): Please be aware that Data Export user rights will be 
+applied to this API request. For example, if you have "No Access" data export rights 
+in the project, then the API data export will fail and return an error. And if you 
+have "De-Identified" or "Remove all tagged Identifier fields" data export rights, 
+then some data fields *might* be removed and filtered out of the data set returned 
+from the API. To make sure that no data is unnecessarily filtered out of your API 
+request, you should have "Full Data Set" export rights in the project.
+}
+
+\section{REDCap Version}{
+
+5.8.2 (Perhaps earlier)
+}
+
+\section{Known REDCap Limitations}{
+
+None
+}
+
+\section{Deidentified Batched Calls}{
+
+Batched calls to the API are not a feature of the REDCap API, but may be imposed 
+by making multiple calls to the API.  The process of batching the export requires
+that an initial call be made to the API to retrieve only the record IDs.  The
+list of IDs is then broken into chunks, each about the size of \code{batch.size}.
+The batched calls then force the \code{records} argument in each call.
+
+When a user's permissions require a de-identified data export, a batched call 
+should be expected to fail.  This is because, upon export, REDCap will hash the 
+identifiers.  When R attempts to pass the hashed identifiers back to REDCap, 
+REDCap will try to match the hashed identifiers to the unhashed identifiers in the
+database.  No matches will be found, and the export will fail.
+
+Users who are exporting de-identified data will have to settle for using unbatched
+calls to the API (ie, \code{batch.size = -1})
+}
+
+
 \references{
 Please refer to your institution's API documentation.
 
@@ -241,6 +211,9 @@ This functionality were originally developed by Jeffrey Horner in the \code{redc
 
 See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
 \url{https://github.com/OuhscBbmc/REDCapR}
+
+Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
+create a list of arbitrary length.
 }
 \author{
 Jeffrey Horner

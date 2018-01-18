@@ -1,9 +1,4 @@
-#' @name exportMappings
-#' @aliases exportMappings.redcapApiConnection
-#' @aliases exportMappings.redcapDbConection
-#' @export exportMappings
-#' @importFrom httr POST
-#' 
+#' @name exportMappings 
 #' @title Exports the Event-Form Mappings for a Project
 #' @description Retrieve a data frame giving the events-form mapping for a project.
 #' 
@@ -11,6 +6,8 @@
 #' @param arms A vector of arm numbers that you wish to pull events for (by default,
 #'   all events are pulled) 
 #' @param ... Arguments to be passed to other methods
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details The data frame that is returned shows the arm number, unique 
 #' event name, and forms mapped in a project.
@@ -19,6 +16,19 @@
 #'  returned giving the API error message, '400: You cannot export form-event 
 #'  mappings for classic projects' but without casting an error in R. This is 
 #'  by design and allows more flexible error checks in certain functions.
+#' 
+#' @section REDCap API Documentation:
+#' This function allows you to export the instrument-event mappings for a project 
+#' (i.e., how the data collection instruments are designated for certain events in a 
+#' longitudinal project).
+#' 
+#' NOTE: this only works for longitudinal projects
+#' 
+#' @section REDCap Version:
+#' 5.8.2+ (and earlier, but we don't know how much earlier)
+#' 
+#' @section Known REDCap Limitations: 
+#' None
 #'  
 #' @author Benjamin Nutter
 #' 
@@ -28,50 +38,7 @@
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 #' 
-#' @examples
-#' \dontrun{
-#' > #*** Note: I cannot provide working examples without
-#' > #*** compromising security.  Instead, I will try to 
-#' > #*** offer up sample code with the matching results
-#' > 
-#' > 
-#' > #*** Create the connection object
-#' > rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' >
-#' > exportMappings(rcon)
-#' arm_num        unique_event_name                 form_name
-#' 1        1            event_1_arm_1              demographics
-#' 2        1            event_1_arm_1 all_the_different_options
-#' 3        1            event_1_arm_1        uploading_decimals
-#' 4        1            event_1_arm_1              calculations
-#' 5        1        follow_up_1_arm_1              calculations
-#' 6        1        follow_up_2_arm_1              calculations
-#' 7        2 experimental_inter_arm_2              demographics
-#' 8        2 experimental_inter_arm_2        uploading_decimals
-#' 9        2 experimental_follo_arm_2 all_the_different_options
-#' 10       2 experimental_follo_arm_2        uploading_decimals
-#' 11       2 experimental_follo_arm_2              calculations
-#' 12      10          baseline_arm_10              demographics
-#' 13      10          baseline_arm_10        uploading_decimals
-#' > 
-#' > exportMappings(rcon, 1:2)
-#' arm_num        unique_event_name                 form_name
-#' 1        1            event_1_arm_1              demographics
-#' 2        1            event_1_arm_1 all_the_different_options
-#' 3        1            event_1_arm_1        uploading_decimals
-#' 4        1            event_1_arm_1              calculations
-#' 5        1        follow_up_1_arm_1              calculations
-#' 6        1        follow_up_2_arm_1              calculations
-#' 7        2 experimental_inter_arm_2              demographics
-#' 8        2 experimental_inter_arm_2        uploading_decimals
-#' 9        2 experimental_follo_arm_2 all_the_different_options
-#' 10       2 experimental_follo_arm_2        uploading_decimals
-#' 11       2 experimental_follo_arm_2              calculations
-#' }
-
-
-#' 
-
+#' @export 
 
 exportMappings <- function(rcon, arms, ...) UseMethod("exportMappings")
 
@@ -86,18 +53,37 @@ exportMappings.redcapDbConnection <- function(rcon, arms, ...){
 #' @rdname exportMappings
 #' @export
 
-exportMappings.redcapApiConnection <- function(rcon, arms, ...){
-  .params <- list(token=rcon$token, content='formEventMapping', format='csv')
-  if (!missing(arms)) .params[['arms']] <- paste(arms, collapse=',')
-  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
+exportMappings.redcapApiConnection <- function(rcon, arms = NULL, ...,
+                                               error_handling = getOption("redcap_error_handling")){
+  coll <- checkmate::makeAssertCollection()
   
-  if (x$status_code == "200")
-    return(utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE))
-  #*** For classic projects, we want to avoid throwing a disruptive error. Instead, we 
-  #*** return the message that indicates this is a classic project.
-  else if (x$status_code == "400" & as.character(x) %in% 
-             c("You cannot export form/event mappings for classic projects",
-               "ERROR: You cannot export form/event mappings for classic projects")) 
-    paste0(x$status_code, ": ", as.character(x))
-  else (stop(paste0(x$status_code, ": ", as.character(x))))
+  checkmate::assert_class(x = rcon,
+                          classes = "redcapApiConnection",
+                          add = coll)
+  
+  checkmate::assert_character(x = arms,
+                              null.ok = TRUE,
+                              add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling,
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  body <- list(token = rcon$token, 
+               content = 'formEventMapping', 
+               format = 'csv')
+  
+  if (!is.null(arms)) body[['arms']] <- paste(arms, collapse=',')
+  
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
+  
+  if (x$status_code != 200) return(redcap_error(x, error_handling))
+  
+  utils::read.csv(textConnection(as.character(x)), 
+                  stringsAsFactors = FALSE, 
+                  na.strings = "")
 }

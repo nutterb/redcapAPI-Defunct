@@ -1,23 +1,43 @@
 ## Test environments
-* local Windows install (devel)
-* ubuntu 12.04 (on travis-ci), R 3.1.2
-* win-builder (devel and release)
+* Ubuntu 4.4.0-103-generic, R 3.4.3
+* ubuntu 14.04.5 (on travis-ci), R 3.4.2
+* win-builder devel (2018-01-04 r74054)
 
 ## R CMD check results
-In the previous CRAN submission, the NOTEs below were returned by CRAN. 
-We apologize for not catching them earlier.  Our oversight was not upgrading
-our version of RTools before submitting the package.
+There is a note about the change in Maintainer.  Stephen Lane is no longer 
+involved in the development of redcapAPI. Benjamin Nutter will resume the 
+role of Maintainer.  Dr. Lane notified CRAN of his consent via e-mail on 
+7 Jan 2018.
 
-1. **The title field should be in title case...**: The title field has been rewritten appropriately 
-2. **Found the following apparent S3 methods exported but not registered**: We have altered the documentation to properly register the methods.
+There were no other notes, warnings, or errors produced by CHECK.
 
-After rerunning the checks, we have only one note left regarding the new package maintainer.  Mr. Nutter will submit his written consent to CRAN@R-project.org separately.
+### Response to Second CRAN Review
 
-There was 1 NOTE:
+I apologize, and am kicking myself, for not catching the angle brackets around
+the link to redcap.org in the Description.  I have added them to this 
+submission.
 
-* A note was given about a new maintainer.  
-  Stephen Lane will be taking over as the maintainer
-  due to a change in Mr. Nutter's employment.
+The issues at <https://raw.githubusercontent.com/kalibera/cran-checks/master/rchk/results/redcapAPI.out> have been addressed in the sense that all C code has removed from the package.  As far as I know, it was not being used and I lack the skillset to maintain it.
+
+### Response to CRAN Review
+
+The redundant R has been removed from the title.
+
+Package and software names in the title and description are now quoted.
+
+The description now has a link to the REDCap Project home page.
+
+The date field has been updated.
+
+I have not made changes to the examples.  In principle, I agree that it would 
+be better to have working examples.  Unfortunately, accessing data from REDCap requires
+a unique token that is associated with the user on the institution's secure
+server.  To provide a token would violate data security policies. Thus, it is not 
+feasible to run meaningful examples outside of the `dontrun` block.  
+
+I have changed functions to no longer write to the working directory.
+
+Thank you for your thorough review.
 
 ## Downstream dependencies
 There are no downstream dependencies for this package
