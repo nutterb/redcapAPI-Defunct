@@ -11,6 +11,14 @@ role of Maintainer.  Dr. Lane notified CRAN of his consent via e-mail on
 
 There were no other notes, warnings, or errors produced by CHECK.
 
+### Response to Second CRAN Review
+
+I apologize, and am kicking myself, for not catching the angle brackets around
+the link to redcap.org in the Description.  I have added them to this 
+submission.
+
+The issues at <https://raw.githubusercontent.com/kalibera/cran-checks/master/rchk/results/redcapAPI.out> have been addressed in the sense that all C code has removed from the package.  As far as I know, it was not being used and I lack the skillset to maintain it.
+
 ### Response to CRAN Review
 
 The redundant R has been removed from the title.
