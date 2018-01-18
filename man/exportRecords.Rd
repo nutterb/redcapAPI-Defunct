@@ -84,7 +84,7 @@ for more on how this interacts with the \code{factors} argument.}
 Useful to force the interpretation of a column in a specific type and 
 avoid an unexpected recast.}
 
-\item{colClasses}{A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
+\item{colClasses}{A (named) vector of colum classes passed to \code{\link[utils]{read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
