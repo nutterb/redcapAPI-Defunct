@@ -46,6 +46,7 @@ but \code{checkbox} variables are common enough in REDCap
 (and the Checked/Unchecked scheme so unpalatable) that a quick way to 
 replace the labels was highly desirable
 }
+
 \author{
 Benjamin Nutter
 }

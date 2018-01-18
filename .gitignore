@@ -11,3 +11,6 @@ src/*.o
 
 zz_lendingclub/*
 tests/*
+# OSX-generated files
+.DS_Store
+

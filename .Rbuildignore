@@ -7,3 +7,5 @@
 ^zz_lendingclub/*
 ^data\testDataBuilder.R$
 ^tests/*
+^\.DS_store$
+

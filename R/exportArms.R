@@ -77,7 +77,7 @@ exportArms.redcapApiConnection <-
            error_handling = getOption("redcap_error_handling"))
 {
   coll <- checkmate::makeAssertCollection()
-  
+
   checkmate::assert_class(x = rcon,
                           classes = "redcapApiConnection",
                           add = coll)

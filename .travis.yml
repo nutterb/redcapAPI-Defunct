@@ -5,18 +5,20 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-language: c
+language: r
+warnings_are_errors: true
+sudo: setuid root
 
 before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-install:
-  - ./travis-tool.sh install_deps
-script: ./travis-tool.sh run_tests
-
-on_failure:
-  - ./travis-tool.sh dump_logs
+  # Update old packages on Ubuntu: https://github.com/travis-ci/travis-ci/issues/6850
+  Rscript -e 'update.packages(ask = FALSE)'
+  
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+   - WARNINGS_ARE_ERRORS=1
+   - R_BUILD_ARGS=--no-manual
+   - R_CHECK_ARGS=--no-manual 
 
 notifications:
   email:

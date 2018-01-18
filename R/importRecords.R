@@ -380,8 +380,6 @@ import_records_unbatched <- function(rcon, data, overwriteBehavior)
     redcap_error(x, error_handling = "error")
 }
 
-
-
 data_frame_to_string <- function(data)
 {
   paste0(

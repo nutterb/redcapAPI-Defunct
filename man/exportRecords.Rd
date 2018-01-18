@@ -75,6 +75,7 @@ flag will revert to its default value.}
 variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
 If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
+
 This option is only available after REDCap version 6.0.  See Checkbox Variables
 for more on how this interacts with the \code{factors} argument.}
 
@@ -82,6 +83,8 @@ for more on how this interacts with the \code{factors} argument.}
 \code{\link[utils]{read.csv}} calls. 
 Useful to force the interpretation of a column in a specific type and 
 avoid an unexpected recast.}
+
+\item{colClasses}{A (named) vector of colum classes passed to \code{\link{[utils::read.csv()]utils::read.csv}} calls. Useful to force the interpretation of a column in a specific type and avoid an unexpected recast.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
@@ -135,6 +138,7 @@ there are four records per patient, each batch will consist of 40 records.
 Thus, if you are concerned about tying up the server with a large, 
 longitudinal project, it would be prudent to use a smaller batch size.
 }
+
 \section{Checkbox Variables}{
 
 
@@ -194,6 +198,7 @@ database.  No matches will be found, and the export will fail.
 Users who are exporting de-identified data will have to settle for using unbatched
 calls to the API (ie, \code{batch.size = -1})
 }
+
 
 \references{
 Please refer to your institution's API documentation.

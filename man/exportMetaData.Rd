@@ -40,10 +40,13 @@ data are retrieved
 A record of this export is placed in the REDCap logging page, 
 but the file that is exported is not stored in the database.
 }
+
 \section{REDCap API Documentation}{
+
 
 This function allows you to export the metadata for a project
 }
+
 
 \section{REDCap Version}{
 
@@ -54,6 +57,7 @@ This function allows you to export the metadata for a project
  
 The API doesn't respond to the \code{fields} and \code{forms} arguments.  It
 always returns the full data dictionary.
+
 }
 
 \references{

@@ -136,7 +136,7 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
   x <- utils::read.csv(textConnection(as.character(x)), 
                        stringsAsFactors = FALSE, 
                        na.strings = "")
-  
+
   #* synchronize underscore codings between records and meta data
   #* Only affects calls in REDCap versions earlier than 5.5.21
   if (utils::compareVersion(version, "6.0.0") == -1) 
