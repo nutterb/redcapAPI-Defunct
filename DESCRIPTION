@@ -14,7 +14,7 @@ Authors@R: c(
 Maintainer: Benjamin Nutter <benjamin.nutter@gmail.com>
 Description: Access data stored in 'REDCap' databases using the Application
     Programming Interface (API).  'REDCap' (Research Electronic Data CAPture;
-    https://projectredcap.org) is
+    <https://projectredcap.org>) is
     a web application for building and managing online surveys and databases
     developed at Vanderbilt University.  The API allows users to access data
     and project meta data (such as the data dictionary) from the web
