@@ -1,0 +1,192 @@
+* using log directory ‘/Users/tobadia/Documents/GitHub/redcapAPI/..Rcheck’
+* using R version 3.4.3 (2017-11-30)
+* using platform: x86_64-apple-darwin17.2.0 (64-bit)
+* using session charset: UTF-8
+* using option ‘--as-cran’
+* checking for file ‘./DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘redcapAPI’ version ‘1.3.7-2’
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Stephen Lane <lane.s@unimelb.edu.au>’
+
+New maintainer:
+  Stephen Lane <lane.s@unimelb.edu.au>
+Old maintainer(s):
+  Stephen Lane <stephen.lane@barwonhealth.org.au>
+
+The build time stamp is missing.
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... WARNING
+Subdirectory ‘redcapAPI/src’ contains apparent object files/libraries
+  Rinit.o redcapAPI.so
+Object files/libraries should not be included in a source package.
+* checking if there is a namespace ... OK
+* checking for executable files ... WARNING
+Found the following executable files:
+  .git/objects/02/5e5fe8f9b88edfeb4ddc528a52c9888cbd98e0
+  .git/objects/04/783cfe1a529d2f2cb2bfbce55432c67d87f14c
+  .git/objects/05/f10fb5c419e473abb1701d1f48cf6ce7d7e83d
+  .git/objects/11/9f9a2a3ad5adaccd86e12809a9deb479dd4f1b
+  .git/objects/15/9a88bf8f29f9e2c6e98768d6df14b3a8b3d4d1
+  .git/objects/19/44a1a89a3891a1a1337ec5207a97c2050679c6
+  .git/objects/19/e42da5c157836aa089898c9ed4ff87917cf8e7
+  .git/objects/1c/aa1a582aa05916737deb6bc9bf7f45ff736662
+  .git/objects/1d/1a5fc2dd307d7cf6105b6a13e466d563e1d414
+  .git/objects/20/bc5c3d33df500a891124cd563fbb2cda29084e
+  .git/objects/25/3a18a668d48c1088e8f561db6718e6b3344457
+  .git/objects/28/11ddca87516474fd6b90fb8ff5c961979c2efc
+  .git/objects/2d/e8cbf9f4da25f9b8bfebcf1eab11c599ac1bf9
+  .git/objects/2e/4e4fd6c30133ebbbdbbe79b094ff40d733c89e
+  .git/objects/2e/944e2467501db8a1211552200656ebb44917f2
+  .git/objects/2f/eef80b6b43f82b113d999874558ab8727aeca4
+  .git/objects/31/b41ee863f3cbae5178c8672f71950b6c5e5be4
+  .git/objects/33/b983f2ae141116e9a6b1222e8d08380a1803db
+  .git/objects/33/e4c4b61b5424829080f0a480d57f9c95a42958
+  .git/objects/37/8d1f7dbbab2e63f2bb428add2eb5d9b51a5ee3
+  .git/objects/37/b255a98f7c43dc090dfd0497908487e3d5a8fb
+  .git/objects/39/0a071ef505d64e1df88460472f1358a8ac1753
+  .git/objects/3a/2422fccb440cc98c0021ff6cc335c03b8c66ef
+  .git/objects/3b/65e3cbb872050f5dbcfacd3f2057d52d28ba0e
+  .git/objects/3c/286cd15e9577acc7bf6b1b6dd5ffe9c7b73cc2
+  .git/objects/3c/b47b9b56e0297fe1d0b06f0bb12439575fdb59
+  .git/objects/41/8477aab516b6ba86919a3d31eb60943bbf3379
+  .git/objects/46/ed4f72687641b60f0270aca5fd2b40253af1b7
+  .git/objects/48/8d72aea70029c9b909c544b638ba086f16355e
+  .git/objects/48/9f792b413de6ca3a757d7276eb636ae74806d4
+  .git/objects/4b/ab64fe194f3c0b7d5ec63d42bbcee27b98b5ee
+  .git/objects/4f/42d5796dea4aceb20bd7511478feedb575c50c
+  .git/objects/4f/4bd895c0c3175429633cc8d1f1fe45ce8a7724
+  .git/objects/52/316ed808f9ee04e53afdbad02fbf829d4d5c16
+  .git/objects/57/3b3201827a6e76e9d846004828b3761c55699f
+  .git/objects/59/fd62d2952a3d1ef13574553fa1fbaf5ce913de
+  .git/objects/5b/bd53f30a85f3caaf9907445e6ea3868d6f3bb5
+  .git/objects/5f/32ccd437c09c858042fd7bf2ab6b71952efe57
+  .git/objects/61/2b67541e59d46bb2934e7c7fc2643674601299
+  .git/objects/62/bf4cd27e75573469f64f4753462165a42cc87d
+  .git/objects/68/652dd999b249d3b666eb7ac9d262e6ec566cbe
+  .git/objects/6e/ae904f23f85f0727bbb4017f9cfe522d50782e
+  .git/objects/70/9a764871c9cc891352b795b523999618cb4e1a
+  .git/objects/70/ec99d53d770b9e9a3fc054d6b56797f7f61901
+  .git/objects/71/bb111cc76d4e3bbd1ec0e80f8834dd0c63fd7b
+  .git/objects/75/d5fc238af173c0b726cc333196dd4a96645245
+  .git/objects/76/64a9f09cc8957b60a5b21471e05b98026a5812
+  .git/objects/76/c0b0607d1cf3d3676fb44257a71d4874391c71
+  .git/objects/7f/31d085568d25a60516abe7c977768d7542b0c4
+  .git/objects/80/b0ceb31c6b582c4db187678d18c060e1ec88a4
+  .git/objects/85/1d24e98877c358af6976b2e98aeeb173384b8a
+  .git/objects/85/906f996f3178050c1407f7f824f0a1fb7df26c
+  .git/objects/88/5a3e18256d18a871c5f137e4bd7fbfea975dc1
+  .git/objects/8a/0a451ba7f901b8d5d1bb6e868f1a3154d25fb1
+  .git/objects/8a/2989bceb7ea6f41cdebdc5055b54b70da36b8c
+  .git/objects/8c/2955f436642ed009d34a23d6577a98e34acff8
+  .git/objects/8d/572bd362de12538a8b7ecd6d432f0791a994bf
+  .git/objects/8e/cd325946548906a7d8e47b4fb03677ec9b142f
+  .git/objects/92/e220731323d1b095d58ff4fcc187b086d6b306
+  .git/objects/92/f9130382df38db029db0e301276fbd98fb43da
+  .git/objects/9c/01eb9fa720bbd2e8f2a6c7121858031f3f7ed2
+  .git/objects/a3/a5ee1a4bc78654aac5c9425b22fc409e4fa6d6
+  .git/objects/a9/f27ddac407b6193dc03595fb229e45e53cec24
+  .git/objects/ac/d431448ecdb7bf056679e30da76bb3e84e0c99
+  .git/objects/b6/2341102c32468410c7f6790d69cf88451662ce
+  .git/objects/b7/f7b0f3c103544852b15ceab866018cb1f20db8
+  .git/objects/b9/1a8d91aec5f4ab8f68afeb4ec6254fa4c51262
+  .git/objects/bc/03a7219489bc4e92aa254f568ad0d89f6ba33a
+  .git/objects/bd/985d571227b2d81f8af6386411b0ec2865688d
+  .git/objects/be/fe32cb0d15b28dc491b01c430aa92279d9d71a
+  .git/objects/c1/21efef1d3605f470095fa9fd3a11a6bbec3628
+  .git/objects/c1/4b9394b0f914f7bbfddda721919f3840b83533
+  .git/objects/cf/29451035dbb4aec80052d8fdef4e28c2d3381d
+  .git/objects/cf/e8585e5406e4417677ea29099865f1a713f291
+  .git/objects/d0/ab2cc240adeb1d4bf42fd08cdb2281a889c80a
+  .git/objects/d5/7999160d1f093df055c5ab9d825a4995e123fe
+  .git/objects/d6/270e850f3855bec9c34a8857984571b2f44823
+  .git/objects/d8/6daac5b1b7a718140f7c652cee06f876e0f288
+  .git/objects/dd/a49d78f06e0ddab037ec75875be898bc609bfc
+  .git/objects/de/d53a41ed239ec1e5b21772fe2707bcc7868349
+  .git/objects/df/71155c123e0d5749ad3611c1ab41ec380a8acc
+  .git/objects/e0/321d848cfde127b8766bee5910c03d711732cd
+  .git/objects/e4/d384def9c14dc62a0b4363ee20e4dffce6a5d2
+  .git/objects/e5/589e8fb21ec8479d7ac34e5d1014efca6bb778
+  .git/objects/e6/161330cdab30e6c732fc7a39378c4b53d92d53
+  .git/objects/e8/2d8b863bbc7717b37548bfb522ff4058f4e287
+  .git/objects/ec/805946b12f1b459e34fb1acb8440fad1f11a4f
+  .git/objects/ec/bbc1e0f9d60f07f1773353034d21787d0d5b47
+  .git/objects/f0/62f03eed09d38e4ca8f9cc42ae998fcb48eb43
+  .git/objects/f0/6882a06cb502c8e3e385a13e596121a475f17f
+  .git/objects/f1/0f5ea669d3de9e84a2ce5bf5752546b99cd02d
+  .git/objects/f1/68179a9b4eba46da0e04b123dda85b26a8ff65
+  .git/objects/f7/f2c112fc3b4dfc4338b165eda3f78d42983fb4
+  .git/objects/f8/c6d626ce5cb1936d54edfcff5fa1879c469a12
+  .git/objects/fa/0d849be7eddde0bfa184d19789563cf137f0f6
+  .git/objects/fc/84fb8cbaae18e063321b5228f0a9f963a97bd7
+  .git/objects/fe/26e58b1a1561079529b123138accaabc31fa91
+Source packages should not contain undeclared executable files.
+See section ‘Package structure’ in the ‘Writing R Extensions’ manual.
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  .gitignore
+  .travis.yml
+  ..Rcheck
+  .git
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
+
+CRAN-pack does not know about
+  .travis.yml
+  ..Rcheck
+  .git
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘redcapAPI’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... NOTE
+Checking should be performed on sources prepared by ‘R CMD build’.
+* checking top-level files ... NOTE
+Files ‘README.md’ or ‘NEWS.md’ cannot be checked without ‘pandoc’ being installed.
+Non-standard files/directories found at top level:
+  ‘cran-comments.md’ ‘redcapAPI.Rproj’
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... WARNING
+Found the following directory with the name of a check directory:
+  ./..Rcheck
+Most likely, these were included erroneously.
+Found the following directory with the name of a version control directory:
+  ./.git
+These should not be in a package tarball.
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... OK
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... WARNING
+Missing link or links in documentation object 'exportRecords.Rd':
+  ‘[utils::read.csv()]utils::read.csv’
+
+See section 'Cross-references' in the 'Writing R Extensions' manual.
+
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking line endings in C/C++/Fortran sources/headers ... OK
+* checking compiled code ... OK
+* checking examples ... OK
+* checking PDF version of manual ... OK
+* DONE
+Status: 4 WARNINGs, 4 NOTEs
