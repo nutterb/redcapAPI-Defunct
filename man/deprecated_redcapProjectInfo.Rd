@@ -5,9 +5,7 @@
 \alias{redcapProjectInfo}
 \alias{redcapProjectInfo.redcapDbConnection}
 \alias{redcapProjectInfo.redcapApiConnection}
-
 \title{Deprecated Functions}
-
 \usage{
 redcapProjectInfo(rcon, date = TRUE, label = TRUE, meta_data = TRUE,
   users = TRUE, instruments = TRUE, events = TRUE, arms = TRUE,
@@ -58,4 +56,3 @@ The \code{redcapProjectInfo} function has been deprecated to avoid
   confusion with the API method now executed by \code{exportProjectInformation}.
   The replacement function is \code{\link{exportBundle}}.
 }
-

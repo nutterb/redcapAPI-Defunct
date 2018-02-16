@@ -62,7 +62,6 @@ NOTE: this only works for longitudinal projects.
 \section{Known REDCap Limitations}{
 
 None
-
 }
 
 \references{

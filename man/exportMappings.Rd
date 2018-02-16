@@ -36,7 +36,6 @@ When this function is called for a classic project, a character string is
  mappings for classic projects' but without casting an error in R. This is 
  by design and allows more flexible error checks in certain functions.
 }
-
 \section{REDCap API Documentation}{
 
 This function allows you to export the instrument-event mappings for a project 
@@ -54,7 +53,6 @@ NOTE: this only works for longitudinal projects
 \section{Known REDCap Limitations}{
  
 None
-
 }
 
 \references{
