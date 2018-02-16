@@ -54,7 +54,6 @@ Note that the name of the file can not be changed.  Whatever name exists in
 REDCap is the name that will be used, although the record ID and event name 
 may be appended as a prefix
 }
-
 \section{REDCap API Documentation (6.5.0)}{
 
 This method allows you to download a document that has been attached to an 

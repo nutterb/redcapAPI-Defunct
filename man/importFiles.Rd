@@ -49,7 +49,6 @@ A single file may be attached to a single record.  The
 \details{
 The function may only import a single file
 }
-
 \author{
 Benjamin Nutter
 }

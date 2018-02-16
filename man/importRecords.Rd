@@ -74,7 +74,6 @@ data before attempting the import.  Namely
 See the documentation for \code{\link{validateImport}} for detailed
 explanations of the validation.
 }
-
 \references{
 \url{http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389}\cr
 \url{https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R}\cr

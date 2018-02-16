@@ -36,7 +36,6 @@ see \code{\link{redcap_error}}}
 This function allows you to remove a document that has been 
 attached to an individual record
 }
-
 \references{
 Please refer to your institution's API documentation.
 

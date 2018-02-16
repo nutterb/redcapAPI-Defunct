@@ -5,9 +5,7 @@
 \alias{exportInstruments.redcapApiConnection}
 \alias{exportInstruments.redcapDbConnection}
 \alias{exportInstruments.redcapApiConnection}
-
 \title{Exports the REDCap Instruments}
-
 \usage{
 exportInstruments(rcon, ...)
 
@@ -27,7 +25,6 @@ see \code{\link{redcap_error}}}
 \description{
 Returns a data frame of instruments, names, etc.
 }
-
 \section{REDCap Version}{
 
 6.5.0 +
