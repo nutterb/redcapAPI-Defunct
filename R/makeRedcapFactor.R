@@ -5,7 +5,7 @@ makeRedcapFactor <- function(x, coding, factors)
   coding <- unlist(strsplit(coding,"[\n|]"))
   if (length(coding) > 0) 
   {
-    coding <- strsplit(coding,',',perl=TRUE)
+    coding <- regmatches(coding, regexpr(",", coding), invert = TRUE)
     coding <- do.call("rbind", coding)
     coding <- trimws(coding)
 
@@ -57,7 +57,7 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
   coding <- unlist(strsplit(coding,"[\n|]"))
   if (length(coding) > 0) 
   {
-    coding <- strsplit(coding,',',perl=TRUE)
+    coding <- regmatches(coding, regexpr(",", coding), invert = TRUE)
     coding <- do.call("rbind", coding)
     coding <- trimws(coding)
     coding <- coding[coding[, 1] == suffix, ]

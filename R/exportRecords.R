@@ -364,7 +364,8 @@ unbatched <- function(rcon, body, colClasses, error_handling)
   if (x$status_code != 200) redcap_error(x, error_handling = error_handling)
   
   x <- as.character(x)
-  x <- iconv(x, "utf8", "ASCII", sub = "")
+  # probably not necessary for data.  Useful for meta data though. (See Issue #99)
+  # x <- iconv(x, "utf8", "ASCII", sub = "")
   utils::read.csv(text = x, 
                   stringsAsFactors = FALSE, 
                   na.strings = "",
@@ -394,7 +395,8 @@ batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
   if (IDs$status_code != 200) redcap_error(IDs, error_handling)
   
   IDs <- as.character(IDs)
-  IDs <- iconv(IDs, "utf8", "ASCII", sub = "")
+  # probably not necessary for data.  Useful for meta data though. (See Issue #99)
+  # IDs <- iconv(IDs, "utf8", "ASCII", sub = "")
   IDs <- utils::read.csv(text = IDs,
                          stringsAsFactors = FALSE,
                          na.strings = "")
@@ -431,7 +433,8 @@ batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
     if (x$status_code != 200) redcap_error(x, error_handling = "error")
     
     x <- as.character(x)
-    x <- iconv(x, "utf8", "ASCII", sub = "")
+    # probably not necessary for data.  Useful for meta data though. (See Issue #99)
+    # x <- iconv(x, "utf8", "ASCII", sub = "")
     batch_list[[i]] <- utils::read.csv(text = x,
                                        stringsAsFactors = FALSE,
                                        na.strings = "",
