@@ -1,8 +1,8 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.0-1
-Date: 2018-01-17
+Version: 2.1
+Date: 2018-02-16
 Authors@R: c(
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
            role = c("aut", "ctb", "cre")),
