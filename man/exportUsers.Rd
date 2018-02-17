@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportUsers.R
 \name{exportUsers}
 \alias{exportUsers}
-\alias{exportUsers.redcapDbConnection}
 \alias{exportUsers.redcapApiConnection}
+\alias{exportUsers.redcapDbConnection}
 \title{Export the Users for a Project}
 \usage{
 exportUsers(rcon, ...)
@@ -81,13 +81,13 @@ This function allows you to export the users for a project
 
 None
 }
-
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+

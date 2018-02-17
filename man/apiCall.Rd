@@ -42,12 +42,13 @@ various other system changes, I began seeing the error
  \code{encoding = 'identity'}.  Making this a default could make this
  function unnecessary.
 }
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+

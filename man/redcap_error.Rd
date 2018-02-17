@@ -52,7 +52,7 @@ Only the errors listed below are handled.  All others throw a hard error.
 "ERROR: You cannot export arms for classic projects"\cr
 "ERROR: You cannot export events for classic projects"
 }
-
 \author{
 Benjamin Nutter
 }
+

@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportBundle.R
 \name{exportBundle}
 \alias{exportBundle}
-\alias{exportBundle.redcapDbConnection}
 \alias{exportBundle.redcapApiConnection}
+\alias{exportBundle.redcapDbConnection}
 \title{Perform a bundle of API calls.}
 \usage{
 exportBundle(rcon, date = TRUE, label = TRUE, meta_data = TRUE,
@@ -72,3 +72,4 @@ The project information is stored in the option
 \author{
 Benjamin Nutter
 }
+

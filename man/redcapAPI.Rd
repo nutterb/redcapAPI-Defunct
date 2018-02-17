@@ -49,3 +49,4 @@ development of the \code{REDCapR} package
 of messages from the API--and to the idea of batching API calls to reduce 
 the likelihood of servers timing out.
 }
+

@@ -4,7 +4,6 @@
 \alias{exportProjectInformation}
 \alias{exportProjectInformation.redcapApiConnection}
 \alias{exportProjectInformation.redcapDbConnection}
-\alias{exportProjectInformation.redcapApiConnection}
 \title{Exports the Project Information}
 \usage{
 exportProjectInformation(rcon, ...)
@@ -46,13 +45,13 @@ surveys are enabled, the time the project was created and moved to production, e
 
 None
 }
-
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+

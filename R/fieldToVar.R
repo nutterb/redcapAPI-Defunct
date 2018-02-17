@@ -30,13 +30,21 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
     
     
     
-    field_type <- meta_data$text_validation_type_or_show_slider_number[meta_data$field_name == field_base]
+    field_text_type <- meta_data$text_validation_type_or_show_slider_number[meta_data$field_name == field_base]
+    field_type <- meta_data$field_type[meta_data$field_name == field_base]
+    
     #* If the variable isn't in the data dictionary (usually it's a field added by REDCap,
     #* such as redcap_event_name, instrument_complete, etc), give it a generic name to
     #* pass to switch.
     if (!length(field_type)) field_type <- "unrecognized field type"
     
-    field_type[is.na(field_type)] <- meta_data$field_type[meta_data$field_name == field_base]
+    # autocomplete was added to the text_validation... column for
+    # dropdown menus with the autocomplete feature.
+    # field_type[is.na(field_type)] <- 
+    #   meta_data$field_type[meta_data$field_name == field_base]
+    field_type[field_type == "text" & 
+                 !is.na(field_text_type)] <- field_text_type
+
     field_type <- gsub(pattern = "_(dmy|mdy|ymd)$", 
                        replacement = "_",
                        x = field_type)

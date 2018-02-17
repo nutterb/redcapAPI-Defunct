@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportEvents.R
 \name{exportEvents}
 \alias{exportEvents}
-\alias{exportEvents.redcapDbConnection}
 \alias{exportEvents.redcapApiConnection}
+\alias{exportEvents.redcapDbConnection}
 \title{Export the Events for a Project}
 \usage{
 exportEvents(rcon, ...)
@@ -63,13 +63,13 @@ NOTE: this only works for longitudinal projects.
 
 None
 }
-
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+

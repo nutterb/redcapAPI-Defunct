@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportMetaData.R
 \name{exportMetaData}
 \alias{exportMetaData}
-\alias{exportMetaData.redcapDbConnection}
 \alias{exportMetaData.redcapApiConnection}
+\alias{exportMetaData.redcapDbConnection}
 \title{Export Meta Data from a REDCap Database}
 \usage{
 exportMetaData(rcon, ...)
@@ -55,7 +55,9 @@ This function allows you to export the metadata for a project
 The API doesn't respond to the \code{fields} and \code{forms} arguments.  It
 always returns the full data dictionary.
 }
-
+\author{
+Jeffrey Horner
+}
 \references{
 This functionality was originally developed by Jeffrey Horner in the \code{redcap} package.
 \url{https://github.com/vubiostat/redcap}
@@ -65,6 +67,4 @@ Please refer to your institution's API documentation.
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Jeffrey Horner
-}
+

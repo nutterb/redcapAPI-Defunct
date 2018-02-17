@@ -2,8 +2,8 @@
 % Please edit documentation in R/deleteFiles.R
 \name{deleteFiles}
 \alias{deleteFiles}
-\alias{deleteFiles.redcapDbConnection}
 \alias{deleteFiles.redcapApiConnection}
+\alias{deleteFiles.redcapDbConnection}
 \title{Delete a File attached to a Record}
 \usage{
 deleteFiles(rcon, record, field, event, ...)
@@ -36,12 +36,13 @@ see \code{\link{redcap_error}}}
 This function allows you to remove a document that has been 
 attached to an individual record
 }
+\author{
+Benjamin Nutter
+}
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-\author{
-Benjamin Nutter
-}
+
