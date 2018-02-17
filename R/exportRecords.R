@@ -305,6 +305,16 @@ exportRecords.redcapApiConnection <-
                                 meta_data = meta_data, 
                                 version = version)
   
+  # Identify the forms from which the chosen fields are found
+  included_form <- 
+    unique(
+      meta_data$form_name[meta_data$field_name %in% field_names]
+    )
+  
+  # Add the form_name_complete column to the export
+  field_names <- c(field_names, 
+                   sprintf("%s_complete", included_form))
+  
   body <- list(token = rcon$token, 
                content = 'record',
                format = 'csv', 
