@@ -155,6 +155,11 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
     field_names <- names(x)
     field_names <- unique(sub("___.+$", "", field_names))
     
+    # For reports, there is not check on the field names, since 
+    # the user may only select fields using the interface.
+    # However, [form]_complete fields do not appear in the 
+    # meta data and need to be removed to avoid an error.
+    # See #108
     field_names <- field_names[field_names %in% meta_data$field_name]
 
     suffixed <- checkbox_suffixes(fields = field_names,

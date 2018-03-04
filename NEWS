@@ -1,4 +1,10 @@
-## Changes in Version 2.0 (2016-04-30)
+## Change up to Version 2.2 (2018-03-03)
+* Bug fix: Add `[form]_complete` fields
+* Bug fix: Include `[form]_complete` fields in Reports
+* New feature: `[form]_complete` fields may be explicitly requested.
+* New feature: Automatic selection of `[form]_complete` fields may be turned off.
+
+## Changes in Version 2.0 (2017-01-18)
 * redcapDbConnection methods are being deprecated.  To our knowledge, no one
   is using these methods, and we do not believe they would work as previously 
   coded anyway. The methods definitions continue to be reserved although 

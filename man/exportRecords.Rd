@@ -22,7 +22,8 @@ exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
   labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
   checkboxLabels = FALSE, colClasses = NA, ..., batch.size = -1,
   bundle = getOption("redcap_bundle"),
-  error_handling = getOption("redcap_error_handling"))
+  error_handling = getOption("redcap_error_handling"),
+  form_complete_auto = TRUE)
 
 exportRecords_offline(datafile, meta_data, factors = TRUE, fields = NULL,
   forms = NULL, labels = TRUE, dates = TRUE, checkboxLabels = FALSE,
@@ -94,6 +95,12 @@ to prevent tying up smaller servers.  See details for more explanation.}
 
 \item{error_handling}{An option for how to handle errors returned by the API.
 see \code{\link{redcap_error}}}
+
+\item{form_complete_auto}{\code{logical(1)}. When \code{TRUE} 
+(default), the \code{[form]_complete} fields for any form 
+from which at least one variable is requested will automatically
+be retrieved.  When \code{FALSE}, these fields must be 
+explicitly requested.}
 
 \item{datafile}{For the offline version, a character string giving the location
 of the dataset downloaded from REDCap.  Note that this should be the raw
