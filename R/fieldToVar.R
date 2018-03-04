@@ -36,8 +36,17 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
     #* If the variable isn't in the data dictionary (usually it's a field added by REDCap,
     #* such as redcap_event_name, instrument_complete, etc), give it a generic name to
     #* pass to switch.
-    if (!length(field_type)) field_type <- "unrecognized field type"
-    
+    if (!length(field_type)) 
+    {
+      if (grepl("_complete$", field_base))
+      {
+        field_type <- "form_complete"
+      }
+      else  
+      {
+        field_type <- "unrecognized field type"
+      }
+    }
     # autocomplete was added to the text_validation... column for
     # dropdown menus with the autocomplete feature.
     # field_type[is.na(field_type)] <- 
@@ -127,6 +136,12 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                                    factors = factors,
                                    checkboxLabels = checkboxLabels)
               },
+             "form_complete" = 
+             {
+               makeRedcapFactor(x = records[[i]],
+                                coding = "0, Incomplete | 1, Unverified | 2, Complete",
+                                factors)
+             },
              records[[i]]
       ) # End switch
   } # End for loop

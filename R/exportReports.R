@@ -155,10 +155,12 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
     field_names <- names(x)
     field_names <- unique(sub("___.+$", "", field_names))
     
+    field_names <- field_names[field_names %in% meta_data$field_name]
+
     suffixed <- checkbox_suffixes(fields = field_names,
                                   meta_data = meta_data, 
                                   version = version)
-    
+
     x[suffixed$name_suffix] <-
       mapply(nm = suffixed$name_suffix,
              lab = suffixed$label_suffix,

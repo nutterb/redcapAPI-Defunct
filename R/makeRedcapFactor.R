@@ -63,11 +63,16 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
     coding <- coding[coding[, 1] == suffix, ]
     
     
-    use_labels <- 
-      if (factors & checkboxLabels) 
-        c("", coding[2])
-      else if (!factors & checkboxLabels)
+    use_labels <-
+      if (!factors && !checkboxLabels)
+        c("0", "1")
+      else if (!factors && checkboxLabels)
         c("", coding[1])
+      else if (factors && !checkboxLabels)
+        c("Unchecked", "Checked")
+      else if (factors && checkboxLabels) 
+        c("", coding[2])
+      
     
     if (!factors){
       if (checkboxLabels)
@@ -88,9 +93,10 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
       
       class(x) <- c("redcapFactor", "factor")
     }
-
+    
     attr(x,'redcapLabels') <- use_labels
     attr(x,'redcapLevels') <- 0:1
+    
   }
   else 
   {
