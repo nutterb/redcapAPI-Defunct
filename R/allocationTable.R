@@ -221,7 +221,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   }
   
   #* 8. block.size must be a multiple of n_levels
-  if (any((n_levels %% length(block.size)) != 0)){
+  if (any((block.size %% n_levels) != 0)){
     coll$push(paste0("'block.size' must be a multiple of ", n_levels))
   }
   
