@@ -1,7 +1,4 @@
 #' @name allocationTable
-#' @aliases allocationTable.redcapApiConnection
-#' @aliases allocationTable.redcapDbConneciton
-#' @aliases allocationTable_offline
 #' 
 #' @title Allocation Tables for the Randomization Module
 #' @description Generate allocation table for the REDCap 
@@ -185,6 +182,8 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   checkmate::assert_subset(x = group,
                            choices = meta_data$field_name,
                            add = coll)
+  
+  checkmate::reportAssertions(coll)
 
   
   #* 5. Calculate n_levels
