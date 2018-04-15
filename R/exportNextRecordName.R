@@ -13,7 +13,7 @@
 #' It generates the next record name by determining the current maximum numerical 
 #' record ID and then incrementing it by one.
 #' 
-#' #' @return 
+#' @return 
 #' Returns the maximum integer record ID + 1.
 #' 
 #' @section REDCap API Documentation:
@@ -62,12 +62,12 @@ exportNextRecordName.redcapApiConnection <- function(rcon, ...,
   
   checkmate::reportAssertions(coll)
   
-  body <- list(token=rcon$token, 
-               content='generateNextRecordName')
+  body <- list(token = rcon$token, 
+               content = 'generateNextRecordName')
   
-  x <- httr::POST(url=rcon$url, 
-                  body=body, 
-                  config=rcon$config)
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
   
   if (x$status_code != 200) 
   {
