@@ -103,7 +103,9 @@ validateImport <- function(data, meta_data, logfile = "")
     field_type <- meta_data[meta_index, "field_type"]
     
     if (length(field_type)){
-      if (field_type == "text"){
+      if (field_type == "text" &&
+          !is.na(meta_data[meta_index, 
+                    "text_validation_type_or_show_slider_number"])){
         field_type <- meta_data[meta_index, 
                                 "text_validation_type_or_show_slider_number"]
       }
