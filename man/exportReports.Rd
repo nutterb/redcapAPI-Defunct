@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportReports.R
 \name{exportReports}
 \alias{exportReports}
-\alias{exportReports.redcapApiConnection}
 \alias{exportReports.redcapDbConnection}
+\alias{exportReports.redcapApiConnection}
 \title{Export Reports from a REDCap Database}
 \usage{
 exportReports(rcon, report_id, factors = TRUE, labels = TRUE,
@@ -76,7 +76,7 @@ request, you should have "Full Data Set" export rights in the project.
 
 None
 }
+
 \author{
 Benjamin Nutter
 }
-

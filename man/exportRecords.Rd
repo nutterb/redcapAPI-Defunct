@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportRecords.R, R/exportRecords_offline.R
 \name{exportRecords}
 \alias{exportRecords}
-\alias{exportRecords.redcapApiConnection}
 \alias{exportRecords.redcapDbConnection}
+\alias{exportRecords.redcapApiConnection}
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
@@ -201,9 +201,7 @@ database.  No matches will be found, and the export will fail.
 Users who are exporting de-identified data will have to settle for using unbatched
 calls to the API (ie, \code{batch.size = -1})
 }
-\author{
-Jeffrey Horner
-}
+
 \references{
 Please refer to your institution's API documentation.
 
@@ -219,4 +217,6 @@ See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasle
 Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
 create a list of arbitrary length.
 }
-
+\author{
+Jeffrey Horner
+}

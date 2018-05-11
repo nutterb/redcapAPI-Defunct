@@ -2,8 +2,8 @@
 % Please edit documentation in R/exportNextRecordName.R
 \name{exportNextRecordName}
 \alias{exportNextRecordName}
-\alias{exportNextRecordName.redcapApiConnection}
 \alias{exportNextRecordName.redcapDbConnection}
+\alias{exportNextRecordName.redcapApiConnection}
 \title{Generate Next Record Name from a REDCap Database}
 \usage{
 exportNextRecordName(rcon, ...)
@@ -43,13 +43,13 @@ what the next record name would be.
 
 8.1.8+
 }
-\author{
-Xuefei Jia
-}
+
 \references{
 Please refer to your institution's API documentation.
 
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Xuefei Jia
+}

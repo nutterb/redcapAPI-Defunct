@@ -66,9 +66,6 @@ exportRecords(rcon)
 }
 
 }
-\author{
-Jeffrey Horner
-}
 \references{
 This functionality were originally developed by Jeffrey Horner in the 
 \code{redcap} package.
@@ -86,4 +83,6 @@ A tutorial on finding your API url is found at
 A tutorial for finding and using alternate SSL certificates is found at 
 \url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}
 }
-
+\author{
+Jeffrey Horner
+}

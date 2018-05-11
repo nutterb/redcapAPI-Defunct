@@ -49,4 +49,3 @@ replace the labels was highly desirable
 \author{
 Benjamin Nutter
 }
-

@@ -19,4 +19,3 @@ Checkbox variables return one vector of data for each option defined
   \code{exportRecords} needs these suffixes in order to retrieve all of the 
   variables and to apply the correct labels.
 }
-
