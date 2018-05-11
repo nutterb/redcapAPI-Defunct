@@ -21,6 +21,9 @@ exportNextRecordName(rcon, ...)
 \item{error_handling}{An option for how to handle errors returned by the API.
 see \code{\link{redcap_error}}}
 }
+\value{
+Returns the maximum integer record ID + 1.
+}
 \description{
 To be used by projects with record auto-numbering enabled, 
 this method exports the next potential record ID for a project.
@@ -28,9 +31,6 @@ this method exports the next potential record ID for a project.
 \details{
 It generates the next record name by determining the current maximum numerical 
 record ID and then incrementing it by one.
-
-#' @return 
-Returns the maximum integer record ID + 1.
 }
 \section{REDCap API Documentation}{
 
