@@ -191,7 +191,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
               "redcap_data_access_group"))
   if (length(w.remove)) data <- data[-w.remove]
   
-  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name")))
+  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name", "redcap_repeat_instrument", "redcap_repeat_instance")))
   {
     coll$push(paste0("The variables ", 
                      paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
