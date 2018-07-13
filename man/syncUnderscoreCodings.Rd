@@ -64,7 +64,7 @@ underscores in the checkbox codings
 If your scripts were written under REDCap 5.5.21 or higher, you will have no backward
 compatibility problems related to this issue.
 }
+
 \author{
 Benjamin Nutter
 }
-

@@ -4,8 +4,10 @@
 \alias{allocationTable}
 \alias{allocationTable.redcapApiConnection}
 \alias{allocationTable.redcapDbConnection}
-\alias{allocationTable_offline}
+\alias{allocationTable.redcapApiConnection}
 \alias{makeChoices}
+\alias{allocationTable_offline}
+\alias{allocationTable_offline}
 \title{Allocation Tables for the Randomization Module}
 \usage{
 allocationTable(rcon, random, strata = NULL, group = NULL, dag.id = NULL,
@@ -109,9 +111,6 @@ cannot exactly match replicates.  For example, if you as for 30 replicates in
 blocks of 8, a warning will be printed and you will receive 32 replicates in the
 randomization table.
 }
-\author{
-Benjamin Nutter
-}
 \references{
 More instruction on using \code{redcapAPI} to produce allocation tables is
   on the package wiki:
@@ -122,4 +121,6 @@ Please refer to your institution's API documentation.
 Additional details on API parameters are found on the package wiki at
 \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
 }
-
+\author{
+Benjamin Nutter
+}

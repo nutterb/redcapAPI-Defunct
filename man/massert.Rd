@@ -39,4 +39,3 @@ Only one assert function may be utilized in each call to \code{massert}.
 \author{
 Benjamin Nutter
 }
-
