@@ -120,13 +120,24 @@ validateImport <- function(data, meta_data, logfile = "")
                               "select_choices_or_calculations"]
     
     if (!length(field_type))
-      field_type <- "form_complete"
+    {
+      if (grepl("complete$", field_name))
+      {
+        field_type <- "form_complete"
+      }
+      else
+      {
+        field_type <- "redcap_internal_type"
+      }
+    }
+    
     if (field_type %in% c("float", "integer", "number", "number_1dp"))
       field_type <- "numeric"
-    
+  
     data[[field_name]] <- 
       switch(
         EXPR = field_type,
+        "redcap_internal_type" = data[[field_name]],
         "form_complete" = 
           validate_import_form_complete(x = data[[field_name]],
                                         field_name = field_name,

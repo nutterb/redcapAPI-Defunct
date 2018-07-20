@@ -164,8 +164,8 @@ importRecords.redcapApiConnection <- function(rcon, data,
   .checkbox <- meta_data[meta_data$field_type == "checkbox", ]
   
   .opts <- lapply(X = .checkbox$select_choices_or_calculations, 
-                  FUN = function(x) strsplit(x, 
-                                             split = " [|] "))
+                  FUN = function(x) unlist(strsplit(x, 
+                                                    split = " [|] ")))
   .opts <- lapply(X = .opts, 
                   FUN = function(x) gsub(pattern = ",[[:print:]]+", 
                                          replacement = "", 
@@ -191,7 +191,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
               "redcap_data_access_group"))
   if (length(w.remove)) data <- data[-w.remove]
   
-  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name")))
+  if (!all(names(data) %in% c(with_complete_fields, "redcap_event_name", "redcap_repeat_instrument", "redcap_repeat_instance")))
   {
     coll$push(paste0("The variables ", 
                      paste(names(data)[!names(data) %in% with_complete_fields], collapse=", "),
@@ -278,13 +278,15 @@ importRecords.redcapApiConnection <- function(rcon, data,
     import_records_batched(rcon = rcon, 
                            data = data,
                            batch.size = batch.size,
-                           overwriteBehavior = overwriteBehavior)
+                           overwriteBehavior = overwriteBehavior,
+                           returnContent = returnContent)
   }
   else
   {
     import_records_unbatched(rcon = rcon,
                              data = data,
-                             overwriteBehavior = overwriteBehavior)
+                             overwriteBehavior = overwriteBehavior,
+                             returnContent = returnContent)
   }
 }
 
@@ -292,7 +294,9 @@ importRecords.redcapApiConnection <- function(rcon, data,
 ## UNEXPORTED FUNCTIONS
 #####################################################################
 
-import_records_batched <- function(rcon, data, batch.size, overwriteBehavior)
+import_records_batched <- function(rcon, data, batch.size, 
+                                   overwriteBehavior,
+                                   returnContent)
 {
   n.batch <- nrow(data) %/% batch.size + 1
   
@@ -329,6 +333,7 @@ import_records_batched <- function(rcon, data, batch.size, overwriteBehavior)
                          format = 'csv',
                          type = 'flat', 
                          overwriteBehavior = overwriteBehavior,
+                         returnContent = returnContent,
                          returnFormat = 'csv', 
                          data = out[[i]]),
                config = rcon$config)
@@ -353,7 +358,8 @@ import_records_batched <- function(rcon, data, batch.size, overwriteBehavior)
 }
 
 
-import_records_unbatched <- function(rcon, data, overwriteBehavior)
+import_records_unbatched <- function(rcon, data, overwriteBehavior,
+                                     returnContent)
 {
   data[is.na(data)] <- ""
 
@@ -370,6 +376,7 @@ import_records_unbatched <- function(rcon, data, overwriteBehavior)
                             format = 'csv',
                             type = 'flat', 
                             overwriteBehavior = overwriteBehavior,
+                            returnContent = returnContent,
                             returnFormat = 'csv', 
                             dateFormat = "YMD",
                             data = out))

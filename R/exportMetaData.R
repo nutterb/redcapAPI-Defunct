@@ -80,10 +80,10 @@ function(rcon, fields=NULL, forms=NULL,
                content = "metadata",
                format = "csv",
                returnFormat = "csv")
-  
+
   if (!is.null(fields)) body[['fields']] <- fields
   if (!is.null(forms)) body[['forms']] <- forms
-  
+ 
   x <- httr::POST(url = rcon$url, 
                   body = body, 
                   config = rcon$config)

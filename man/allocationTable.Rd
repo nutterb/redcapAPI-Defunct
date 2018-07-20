@@ -2,7 +2,6 @@
 % Please edit documentation in R/allocationTable.R, R/allocationTable_offline.R
 \name{allocationTable}
 \alias{allocationTable}
-\alias{allocationTable.redcapApiConnection}
 \alias{allocationTable.redcapDbConnection}
 \alias{allocationTable.redcapApiConnection}
 \alias{makeChoices}

@@ -1,7 +1,4 @@
 #' @name allocationTable
-#' @aliases allocationTable.redcapApiConnection
-#' @aliases allocationTable.redcapDbConneciton
-#' @aliases allocationTable_offline
 #' 
 #' @title Allocation Tables for the Randomization Module
 #' @description Generate allocation table for the REDCap 
@@ -73,6 +70,8 @@
 #' 
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+#' 
+#' @export
 
 allocationTable <- function(rcon, random, strata = NULL, 
                             group = NULL, dag.id = NULL, 
@@ -162,10 +161,12 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   
   #* 2. random, strata and group are characters
   checkmate::assert_character(x = strata,
+                              null.ok = TRUE,
                               add = coll)
   
   checkmate::assert_character(x = group,
                               len = 1,
+                              null.ok = TRUE,
                               add = coll)
   
   #* 4. all fields in 'random', 'strata', and 'group' exist in meta_data
@@ -181,6 +182,8 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   checkmate::assert_subset(x = group,
                            choices = meta_data$field_name,
                            add = coll)
+  
+  checkmate::reportAssertions(coll)
 
   
   #* 5. Calculate n_levels
@@ -268,7 +271,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   
   #* 14. seed.dev is not NULL and has length 1 or n_strata
   if (ifelse(is.null(seed.dev), TRUE, !length(seed.dev) %in% c(1, n_strata))){
-    coll$pusch(paste0("'seed.dev' is a required argument and must be length 1 or ", n_strata))
+    coll$push(paste0("'seed.dev' is a required argument and must be length 1 or ", n_strata))
   }
   
   #* 15. seed.prod is not NULL and has length 1 or n_strata
