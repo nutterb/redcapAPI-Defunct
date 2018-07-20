@@ -74,7 +74,7 @@ flag will revert to its default value.}
 
 \item{checkboxLabels}{Logical. Determines the format of labels in checkbox 
 variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
-If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
+If \code{TRUE}, they are applied as ""/"[field_label]" where [field_label] 
 is the label assigned to the level in the data dictionary. 
 This option is only available after REDCap version 6.0.  See Checkbox Variables
 for more on how this interacts with the \code{factors} argument.}
