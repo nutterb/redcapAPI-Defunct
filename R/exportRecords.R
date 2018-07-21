@@ -349,11 +349,18 @@ exportRecords.redcapApiConnection <-
   if (!is.null(records)) body[['records']] <- paste0(records, collapse=",")
   
   if (batch.size < 1){
-    x <- unbatched(rcon, body, colClasses = colClasses, error_handling)
+    x <- unbatched(rcon = rcon, 
+                   body = body,
+                   id = meta_data$field_name[1],
+                   colClasses = colClasses, 
+                   error_handling = error_handling)
   }
   else 
   {
-    x <- batched(rcon, body, batch.size, meta_data$field_name[1],
+    x <- batched(rcon = rcon, 
+                 body = body, 
+                 batch.size = batch.size, 
+                 id = meta_data$field_name[1],
                  colClasses = colClasses,
                  error_handling = error_handling)
   }
@@ -385,8 +392,13 @@ exportRecords.redcapApiConnection <-
 
 
 #*** UNBATCHED EXPORT
-unbatched <- function(rcon, body, colClasses, error_handling)
+unbatched <- function(rcon, body, id, colClasses, error_handling)
 {
+  colClasses[[id]] <- "character"
+  colClasses <- colClasses[!vapply(colClasses,
+                                   is.na,
+                                   logical(1))]
+  
   x <- httr::POST(url = rcon$url, 
                   body = body, 
                   config = rcon$config)
@@ -406,6 +418,11 @@ unbatched <- function(rcon, body, colClasses, error_handling)
 #*** BATCHED EXPORT
 batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
 {
+  colClasses[[id]] <- "character"
+  colClasses <- colClasses[!vapply(colClasses,
+                                   is.na,
+                                   logical(1))]
+  
   #* 1. Get the IDs column
   #* 2. Restrict to unique IDs
   #* 3. Determine if the IDs look hashed (de-identified)
@@ -429,7 +446,8 @@ batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
   # IDs <- iconv(IDs, "utf8", "ASCII", sub = "")
   IDs <- utils::read.csv(text = IDs,
                          stringsAsFactors = FALSE,
-                         na.strings = "")
+                         na.strings = "",
+                         colClasses = colClasses[id])
   
   #* 2. Restrict to unique IDs
   unique_id <- unique(IDs[[id]])
@@ -444,7 +462,7 @@ batched <- function(rcon, body, batch.size, id, colClasses, error_handling)
   }
   
   #* Determine batch numbers for the IDs.
-  batch.number <- rep(1:ceiling(length(unique_id) / batch.size),
+  batch.number <- rep(seq_len(ceiling(length(unique_id) / batch.size)),
                       each = batch.size,
                       length.out = length(unique_id))
   

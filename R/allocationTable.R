@@ -181,6 +181,8 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   checkmate::assert_subset(x = group,
                            choices = meta_data$field_name,
                            add = coll)
+  
+  checkmate::reportAssertions(coll)
 
   
   #* 5. Calculate n_levels
@@ -192,7 +194,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   #* stratification groups
   strata <- c(strata, group)
   strata_levels <- lapply(strata, redcapChoices, meta_data)
-  names(strata_levels) <- c(strata, group)
+  names(strata_levels) <- strata
   if (!is.null(dag.id)) strata_levels[['redcap_data_access_group']] <- dag.id
   
   #* Allocation table
@@ -369,9 +371,9 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   rownames(prod_allocate) <- NULL  
   
   
-  return(list(dev_allocate = dev_allocate, 
+  return(list(dev_allocation = dev_allocate, 
               dev_seed = seed.dev,
-              prod_allocate = prod_allocate, 
+              prod_allocation = prod_allocate, 
               prod_seed = seed.prod,
               blocks = Blocks,
               weights = weights_orig))
