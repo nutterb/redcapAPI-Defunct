@@ -1,7 +1,7 @@
 context("redcapConnection.R")
 
-if (file.exists("local_token.Rdata")){
-  load("local_token.Rdata")
+if (file.exists("local-token.Rdata")){
+  load("local-token.Rdata")
 } else {
   url <- "https://redcap.notaplace.net/redcap/api/"
   token_case_01 <- "NOTaREALtoken1234567890123456789"

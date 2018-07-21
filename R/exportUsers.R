@@ -120,7 +120,7 @@ exportUsers.redcapApiConnection <- function(rcon, dates=TRUE, labels=TRUE, ...,
   
   if (x$status_code != 200) redcap_error(x, error_handling)
   
-  x <- utils::read.csv(textConnection(as.character(x)),
+  x <- utils::read.csv(text = as.character(x),
                        stringsAsFactors = FALSE,
                        na.strings = "")
                              

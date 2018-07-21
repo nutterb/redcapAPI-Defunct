@@ -98,7 +98,7 @@ exportEvents.redcapApiConnection <-
   
   if (x$status_code != 200) return(redcap_error(x, error_handling))
   
-  utils::read.csv(textConnection(as.character(x)),
+  utils::read.csv(text = as.character(x),
                   stringsAsFactors = FALSE,
                   na.strings = "")
 }
