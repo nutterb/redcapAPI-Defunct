@@ -17,6 +17,9 @@
 #' @param ... Arguments to be passed to other methods.
 #' @param error_handling An option for how to handle errors returned by the API.
 #'   see \code{\link{redcap_error}}
+#' @param drop_utf8 \code{logical(1)}. In some cases, UTF-8 characters can 
+#'   pose problems for exporting the data dictionary.  Set this to \code{TRUE}
+#'   to replace any UTF-8 characters with empty characters.
 #' 
 #' @details A record of this export is placed in the REDCap logging page, 
 #' but the file that is exported is not stored in the database.
@@ -61,7 +64,8 @@ exportMetaData.redcapDbConnection <-
 
 exportMetaData.redcapApiConnection <-
 function(rcon, fields=NULL, forms=NULL,
-         error_handling = getOption("redcap_error_handling"), ...)
+         error_handling = getOption("redcap_error_handling"), ...,
+         drop_utf8 = FALSE)
 {
   coll <- checkmate::makeAssertCollection()
   
@@ -73,6 +77,10 @@ function(rcon, fields=NULL, forms=NULL,
           fun = checkmate::assert_character,
           fixed = list(null.ok = TRUE,
                        add = coll))
+  
+  checkmate::assert_logical(x = drop_utf8,
+                            len = 1,
+                            add = coll)
   
   checkmate::reportAssertions(coll)
   
@@ -91,7 +99,10 @@ function(rcon, fields=NULL, forms=NULL,
   if (x$status_code != 200) return(redcap_error(x, error_handling))
   
   x <- as.character(x)
-  x <- iconv(x, "utf8", "ASCII", sub = "")
+  if (drop_utf8)
+  {
+    x <- iconv(x, "utf8", "ASCII", sub = "")
+  }
   utils::read.csv(text = x, 
                   stringsAsFactors = FALSE, 
                   na.strings = "")
