@@ -18,7 +18,6 @@
 #' @param meta_data_clean \code{character(1)} the path of the file to which
 #'   the cleaned meta data will be written.
 #'
-#' @export
 
 cleanseMetaData <- function(meta_data_file, meta_data_clean,
                             overwrite = FALSE)
