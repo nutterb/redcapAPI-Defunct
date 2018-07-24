@@ -30,6 +30,7 @@ Imports:
     httr,
     labelVector,
     lubridate,
+    readr,
     stringr,
     tidyr
 LazyLoad: yes

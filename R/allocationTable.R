@@ -70,7 +70,6 @@
 #' 
 #' Additional details on API parameters are found on the package wiki at
 #' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-#' 
 #' @export
 
 allocationTable <- function(rcon, random, strata = NULL, 
@@ -293,7 +292,7 @@ allocationTable.redcapApiConnection <- function(rcon, random, strata = NULL,
   
   #* 18. If 'weights' has names, the names are identical to the levels of 'random'
   if (!is.null(names(weights))){
-    if (identical(names(weights), random_level_names)) {
+    if (!identical(names(weights), random_level_names)) {
       coll$push(paste0("'weight' names must be '",
                        paste0(random_level_names, collapse = "', '"), 
                        "'."))

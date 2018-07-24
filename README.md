@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/nutterb/redcapAPI.png?branch=master)](https://travis-ci.org/nutterb/redcapAPI)
-
+[![Coverage Status](https://coveralls.io/repos/github/nutterb/redcapAPI/badge.svg?branch=master)](https://coveralls.io/github/nutterb/redcapAPI?branch=master)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11826.png)](http://dx.doi.org/10.5281/zenodo.11826)
-
 ![](http://cranlogs.r-pkg.org/badges/grand-total/redcapAPI)
 
 redcapAPI
