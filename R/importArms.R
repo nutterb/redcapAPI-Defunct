@@ -17,6 +17,8 @@
 #'   delete all of the arms in the project and import the contents of 
 #'   \code{arms_data}.  The default setting is \code{FALSE}, which only
 #'   allows arms to be renamed or added.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' @param ... additional arguments to pass to other methods.
 #' 
 #' @section REDCap API Documentation:
@@ -55,7 +57,9 @@ importArms.redcapDbConnection <- function(rcon, arms_data, override = FALSE, ...
 #' @rdname importArms
 #' @export
 
-importArms.redcapApiConnection <- function(rcon, arms_data, override = FALSE, ...){
+importArms.redcapApiConnection <- function(rcon, arms_data, 
+                                           override = FALSE, ...,
+                                           error_handling = getOption("redcap_error_handling")){
   coll <- checkmate::makeAssertCollection()
   
   checkmate::assert_data_frame(x = arms_data,
@@ -85,11 +89,11 @@ importArms.redcapApiConnection <- function(rcon, arms_data, override = FALSE, ..
   checkmate::reportAssertions(coll)
   
   arms_data <- 
-    capture.output(
-      write.csv(arms_data,
-                file = "",
-                na = "",
-                row.names = FALSE)
+    utils::capture.output(
+      utils::write.csv(arms_data,
+                       file = "",
+                       na = "",
+                       row.names = FALSE)
     )
   arms_data <- paste0(arms_data, collapse = "\n")
       

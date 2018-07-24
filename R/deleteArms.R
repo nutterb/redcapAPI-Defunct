@@ -10,6 +10,8 @@
 #'   \code{redcapConnection}.
 #' @param arms \code{integerish}, a vector of arm numbers that will be 
 #'   deleted.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' @param ... Additional arguments to pass to other methods.
 #' 
 #' @section REDCap API Documentation:
@@ -46,7 +48,8 @@ deleteArms.redcapDbConnection <- function(rcon, arms, ...){
 
 #' @rdname deleteArms
 
-deleteArms.redcapApiConnection <- function(rcon, arms, ...){
+deleteArms.redcapApiConnection <- function(rcon, arms, ...,
+                                           error_handling = getOption("redcap_error_handling")){
   checkmate::assert_integerish(arms)
   
   body <- list(token = rcon$token,

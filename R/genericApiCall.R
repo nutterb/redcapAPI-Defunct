@@ -35,6 +35,7 @@ genericApiCall <- function(rcon,
 }
 
 #' @rdname genericApiCall
+#' @export
 
 genericApiCall.redcapDbConnection <- function(rcon, 
                                               content,
@@ -48,6 +49,7 @@ genericApiCall.redcapDbConnection <- function(rcon,
 }
 
 #' @rdname genericApiCall
+#' @export
 
 genericApiCall.redcapApiConnection <- function(rcon,
                                                content,
