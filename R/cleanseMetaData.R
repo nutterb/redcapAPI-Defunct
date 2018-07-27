@@ -17,6 +17,8 @@
 #'   that has been downloaded using the REDCap user interface.
 #' @param meta_data_clean \code{character(1)} the path of the file to which
 #'   the cleaned meta data will be written.
+#' @param overwrite \code{logical(1)} Permit the new file to overwrite an 
+#'   existing file
 #'
 
 cleanseMetaData <- function(meta_data_file, meta_data_clean,
@@ -62,11 +64,11 @@ cleanseMetaData <- function(meta_data_file, meta_data_clean,
               to = "ASCII", 
               sub = "")
   
-  dd <- read.csv(text = dd, 
-                 stringsAsFactors = FALSE)
+  dd <- utils::read.csv(text = dd, 
+                        stringsAsFactors = FALSE)
   
-  write.csv(dd, 
-            meta_data_clean, 
-            row.names = FALSE, 
-            na = "")
+  utils::write.csv(dd, 
+                   meta_data_clean, 
+                   row.names = FALSE, 
+                   na = "")
 }

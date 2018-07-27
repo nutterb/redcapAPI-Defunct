@@ -105,3 +105,4 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
   }
   x
 }
+
