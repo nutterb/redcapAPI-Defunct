@@ -40,8 +40,8 @@ validate_import_date <- function(x, field_name, field_min, field_max, logfile)
                                                  "dmy", "dmy HMS"))
     )
   }
-  
-  w_low <- which(x < as.POSIXct(field_min))
+
+  w_low <- which(as.POSIXct(x) < as.POSIXct(field_min, origin = "1970-01-01"))
   print_validation_message(
     field_name,
     indices = w_low,
@@ -50,7 +50,7 @@ validate_import_date <- function(x, field_name, field_min, field_max, logfile)
     logfile = logfile
   )
   
-  w_high <- which(x > as.POSIXct(field_max))
+  w_high <- which(as.POSIXct(x) > as.POSIXct(field_max, origin = "1970-01-01"))
   print_validation_message(
     field_name,
     indices = w_high,
@@ -89,7 +89,7 @@ validate_import_datetime <- function(x, field_name, field_min, field_max, logfil
     )
   }
   
-  w_low <- which(x < as.POSIXct(field_min))
+  w_low <- which(as.POSIXct(x) < as.POSIXct(field_min, origin = "1970-01-01"))
   print_validation_message(
     field_name,
     indices = w_low,
@@ -98,7 +98,7 @@ validate_import_datetime <- function(x, field_name, field_min, field_max, logfil
     logfile = logfile
   )
   
-  w_high <- which(x > as.POSIXct(field_max))
+  w_high <- which(as.POSIXct(x) > as.POSIXct(field_max, origin = "1970-01-01"))
   print_validation_message(
     field_name,
     indices = w_high,
@@ -136,7 +136,7 @@ validate_import_datetime_seconds <- function(x, field_name, field_min, field_max
     )
   }
   
-  w_low <- which(x < as.POSIXct(field_min))
+  w_low <- which(as.POSIXct(x) < as.POSIXct(field_min))
   print_validation_message(
     field_name,
     indices = w_low,
@@ -145,7 +145,7 @@ validate_import_datetime_seconds <- function(x, field_name, field_min, field_max
     logfile = logfile
   )
   
-  w_high <- which(x > as.POSIXct(field_max))
+  w_high <- which(as.POSIXct(x) > as.POSIXct(field_max))
   print_validation_message(
     field_name,
     indices = w_high,

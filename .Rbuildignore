@@ -6,6 +6,7 @@
 ^cran-comments.md
 ^zz_lendingclub/*
 ^data\testDataBuilder.R$
-^tests/*
 ^\.DS_store$
-
+^tests/testthat.R$
+^tests/testthat/local-token.R$
+^tests/testthat/local-token.Rdata$

@@ -25,12 +25,16 @@
 #' 
 
 parseBranchingLogic <- function(l){
+  l <- tolower(l)
   l <- gsub("\\n", " ", l)
   l <- gsub(" or ", " | ", l)
   l <- gsub(" and ", " & ", l)
-  l <- gsub("[(]", "___", l)
-  l <- gsub("[)]", "", l)
+  l <- gsub("([a-z,0-9,_])\\((?<=\\()(.*?)(?=\\))\\)", 
+            "\\1___\\2", 
+            l, 
+            perl = TRUE)
   l <- gsub("([[]|[]])", "", l)
-  l <- gsub(" [=] ", " == ", l)
+  l <- gsub("[=]", " == ", l)
+  l <- gsub("[!] [=]", " !", l)
   lapply(l, function(x) ifelse(x=="", NA, parse(text=x)))
 }

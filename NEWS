@@ -1,4 +1,17 @@
-## Changes in Version 2.0 (2016-04-30)
+## Changes in Version 2.2 (no scheduled date)
+* BREAKING CHANGE: The `dev_allocate` and `prod_allocate` elements of the 
+  object returned by `allocationTable` have been named `dev_allocation` and 
+  `prod_allocation`, respectively.  
+* Bug fix: `importRecords` now handles data with repeating forms correctly.
+* New feature: UTF-8 Characters may be stripped from the data dictionary.
+
+## Change up to Version 2.1 (2018-03-03)
+* Bug fix: Add `[form]_complete` fields
+* Bug fix: Include `[form]_complete` fields in Reports
+* New feature: `[form]_complete` fields may be explicitly requested.
+* New feature: Automatic selection of `[form]_complete` fields may be turned off.
+
+## Changes in Version 2.0 (2017-01-18)
 * redcapDbConnection methods are being deprecated.  To our knowledge, no one
   is using these methods, and we do not believe they would work as previously 
   coded anyway. The methods definitions continue to be reserved although 
