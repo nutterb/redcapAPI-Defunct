@@ -125,12 +125,11 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event = N
                action = 'import', 
                record = record,
                field = field, 
-               repeat_instance = repeat_instance,
                file = httr::upload_file(file), 
                returnFormat = 'csv')
   
   if (!is.null(event)) body[['event']] <- event
-  
+  if (!is.null(repeat_instance)) body[['repeat_instance']] <- as.character(repeat_instance)
   #* Export the file
   file <- 
     tryCatch(
