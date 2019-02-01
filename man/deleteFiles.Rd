@@ -10,8 +10,9 @@ deleteFiles(rcon, record, field, event, ...)
 
 \method{deleteFiles}{redcapDbConnection}(rcon, record, field, event, ...)
 
-\method{deleteFiles}{redcapApiConnection}(rcon, record = NULL, field = NULL,
-  event = NULL, ..., bundle = getOption("redcap_bundle"),
+\method{deleteFiles}{redcapApiConnection}(rcon, record = NULL,
+  field = NULL, event = NULL, ...,
+  bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 }
 \arguments{
