@@ -10,13 +10,13 @@ exportBundle(rcon, date = TRUE, label = TRUE, meta_data = TRUE,
   users = TRUE, instruments = TRUE, events = TRUE, arms = TRUE,
   mappings = TRUE, version = TRUE, ...)
 
-\method{exportBundle}{redcapDbConnection}(rcon, date = TRUE, label = TRUE,
-  meta_data = TRUE, users = TRUE, instruments = TRUE, events = TRUE,
-  arms = TRUE, mappings = TRUE, version = TRUE, ...)
+\method{exportBundle}{redcapDbConnection}(rcon, date = TRUE,
+  label = TRUE, meta_data = TRUE, users = TRUE, instruments = TRUE,
+  events = TRUE, arms = TRUE, mappings = TRUE, version = TRUE, ...)
 
-\method{exportBundle}{redcapApiConnection}(rcon, date = TRUE, label = TRUE,
-  meta_data = TRUE, users = TRUE, instruments = TRUE, events = TRUE,
-  arms = TRUE, mappings = TRUE, version = TRUE, ...,
+\method{exportBundle}{redcapApiConnection}(rcon, date = TRUE,
+  label = TRUE, meta_data = TRUE, users = TRUE, instruments = TRUE,
+  events = TRUE, arms = TRUE, mappings = TRUE, version = TRUE, ...,
   return_object = TRUE)
 }
 \arguments{

@@ -9,12 +9,13 @@
 exportReports(rcon, report_id, factors = TRUE, labels = TRUE,
   dates = TRUE, checkboxLabels = FALSE, ...)
 
-\method{exportReports}{redcapDbConnection}(rcon, report_id, factors = TRUE,
-  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ...)
+\method{exportReports}{redcapDbConnection}(rcon, report_id,
+  factors = TRUE, labels = TRUE, dates = TRUE,
+  checkboxLabels = FALSE, ...)
 
-\method{exportReports}{redcapApiConnection}(rcon, report_id, factors = TRUE,
-  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ...,
-  bundle = getOption("redcap_bundle"),
+\method{exportReports}{redcapApiConnection}(rcon, report_id,
+  factors = TRUE, labels = TRUE, dates = TRUE,
+  checkboxLabels = FALSE, ..., bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 }
 \arguments{

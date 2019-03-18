@@ -4,8 +4,8 @@
 \alias{recodeCheck}
 \title{Change labelling of \code{checkbox} variables}
 \usage{
-recodeCheck(df, vars, old = c("Unchecked", "Checked"), new = c("No", "Yes"),
-  reverse = FALSE)
+recodeCheck(df, vars, old = c("Unchecked", "Checked"), new = c("No",
+  "Yes"), reverse = FALSE)
 }
 \arguments{
 \item{df}{A data frame, presumably retrieved from REDCap, though not a 
