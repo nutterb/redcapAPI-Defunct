@@ -22,8 +22,10 @@ exportSurveyParticipants = function(rcon, instrument, event){
                   format='csv', returnFormat='csv')
   
   x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
+  
+  if (x$status_code != 200) return(redcap_error(x, error_handling))
+  
   x <- read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
-  x = x %>% 
-    separate(invitation_send_time, c("date", "time"), " ")
+
   return(x)
 }
