@@ -1,7 +1,7 @@
 #' @rdname exportRecords
 #' @export
 
-exportRecords_offline <- function(datafile, meta_data, 
+exportRecords_offline <- function(dataFile, metaDataFile, 
                                   factors = TRUE, fields = NULL,
                                   forms=NULL, labels = TRUE,
                                   dates = TRUE, checkboxLabels = FALSE, 
@@ -16,29 +16,19 @@ exportRecords_offline <- function(datafile, meta_data,
           fixed = list(len = 1,
                        add = coll))
   
-  massert(~ fields + forms + datafile + meta_data,
+  massert(~ fields + forms + dataFile + metaDataFile,
           fun = checkmate::assert_character,
-          len = list(datafile = 1, 
-                     meta_data = 1),
+          len = list(dataFile = 1, 
+                     metaDataFile = 1),
           fixed = list(null.ok = TRUE,
                        add = coll))
   
   checkmate::reportAssertions(coll)
   
   #* Secure the meta data.
-  meta_data <- utils::read.csv(meta_data,
+  meta_data <- utils::read.csv(metaDataFile,
                                stringsAsFactors = FALSE,
                                na.strings = "")
-  
-  col.names=c('field_name', 'form_name', 'section_header', 
-              'field_type', 'field_label', 'select_choices_or_calculations', 
-              'field_note', 'text_validation_type_or_show_slider_number', 
-              'text_validation_min', 'text_validation_max', 'identifier', 
-              'branching_logic', 'required_field', 'custom_alignment', 
-              'question_number', 'matrix_group_name', 'matrix_ranking',
-              'field_annotation')
-  
-  names(meta_data) <- col.names[1:length(col.names)]
   
   #* for purposes of the export, we don't need the descriptive fields. 
   #* Including them makes the process more error prone, so we'll ignore them.
@@ -91,7 +81,7 @@ exportRecords_offline <- function(datafile, meta_data,
                                 version = version)
   
   
-  x <- utils::read.csv(datafile, 
+  x <- utils::read.csv(dataFile, 
                        stringsAsFactors = FALSE,
                        colClasses = colClasses)
   
