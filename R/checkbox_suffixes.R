@@ -59,10 +59,11 @@ manual_checkbox_label_suffixes <- function(x, meta_data)
   if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
     #* Select choices
     opts <- meta_data$select_choices_or_calculations[meta_data$field_name %in% x]
-    #* Remove choice numbers
-    opts <- gsub("\\d, ", "", opts)
+    #* Remove choice numbers, split, then remove spaces
+    opts <- gsub("\\d,", "", opts)
     opts <- strsplit(x = opts,
                      split = "[|]")[[1]]
+    opts <- gsub("(^ *| *$)", "", opts)
     #* Assemble labels
     paste0(meta_data$field_label[meta_data$field_name %in% x], ": ", opts)
   }
