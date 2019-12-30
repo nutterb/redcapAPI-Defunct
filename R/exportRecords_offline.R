@@ -30,6 +30,16 @@ exportRecords_offline <- function(dataFile, metaDataFile,
                                stringsAsFactors = FALSE,
                                na.strings = "")
   
+  col.names=c('field_name', 'form_name', 'section_header', 
+              'field_type', 'field_label', 'select_choices_or_calculations', 
+              'field_note', 'text_validation_type_or_show_slider_number', 
+              'text_validation_min', 'text_validation_max', 'identifier', 
+              'branching_logic', 'required_field', 'custom_alignment', 
+              'question_number', 'matrix_group_name', 'matrix_ranking',
+              'field_annotation')
+  
+  names(meta_data) <- col.names[1:length(col.names)]
+  
   #* for purposes of the export, we don't need the descriptive fields. 
   #* Including them makes the process more error prone, so we'll ignore them.
   meta_data <- meta_data[!meta_data$field_type %in% "descriptive", ]  
