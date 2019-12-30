@@ -93,7 +93,7 @@ exportRecords_offline <- function(datafile, meta_data,
   
   x <- utils::read.csv(datafile, 
                        stringsAsFactors = FALSE,
-                       colClasses = colClasses)[suffixed$name_suffix]
+                       colClasses = colClasses)
   
   x <- fieldToVar(records = x, 
                   meta_data = meta_data, 
