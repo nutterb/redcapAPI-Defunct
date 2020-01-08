@@ -38,4 +38,5 @@ URL: https://github.com/nutterb/redcapAPI/wiki,
     https://github.com/nutterb/redcapAPI,
     https://projectredcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
+

@@ -1,7 +1,7 @@
 #' @rdname exportRecords
 #' @export
 
-exportRecords_offline <- function(datafile, meta_data, 
+exportRecords_offline <- function(dataFile, metaDataFile, 
                                   factors = TRUE, fields = NULL,
                                   forms=NULL, labels = TRUE,
                                   dates = TRUE, checkboxLabels = FALSE, 
@@ -16,17 +16,17 @@ exportRecords_offline <- function(datafile, meta_data,
           fixed = list(len = 1,
                        add = coll))
   
-  massert(~ fields + forms + datafile + meta_data,
+  massert(~ fields + forms + dataFile + metaDataFile,
           fun = checkmate::assert_character,
-          len = list(datafile = 1, 
-                     meta_data = 1),
+          len = list(dataFile = 1, 
+                     metaDataFile = 1),
           fixed = list(null.ok = TRUE,
                        add = coll))
   
   checkmate::reportAssertions(coll)
   
   #* Secure the meta data.
-  meta_data <- utils::read.csv(meta_data,
+  meta_data <- utils::read.csv(metaDataFile,
                                stringsAsFactors = FALSE,
                                na.strings = "")
   
@@ -91,9 +91,9 @@ exportRecords_offline <- function(datafile, meta_data,
                                 version = version)
   
   
-  x <- utils::read.csv(datafile, 
+  x <- utils::read.csv(dataFile, 
                        stringsAsFactors = FALSE,
-                       colClasses = colClasses)[suffixed$name_suffix]
+                       colClasses = colClasses)
   
   x <- fieldToVar(records = x, 
                   meta_data = meta_data, 
