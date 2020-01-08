@@ -8,11 +8,11 @@
 \usage{
 exportUsers(rcon, ...)
 
-\method{exportUsers}{redcapDbConnection}(rcon, dates = TRUE, labels = TRUE,
-  ...)
+\method{exportUsers}{redcapDbConnection}(rcon, dates = TRUE,
+  labels = TRUE, ...)
 
-\method{exportUsers}{redcapApiConnection}(rcon, dates = TRUE, labels = TRUE,
-  ..., bundle = getOption("redcap_bundle"),
+\method{exportUsers}{redcapApiConnection}(rcon, dates = TRUE,
+  labels = TRUE, ..., bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 }
 \arguments{
