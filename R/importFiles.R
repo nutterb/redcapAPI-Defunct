@@ -17,6 +17,9 @@
 #'   terminates to prevent overwriting.  When \code{TRUE}, no additional 
 #'   check is performed.
 #' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
+#' @param repeat_instance The repeat instance number of the repeating
+#'   event or the repeating instrument. When available in your instance
+#'   of REDCap, and passed as NULL, the API will assume a value of 1.
 #' @param ... Arguments to be passed to other methods
 #' @param error_handling An option for how to handle errors returned by the API.
 #'   see \code{\link{redcap_error}}
@@ -28,14 +31,14 @@
 #' @export
 
 importFiles <- function(rcon, file, record, field, event, overwrite=TRUE, ...,
-                        bundle=NULL)
+                        bundle=NULL, repeat_instance = NULL)
   UseMethod("importFiles")
 
 #' @rdname importFiles
 #' @export
 
 importFiles.redcapDbConnection <- function(rcon, file, record, field, event, overwrite=TRUE, ..., 
-                                           bundle=NULL){
+                                           bundle=NULL, repeat_instance = NULL){
   message("Please accept my apologies.  The importFiles method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
@@ -44,7 +47,7 @@ importFiles.redcapDbConnection <- function(rcon, file, record, field, event, ove
 #' @export
 
 importFiles.redcapApiConnection <- function(rcon, file, record, field, event = NULL, 
-                                            overwrite=TRUE, ...,
+                                            overwrite=TRUE, repeat_instance = NULL, ...,
                                             bundle=NULL,
                                             error_handling = getOption("redcap_error_handling")){
   
@@ -75,6 +78,10 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event = N
   checkmate::assert_logical(x = overwrite,
                             len = 1,
                             add = coll)
+  
+  checkmate::assert_integerish(x = repeat_instance,
+                               len = 1,
+                               add = coll)
   
   checkmate::reportAssertions(coll)
   
@@ -122,7 +129,7 @@ importFiles.redcapApiConnection <- function(rcon, file, record, field, event = N
                returnFormat = 'csv')
   
   if (!is.null(event)) body[['event']] <- event
-  
+  if (!is.null(repeat_instance)) body[['repeat_instance']] <- as.character(repeat_instance)
   #* Export the file
   file <- 
     tryCatch(
