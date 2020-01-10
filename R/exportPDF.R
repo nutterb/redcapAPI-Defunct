@@ -96,7 +96,7 @@ function(rcon, dir, filename = "redcap_forms_download",
     }
   }
   
-  massert(~ filename + record + events + instruments,
+  massert(~ filename + record + events + instruments + dir,
           fun = checkmate::assert_character,
           len = list(dir = 1, filename = 1),
           fixed = list(null.ok = TRUE,

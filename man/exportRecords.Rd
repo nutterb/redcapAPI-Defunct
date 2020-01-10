@@ -60,8 +60,8 @@ exportRecords(
 )
 
 exportRecords_offline(
-  datafile,
-  meta_data,
+  dataFile,
+  metaDataFile,
   factors = TRUE,
   fields = NULL,
   forms = NULL,
@@ -145,11 +145,11 @@ from which at least one variable is requested will automatically
 be retrieved.  When \code{FALSE}, these fields must be 
 explicitly requested.}
 
-\item{datafile}{For the offline version, a character string giving the location
+\item{dataFile}{For the offline version, a character string giving the location
 of the dataset downloaded from REDCap.  Note that this should be the raw
 (unlabeled) data set.}
 
-\item{meta_data}{A text string giving the location of the data dictionary 
+\item{metaDataFile}{A text string giving the location of the data dictionary 
 downloaded from REDCap.}
 }
 \description{

@@ -95,9 +95,7 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
              "time" = 
                {
                  if (dates)
-                   chron::times(ifelse(!is.na(records[[i]]), 
-                                       paste0(records[[i]], ":00"), 
-                                       records[[i]]), 
+                   chron::times(gsub("(^\\d{2}:\\d{2}$)", "\\1:00", records[[i]]), 
                                 format=c(times="h:m:s"))
                  else 
                    records[[i]]
