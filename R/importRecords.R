@@ -379,7 +379,8 @@ import_records_unbatched <- function(rcon, data, overwriteBehavior,
                             returnContent = returnContent,
                             returnFormat = 'csv', 
                             dateFormat = "YMD",
-                            data = out))
+                            data = out), 
+                  config = rcon$config)
   
   if (x$status_code == "200") 
     as.character(x) 
