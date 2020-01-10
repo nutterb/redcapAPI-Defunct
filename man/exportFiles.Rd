@@ -12,8 +12,9 @@ exportFiles(rcon, record, field, event, dir, filePrefix = TRUE, ...,
 \method{exportFiles}{redcapDbConnection}(rcon, record, field, event, dir,
   filePrefix = TRUE, ..., bundle = getOption("redcap_bundle"))
 
-\method{exportFiles}{redcapApiConnection}(rcon, record, field, event = NULL,
-  dir, filePrefix = TRUE, ..., bundle = getOption("redcap_bundle"),
+\method{exportFiles}{redcapApiConnection}(rcon, record, field,
+  event = NULL, dir, filePrefix = TRUE, ...,
+  bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"))
 }
 \arguments{
