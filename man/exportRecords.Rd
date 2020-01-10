@@ -7,6 +7,7 @@
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
+
 exportRecords(
   rcon,
   factors = TRUE,

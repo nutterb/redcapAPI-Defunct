@@ -4,6 +4,7 @@
 \alias{recodeCheck}
 \title{Change labelling of \code{checkbox} variables}
 \usage{
+
 recodeCheck(
   df,
   vars,

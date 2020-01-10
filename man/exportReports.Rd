@@ -6,6 +6,7 @@
 \alias{exportReports.redcapApiConnection}
 \title{Export Reports from a REDCap Database}
 \usage{
+
 exportReports(
   rcon,
   report_id,

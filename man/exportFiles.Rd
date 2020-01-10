@@ -6,6 +6,7 @@
 \alias{exportFiles.redcapApiConnection}
 \title{Exports a File attached to a Record}
 \usage{
+
 exportFiles(
   rcon,
   record,
