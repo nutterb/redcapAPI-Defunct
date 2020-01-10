@@ -40,12 +40,13 @@ manual_checkbox_suffixes <- function(x, meta_data)
                  replacement = "", 
                  x = meta_data$select_choices_or_calculations[meta_data$field_name %in% x], 
                  perl = TRUE)
-    #* Remove "|" and "," characters
-    opts <- gsub(pattern = "([|]|,)", 
+    #* Split by "|" then remove any commas or spaces
+    opts <- strsplit(x = opts, 
+                     split = "\\|")[[1]]
+    opts <- gsub(pattern = ",| ", 
                  replacement = "", 
                  x = opts)
-    opts <- strsplit(x = opts, 
-                     split = " ")[[1]]
+    #* Assemble labels
     x <- paste(x, opts, sep="___")
   }
   x
@@ -56,20 +57,14 @@ manual_checkbox_label_suffixes <- function(x, meta_data)
 {
   #* If x is a checkbox variable
   if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
-    opts <- gsub(pattern = "(?<=[|])(.*?)(?=,)", 
-                 replacement = "", 
-                 x = paste0("|", 
-                            meta_data$select_choices_or_calculations[meta_data$field_name %in% x]), 
-                 perl = TRUE)
-    opts <- gsub(pattern = ", ",
-                replacement = "", 
-                x = opts)
-    opts <- sub(pattern = "[|]", 
-                replacement = "",
-                x = opts)
+    #* Select choices
+    opts <- meta_data$select_choices_or_calculations[meta_data$field_name %in% x]
+    #* Remove choice numbers, split, then remove spaces
+    opts <- gsub("\\d,", "", opts)
     opts <- strsplit(x = opts,
-                     split = " [|]")[[1]]
-    
+                     split = "[|]")[[1]]
+    opts <- gsub("(^ *| *$)", "", opts)
+    #* Assemble labels
     paste0(meta_data$field_label[meta_data$field_name %in% x], ": ", opts)
   }
   else 

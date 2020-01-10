@@ -7,27 +7,71 @@
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
-exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
-  records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-  survey = TRUE, dag = TRUE, checkboxLabels = FALSE,
-  colClasses = NA, ...)
 
-\method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
-  fields = NULL, forms = NULL, records = NULL, events = NULL,
-  labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ...)
+exportRecords(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...
+)
 
-\method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
-  fields = NULL, forms = NULL, records = NULL, events = NULL,
-  labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ..., batch.size = -1,
+\method{exportRecords}{redcapDbConnection}(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...
+)
+
+\method{exportRecords}{redcapApiConnection}(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...,
+  batch.size = -1,
   bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"),
-  form_complete_auto = TRUE)
+  form_complete_auto = TRUE
+)
 
-exportRecords_offline(datafile, meta_data, factors = TRUE,
-  fields = NULL, forms = NULL, labels = TRUE, dates = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ...)
+exportRecords_offline(
+  dataFile,
+  metaDataFile,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...
+)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
@@ -102,11 +146,11 @@ from which at least one variable is requested will automatically
 be retrieved.  When \code{FALSE}, these fields must be 
 explicitly requested.}
 
-\item{datafile}{For the offline version, a character string giving the location
+\item{dataFile}{For the offline version, a character string giving the location
 of the dataset downloaded from REDCap.  Note that this should be the raw
 (unlabeled) data set.}
 
-\item{meta_data}{A text string giving the location of the data dictionary 
+\item{metaDataFile}{A text string giving the location of the data dictionary 
 downloaded from REDCap.}
 }
 \description{

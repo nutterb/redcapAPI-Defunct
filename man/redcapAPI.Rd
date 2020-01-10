@@ -3,7 +3,6 @@
 \docType{package}
 \name{redcapAPI}
 \alias{redcapAPI}
-\alias{redcapAPI-package}
 \title{Access data, meta data, and files from REDCap using the API}
 \description{
 REDCap is a database development tool built on MySQL.  Visit 

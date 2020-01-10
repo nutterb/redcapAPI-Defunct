@@ -5,10 +5,10 @@
 #'   subsets of subjects, fields, records, and events.
 #'   
 #' @param rcon A REDCap connection object as created by \code{redcapConnection}.
-#' @param datafile For the offline version, a character string giving the location
+#' @param dataFile For the offline version, a character string giving the location
 #'   of the dataset downloaded from REDCap.  Note that this should be the raw
 #'   (unlabeled) data set.
-#' @param meta_data A text string giving the location of the data dictionary 
+#' @param metaDataFile A text string giving the location of the data dictionary 
 #'   downloaded from REDCap.
 #' @param factors Logical.  Determines if categorical data from the database is 
 #'   returned as numeric codes or labelled factors. See 'Checkbox Variables'
