@@ -6,19 +6,37 @@
 \alias{importRecords.redcapApiConnection}
 \title{Import Records to a REDCap Database}
 \usage{
-importRecords(rcon, data, overwriteBehavior = c("normal", "overwrite"),
-  returnContent = c("count", "ids", "nothing"), returnData = FALSE,
-  logfile = "", ...)
-
-\method{importRecords}{redcapDbConnection}(rcon, data,
+importRecords(
+  rcon,
+  data,
   overwriteBehavior = c("normal", "overwrite"),
-  returnContent = c("count", "ids", "nothing"), returnData = FALSE,
-  logfile = "", ...)
+  returnContent = c("count", "ids", "nothing"),
+  returnData = FALSE,
+  logfile = "",
+  ...
+)
 
-\method{importRecords}{redcapApiConnection}(rcon, data,
+\method{importRecords}{redcapDbConnection}(
+  rcon,
+  data,
   overwriteBehavior = c("normal", "overwrite"),
-  returnContent = c("count", "ids", "nothing"), returnData = FALSE,
-  logfile = "", ..., bundle = NULL, batch.size = -1)
+  returnContent = c("count", "ids", "nothing"),
+  returnData = FALSE,
+  logfile = "",
+  ...
+)
+
+\method{importRecords}{redcapApiConnection}(
+  rcon,
+  data,
+  overwriteBehavior = c("normal", "overwrite"),
+  returnContent = c("count", "ids", "nothing"),
+  returnData = FALSE,
+  logfile = "",
+  ...,
+  bundle = NULL,
+  batch.size = -1
+)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
