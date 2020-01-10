@@ -6,8 +6,15 @@ exportRecords_offline <- function(dataFile, metaDataFile,
                                   forms=NULL, labels = TRUE,
                                   dates = TRUE, checkboxLabels = FALSE, 
                                   colClasses = NA,
-                                  ...)
+                                  ..., meta_data)
 {
+  if (!missing(meta_data)){
+    warning("Argument `meta_data` has been deprecated. Please use `metaDataFile` instead.")
+    if (missing(metaDataFile)){
+      metaDataFile <- meta_data
+    }
+  }
+  
   #* Error Collection Object
   coll <- checkmate::makeAssertCollection()
   

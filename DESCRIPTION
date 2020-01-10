@@ -9,7 +9,8 @@ Authors@R: c(
     person("Will", "Beasley", role = "ctb"),
     person("Jeffrey", "Horner", role = "ctb"),
     person("Will", "Gray", role = "ctb"),
-    person("Jeremy", "Stephens", role = "ctb"))
+    person("Jeremy", "Stephens", role = "ctb"), 
+    person("Marcus", "Lehr", role = "ctb", email = "marcus.j.lehr@gmail.com"))
 Maintainer: Benjamin Nutter <benjamin.nutter@gmail.com>
 Description: Access data stored in 'REDCap' databases using the Application
     Programming Interface (API).  'REDCap' (Research Electronic Data CAPture;

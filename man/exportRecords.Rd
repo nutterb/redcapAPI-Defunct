@@ -69,7 +69,8 @@ exportRecords_offline(
   dates = TRUE,
   checkboxLabels = FALSE,
   colClasses = NA,
-  ...
+  ...,
+  meta_data
 )
 }
 \arguments{
@@ -151,6 +152,8 @@ of the dataset downloaded from REDCap.  Note that this should be the raw
 
 \item{metaDataFile}{A text string giving the location of the data dictionary 
 downloaded from REDCap.}
+
+\item{meta_data}{Deprecated version of \code{metaDataFile}}
 }
 \description{
 Exports records from a REDCap Database, allowing for 

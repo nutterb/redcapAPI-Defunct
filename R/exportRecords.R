@@ -64,6 +64,7 @@
 #'   from which at least one variable is requested will automatically
 #'   be retrieved.  When \code{FALSE}, these fields must be 
 #'   explicitly requested.
+#' @param meta_data Deprecated version of \code{metaDataFile}
 #' 
 #' @details
 #' A record of exports through the API is recorded in the Logging section 
