@@ -4,13 +4,8 @@
 \alias{fieldToVar}
 \title{Convert a REDCap Data Field to an R Vector}
 \usage{
-fieldToVar(
-  records,
-  meta_data,
-  factors = TRUE,
-  dates = TRUE,
-  checkboxLabels = FALSE
-)
+fieldToVar(records, meta_data, factors = TRUE, dates = TRUE,
+  checkboxLabels = FALSE)
 }
 \arguments{
 \item{records}{A data frame of records returned by \code{exportRecords} 

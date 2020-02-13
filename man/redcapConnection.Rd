@@ -4,13 +4,8 @@
 \alias{redcapConnection}
 \title{Connect to a REDCap Database}
 \usage{
-redcapConnection(
-  url = getOption("redcap_api_url"),
-  token,
-  conn,
-  project,
-  config = httr::config()
-)
+redcapConnection(url = getOption("redcap_api_url"), token, conn, project,
+  config = httr::config())
 }
 \arguments{
 \item{url}{URL for a REDCap database API.  Check your institution's REDCap 
