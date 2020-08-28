@@ -34,13 +34,13 @@
 #' 
 
 deleteRecords <- function(rcon, records, arms = NULL, ...){
-  UseMethod("deleteArms")
+  UseMethod("deleteRecords")
 }
 
 #' @rdname deleteRecords
 
 deleteRecords.redcapDbConnection <- function(rcon, records, arms = NULL, ...){
-  message("Please accept my apologies.  The deleteArms method for redcapDbConnection objects\n",
+  message("Please accept my apologies.  The deleteRecords method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
