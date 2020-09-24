@@ -5,4 +5,8 @@
 ^\.travis\.yml$
 ^cran-comments.md
 ^zz_lendingclub/*
+^data\testDataBuilder.R$
 ^\.DS_store$
+^tests/testthat.R$
+^tests/testthat/local-token.R$
+^tests/testthat/local-token.Rdata$

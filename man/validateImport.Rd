@@ -4,17 +4,12 @@
 \alias{validateImport}
 \title{Validate Data Frames for Import}
 \usage{
-validateImport(field, meta_data, records, ids, logfile = "")
+validateImport(data, meta_data, logfile = "")
 }
 \arguments{
-\item{field}{Character(1) naming the variable to be validated.}
+\item{data}{Data frame being prepared for import to REDCap.}
 
 \item{meta_data}{REDCap database meta data.}
-
-\item{records}{The data frame to be validated.}
-
-\item{ids}{Character vector giving the names of fields that uniquely 
-identify a record.  Usually the study id and \code{redcap_event_name}.}
 
 \item{logfile}{A character string giving the filepath to which the 
 results of the validation are printed.  If \code{""}, the results 
@@ -60,8 +55,8 @@ Radio and dropdown fields may have either the coding in the data
 dictionary or the labels in the data dictionary. The validation will use 
 the meta data to convert any matching values to the appropriate coding 
 before importing to REDCap.  Values that cannot be reconciled are 
-deleted with a message printed in the log.  Currently, these variables
-\emph{are} case-sensitive.
+deleted with a message printed in the log.  These variables
+are not case-sensitive.
 
 Checkbox fields require a value of "Checked", "Unchecked", "0", or "1".  
 These are currently case sensitive.  Values that do not match these are 

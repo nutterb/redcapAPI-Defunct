@@ -69,11 +69,14 @@
 #' 
 #' options(redcap_api_url=[YOUR_REDCAP_URL])
 #' rcon <- redcapConnection(token=[API_TOKEN])
+#' 
+#' exportRecords(rcon)
 #' }
 #' 
 
 redcapConnection <-
-function(url=getOption('redcap_api_url'),token,conn,project, config=httr::config())
+function(url=getOption('redcap_api_url'),token,conn,project, 
+         config=httr::config())
 {
    if (is.na(url) && missing(conn))
       stop("Need one of url or conn")

@@ -2,7 +2,6 @@
 % Please edit documentation in R/exportReports.R
 \name{exportReports}
 \alias{exportReports}
-\alias{exportReports.redcapApiConnection}
 \alias{exportReports.redcapDbConnection}
 \alias{exportReports.redcapApiConnection}
 \title{Export Reports from a REDCap Database}
@@ -10,11 +9,14 @@
 exportReports(rcon, report_id, factors = TRUE, labels = TRUE,
   dates = TRUE, checkboxLabels = FALSE, ...)
 
-\method{exportReports}{redcapDbConnection}(rcon, report_id, factors = TRUE,
-  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ...)
+\method{exportReports}{redcapDbConnection}(rcon, report_id,
+  factors = TRUE, labels = TRUE, dates = TRUE,
+  checkboxLabels = FALSE, ...)
 
-\method{exportReports}{redcapApiConnection}(rcon, report_id, factors = TRUE,
-  labels = TRUE, dates = TRUE, checkboxLabels = FALSE, ..., proj = NULL)
+\method{exportReports}{redcapApiConnection}(rcon, report_id,
+  factors = TRUE, labels = TRUE, dates = TRUE,
+  checkboxLabels = FALSE, ..., bundle = getOption("redcap_bundle"),
+  error_handling = getOption("redcap_error_handling"))
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
@@ -37,7 +39,10 @@ is only available after REDCap version 6.0.}
 
 \item{...}{Additional arguments to be passed between methods.}
 
-\item{proj}{A \code{redcapProject} object as created by \code{redcapProjectInfo}.}
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 }
 \description{
 Exports reports from a REDCap Database and formats data if requested
@@ -49,6 +54,30 @@ the project.
 Reports are exported based on their id number, which can be looked up in 
 the Reports page of a project
 }
+\section{REDCap API Documentation (6.5.0)}{
+
+This function allows you to export the data set of a report created on a project's 
+"Data Exports, Reports, and Stats" page.
+
+Note about export rights (6.0.0+): Please be aware that Data Export user rights will be 
+applied to this API request. For example, if you have "No Access" data export rights 
+in the project, then the API report export will fail and return an error. And if you 
+have "De-Identified" or "Remove all tagged Identifier fields" data export rights, 
+then some data fields *might* be removed and filtered out of the data set returned 
+from the API. To make sure that no data is unnecessarily filtered out of your API 
+request, you should have "Full Data Set" export rights in the project.
+}
+
+\section{REDCap Version}{
+
+6.0.0+
+}
+
+\section{Known REDCap Limitations}{
+
+None
+}
+
 \author{
 Benjamin Nutter
 }

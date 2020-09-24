@@ -1,23 +1,23 @@
 ## Test environments
-* local Windows install (devel)
-* ubuntu 12.04 (on travis-ci), R 3.1.2
-* win-builder (devel and release)
+* local Linux install (R-3.4.4)
+* remote Linux install (R-3.5.0; ubuntu 4.8.4-2ubuntu1~14.04.3)
+* win-builder (release R 3.5.1)
+* win-builder (2018-07-31 r75040)
 
 ## R CMD check results
-In the previous CRAN submission, the NOTEs below were returned by CRAN. 
-We apologize for not catching them earlier.  Our oversight was not upgrading
-our version of RTools before submitting the package.
 
-1. **The title field should be in title case...**: The title field has been rewritten appropriately 
-2. **Found the following apparent S3 methods exported but not registered**: We have altered the documentation to properly register the methods.
+This release provides a handful of bug fixes following the previous release.
 
-After rerunning the checks, we have only one note left regarding the new package maintainer.  Mr. Nutter will submit his written consent to CRAN@R-project.org separately.
+There were no notes, warnings, or errors produced by CHECK.
 
-There was 1 NOTE:
+## A note on testing
 
-* A note was given about a new maintainer.  
-  Stephen Lane will be taking over as the maintainer
-  due to a change in Mr. Nutter's employment.
+In response to a previous observation from CRAN maintainers, we
+have begun writing unit tests for this package.  Due to security concerns
+around disclosing servers and tokens, we have deliberately prevented tests
+from running on CRAN, and only conduct the tests locally.  We did, however, 
+want testing code to be available to other users, so we have included the 
+tests in the code so that users may run them independently.   
 
 ## Downstream dependencies
 There are no downstream dependencies for this package

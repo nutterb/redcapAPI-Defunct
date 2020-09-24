@@ -1,18 +1,6 @@
-#' @name exportReports
-#' @aliases exportReports.redcapApiConnection
-#' @aliases exportReports.redcapDbConnection
-#' @export exportReports
-#' @importFrom httr POST
-#' @importFrom chron times
-#' @importFrom stringr str_split_fixed
-#' @importFrom Hmisc label.default
-#' @importFrom Hmisc label.data.frame
-#' @importFrom Hmisc 'label<-.default'
-#' @importFrom Hmisc 'label<-.data.frame'
-#' @importFrom Hmisc '[.labelled'
-#' @importFrom Hmisc print.labelled
-#' 
+#' @name exportReports 
 #' @title Export Reports from a REDCap Database
+#' 
 #' @description Exports reports from a REDCap Database and formats data if requested
 #' 
 #' @param rcon A REDCap connection object as created by \code{redcapConnection}.
@@ -27,8 +15,10 @@
 #'   If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
 #'   is the label assigned to the level in the data dictionary. This option 
 #'   is only available after REDCap version 6.0.
-#' @param proj A \code{redcapProject} object as created by \code{redcapProjectInfo}.
+#' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
 #' @param ... Additional arguments to be passed between methods.
+#' @param error_handling An option for how to handle errors returned by the API.
+#'   see \code{\link{redcap_error}}
 #' 
 #' @details
 #' A record of exports through the API is recorded in the Logging section of 
@@ -37,88 +27,154 @@
 #' Reports are exported based on their id number, which can be looked up in 
 #' the Reports page of a project
 #' 
+#' @section REDCap API Documentation (6.5.0):
+#' This function allows you to export the data set of a report created on a project's 
+#' "Data Exports, Reports, and Stats" page.
+#' 
+#' Note about export rights (6.0.0+): Please be aware that Data Export user rights will be 
+#' applied to this API request. For example, if you have "No Access" data export rights 
+#' in the project, then the API report export will fail and return an error. And if you 
+#' have "De-Identified" or "Remove all tagged Identifier fields" data export rights, 
+#' then some data fields *might* be removed and filtered out of the data set returned 
+#' from the API. To make sure that no data is unnecessarily filtered out of your API 
+#' request, you should have "Full Data Set" export rights in the project.
+#' 
+#' @section REDCap Version:
+#' 6.0.0+
+#' 
+#' @section Known REDCap Limitations:
+#' None
+#' 
 #' @author Benjamin Nutter
+#' 
+#' @export
 
 exportReports <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
-              dates=TRUE, checkboxLabels=FALSE, ...)
-    UseMethod("exportReports")
+                          dates=TRUE, checkboxLabels=FALSE, ...)
+  UseMethod("exportReports")
 
 #' @rdname exportReports
 #' @export
 
 exportReports.redcapDbConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
-              dates=TRUE, checkboxLabels=FALSE, ...){
-    message("Please accept my apologies.  The exportMappings method for redcapDbConnection objects\n",
+                                             dates=TRUE, checkboxLabels=FALSE, ...){
+  message("Please accept my apologies.  The exportMappings method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")          
 }
 
 #' @rdname exportReports
 #' @export
 
-exportReports.redcapApiConnection <- function(rcon, report_id, factors=TRUE, labels=TRUE, 
-              dates=TRUE, checkboxLabels=FALSE, ...,
-              proj=NULL){
-              
-  #Hlabel <- require(Hmisc)
-  #if (!Hlabel) stop("Please install the 'Hmisc' package.")
-              
-  .params <- list(token=rcon$token, content='report',
-                    format='csv', returnFormat='csv',
-                    report_id=report_id)
+exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, labels = TRUE, 
+                                              dates = TRUE, checkboxLabels = FALSE, ...,
+                                              bundle = getOption("redcap_bundle"),
+                                              error_handling = getOption("redcap_error_handling")){
   
-  #* descriptive fields aren't exported through the API, and 
-  #* their meta_data can make other aspects of this function difficult,
-  #* so we'll ignore them.
-  if (is.null(proj$meta_data)) meta_data <- exportMetaData(rcon)
-  meta_data <- subset(meta_data, !meta_data$field_type %in% "descriptive")
+  if (!is.na(match("proj", names(list(...)))))
+  {
+    message("The 'proj' argument is deprecated.  Please use 'bundle' instead")
+    bundle <- list(...)[["proj"]]
+  }
   
-  x <- httr::POST(url=rcon$url, body=.params, config=rcon$config)
-  if (x$status_code != "200") stop(as.character(x))
-    
-  x <- utils::read.csv(textConnection(as.character(x)), stringsAsFactors=FALSE, na.strings="")
+  if (!is.numeric(report_id)) report_id <- as.numeric(report_id)
   
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_integerish(x = report_id,
+                               len = 1,
+                               add = coll)
+  
+  massert(~ rcon + bundle,
+          fun = checkmate::assert_class,
+          classes = list(rcon = "redcapApiConnection",
+                         bundle = "redcapBundle"),
+          null.ok = list(rcon = FALSE,
+                         bundle = TRUE),
+          fixed = list(add = coll))
+  
+  massert(~ factors + labels + dates + checkboxLabels,
+          fun = checkmate::assert_logical,
+          fixed = list(len = 1,
+                       add = coll))
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"),
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  #* Secure the meta data.
+  meta_data <- 
+    if (is.null(bundle$meta_data)) 
+      exportMetaData(rcon) 
+  else 
+    bundle$meta_data
+  
+  #* for purposes of the export, we don't need the descriptive fields. 
+  #* Including them makes the process more error prone, so we'll ignore them.
+  meta_data <- meta_data[!meta_data$field_type %in% "descriptive", ]  
+  
+  #* Secure the REDCap version
+  version <- 
+    if (is.null(bundle$version))
+      exportVersion(rcon)
+  else
+    bundle$version
+  
+  body <- list(token = rcon$token, 
+               content = 'report',
+               format = 'csv', 
+               returnFormat = 'csv',
+               report_id = report_id)
+  
+  x <- httr::POST(url = rcon$url, 
+                  body = body, 
+                  config = rcon$config)
+  
+  if (x$status_code != 200) redcap_error(x, error_handling)
+  
+  x <- utils::read.csv(text = as.character(x), 
+                       stringsAsFactors = FALSE, 
+                       na.strings = "")
+
   #* synchronize underscore codings between records and meta data
-  meta_data <- syncUnderscoreCodings(x, meta_data)
+  #* Only affects calls in REDCap versions earlier than 5.5.21
+  if (utils::compareVersion(version, "6.0.0") == -1) 
+    meta_data <- syncUnderscoreCodings(x, meta_data)
   
-  #* Change field_names to match underscore codings
-  if (!is.null(attributes(meta_data)$checkbox_field_name_map)){
-    names(x)[names(x) %in%  attributes(meta_data)$checkbox_field_name_map[, 1]] <- 
-          attributes(meta_data)$checkbox_field_name_map[, 2]
+
+  x <- fieldToVar(records = x, 
+                  meta_data = meta_data, 
+                  factors = factors, 
+                  dates = dates, 
+                  checkboxLabels = checkboxLabels)
+  
+  
+  if (labels) 
+  {
+    field_names <- names(x)
+    field_names <- unique(sub("___.+$", "", field_names))
+    
+    # For reports, there is not check on the field names, since 
+    # the user may only select fields using the interface.
+    # However, [form]_complete fields do not appear in the 
+    # meta data and need to be removed to avoid an error.
+    # See #108
+    field_names <- field_names[field_names %in% meta_data$field_name]
+
+    suffixed <- checkbox_suffixes(fields = field_names,
+                                  meta_data = meta_data, 
+                                  version = version)
+
+    x[suffixed$name_suffix] <-
+      mapply(nm = suffixed$name_suffix,
+             lab = suffixed$label_suffix,
+             FUN = function(nm, lab){
+               labelVector::set_label(x[[nm]], lab)
+             },
+             SIMPLIFY = FALSE)
   }
   
-  lapply(names(x)[names(x) %in% meta_data$field_name],
-      function(i) 
-        {
-          x[[i]] <<- fieldToVar(as.list(meta_data[meta_data$field_name==sub("___[a-z,A-Z,0-9,_]+", "", i),]), 
-                                x[[i]],factors,dates,checkboxLabels,vname=i)
-        }
-  )
-  if (labels){
-    field_names <- gsub("___[a-z,A-Z,0-9,_]+", "", names(x)[names(x) %in% meta_data$field_name])
-    
-    #* Extract label suffixes for checkbox fields
-    #* This takes the choices of the checkboxes from the meta data and organizes
-    #* To be conveniently pasted to 'field_label'
-    #* In this process, a checkbox field label is replicated as many times as it has options
-    checklabs <- function(x){
-      if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
-        opts <- unlist(strsplit(meta_data$select_choices_or_calculations[meta_data$field_name %in% x], "[|]"))
-        opts <- sub("[[:space:]]+$", "", unlist(sapply(strsplit(opts, ","), '[', 2)))
-        opts <- sub("[[:space:]]+", ": ", opts)
-        return(opts)
-      }
-      return("")
-    }
-    field_labels_suffix <- unlist(sapply(unique(field_names), checklabs))
-    
-    #* Ensures field_labels is adjusted to the proper length to account for
-    #* checkbox variables and creates the labels.
-    field_labels <- rep(meta_data$field_label[meta_data$field_name %in% field_names], 
-                        sapply(field_names, length))
-    field_labels <- paste0(field_labels, field_labels_suffix)
-    
-    Hmisc::label(x[, field_names], self=FALSE) <- field_labels
-  }
-  x
-              
+  x 
+  
 }

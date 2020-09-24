@@ -40,16 +40,35 @@
 #' names to the meta data and the expectations of REDCap (for import, 
 #' REDCap expects the underscore codings to be used.
 #' 
+#' @section Backward Compatibility:
+#' In retrospect, we realize that the way \code{syncUnderscoreCodings} is written
+#' is backwards.  We should have altered the field names in the records
+#' data frame.  Any scripts that make use of \code{syncUnderscoreCodings} and were
+#' written prior to version 5.5.21 will fail because the underscores in the codings
+#' will now be present where they weren't before.  
+#' 
+#' For backward compatibility of \code{redcapAPI}, we continue to alter the codings
+#' in the meta data. We do not anticipate many problems, as most people don't use
+#' underscores in the checkbox codings
+#' 
+#' If your scripts were written under REDCap 5.5.21 or higher, you will have no backward
+#' compatibility problems related to this issue.
+#' 
 #' @author Benjamin Nutter
 #' 
 
-syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
+syncUnderscoreCodings <- function(records, meta_data, export = TRUE){
   #* Deterimine if there are any underscores in checkbox codings
-  .checkbox <- subset(meta_data, meta_data$field_type %in% c('checkbox'))
+  .checkbox <- meta_data[meta_data$field_type %in% c('checkbox'), ]
+  
   if (nrow(.checkbox) == 0) return(meta_data)
-  codings <- strsplit(.checkbox$select_choices_or_calculations, "[|]")
-  codings <- lapply(codings, function(x) gsub(",[[:print:]]+", "", x))
-  codings <- lapply(codings, function(x) sub(" ", "", x))
+  
+  codings <- lapply(X = .checkbox$field_name,
+                    FUN = manual_checkbox_suffixes,
+                    meta_data)
+  codings <- lapply(X = codings,
+                    FUN = function(x) sub("^.+___", "", x))
+
   metaUnderscore <- any(sapply(codings, function(x) any(grepl("_", x))))
   
   #* If there are no underscores in checkbox codings, return meta_data.
@@ -59,11 +78,23 @@ syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
   
   #* If the function reaches this point, there were underscores in the codings
   #* Now check the variable names in the exported records for underscores in the coding suffixes
-  ptrn <- paste0("(", paste(.checkbox$field_name, collapse="|"), ")")
-  ptrn_suff <- paste0("(", paste(.checkbox$field_name, "___", sep="", collapse="|"), ")")
-  checkNames <- names(records)[grepl(ptrn, names(records))]
-  checkNames <- gsub(ptrn_suff, "", checkNames)
-  recordUnderscore <- any(grepl("_", checkNames))
+  ptrn <- paste0("(", 
+                 paste(.checkbox$field_name, 
+                       collapse="|"), 
+                 ")")
+  ptrn_suff <- paste0("(", 
+                      paste(.checkbox$field_name, 
+                            "___", 
+                            sep="", 
+                            collapse="|"), 
+                      ")")
+  checkNames <- names(records)[grepl(pattern = ptrn, 
+                                     x = names(records))]
+  checkNames <- gsub(pattern = ptrn_suff, 
+                     replacement = "", 
+                     x = checkNames)
+  recordUnderscore <- any(grepl(pattern = "_", 
+                                x = checkNames))
   
   #* if underscores are found in the meta_data codings and the records suffixes, return meta_data
   #* No further work needed
@@ -73,18 +104,45 @@ syncUnderscoreCodings <- function(records, meta_data, export=TRUE){
   #* If the function reaches this point, the meta_data codings do not match the record suffixes.
   #* This will remove underscores from the meta_data codings and return the 
   #* meta_data so that it matches the records suffixes.
-  oldCoding <- strsplit(.checkbox$select_choices_or_calculations, " [|] ")
-  newCoding <- lapply(oldCoding, function(x) do.call("rbind", strsplit(x, ", ")))
-  newCoding <- lapply(newCoding, function(x){ x[, 1] <- gsub("_", "", x[,1]); return(x)})
-  newCoding <- lapply(newCoding, apply, 1, paste, collapse=", ")
-  newCodingStr <- sapply(newCoding, paste, collapse = " | ")
+  oldCoding <- strsplit(x = .checkbox$select_choices_or_calculations, 
+                        " [|] ")
+  newCoding <- lapply(X = oldCoding, 
+                      FUN = function(x) do.call(what = "rbind", 
+                                                args = strsplit(x, ", ")))
+  newCoding <- lapply(X = newCoding, 
+                      FUN = function(x)
+                        { 
+                          x[, 1] <- gsub(pattern = "_", 
+                                         replacement = "", 
+                                         x = x[,1])
+                          return(x)
+                        }
+                      )
+  newCoding <- lapply(X = newCoding, 
+                      FUN = apply, 
+                      MARGIN = 1, 
+                      paste, 
+                      collapse=", ")
+  newCodingStr <- sapply(X = newCoding, 
+                         FUN = paste, 
+                         collapse = " | ")
   if (export) meta_data$select_choices_or_calculations[meta_data$field_type == "checkbox"] <- newCodingStr
   
-  field_names <- cbind(rep(meta_data$field_name[meta_data$field_type == "checkbox"], sapply(oldCoding, length)), 
-                       gsub(",[[:print:]]+", "", unlist(oldCoding)), 
-                       gsub(",[[:print:]]+", "", unlist(newCoding)))
-  field_names <- cbind(paste(field_names[, 1], field_names[, 2], sep="___"),
-                       paste(field_names[, 1], field_names[, 3], sep="___"))
+  field_names <- cbind(rep(x = meta_data$field_name[meta_data$field_type == "checkbox"], 
+                           sapply(X = oldCoding, 
+                                  FUN = length)), 
+                       gsub(pattern = ",[[:print:]]+", 
+                            replacement = "", 
+                            x = unlist(oldCoding)), 
+                       gsub(pattern = ",[[:print:]]+", 
+                            replacement = "", 
+                            x = unlist(newCoding)))
+  field_names <- cbind(paste(field_names[, 1], 
+                             field_names[, 2], 
+                             sep="___"),
+                       paste(field_names[, 1], 
+                             field_names[, 3], 
+                             sep="___"))
   attr(meta_data, "checkbox_field_name_map") <- field_names
   return(meta_data)
 }
