@@ -43,9 +43,9 @@ manual_checkbox_suffixes <- function(x, meta_data)
     #* Split by "|" then remove any commas or spaces
     opts <- strsplit(x = opts, 
                      split = "\\|")[[1]]
-    opts <- gsub(pattern = ",| ", 
+    opts <- tolower(gsub(pattern = ",| ", 
                  replacement = "", 
-                 x = opts)
+                 x = opts))
     #* Assemble labels
     x <- paste(x, opts, sep="___")
   }
