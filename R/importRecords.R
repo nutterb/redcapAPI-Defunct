@@ -175,7 +175,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
                          vapply(.opts, 
                                 FUN = length,
                                 FUN.VALUE = numeric(1))), 
-                     unlist(.opts), 
+                     tolower(unlist(.opts)), 
                      sep="___")
   
   with_complete_fields <- 
