@@ -382,6 +382,9 @@ exportRecords.redcapApiConnection <-
       mapply(nm = suffixed$name_suffix,
              lab = suffixed$label_suffix,
              FUN = function(nm, lab){
+               print(sprintf("%s: %s",
+                             x[[nm]],
+                             paste0(class(x[[nm]]), collapse = ", ")))
                labelVector::set_label(x[[nm]], lab)
              },
              SIMPLIFY = FALSE)
