@@ -109,7 +109,7 @@ exportRecords_offline <- function(dataFile, metaDataFile,
                   checkboxLabels = checkboxLabels)
   
   if (labels){
-    x[suffixed$name_suffix] <-
+    x[,suffixed$name_suffix, drop = FALSE] <-
       mapply(nm = suffixed$name_suffix,
              lab = suffixed$label_suffix,
              FUN = function(nm, lab){
