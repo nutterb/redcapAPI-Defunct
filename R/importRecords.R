@@ -361,8 +361,6 @@ import_records_batched <- function(rcon, data, batch.size,
 import_records_unbatched <- function(rcon, data, overwriteBehavior,
                                      returnContent)
 {
-  data[is.na(data)] <- ""
-
   out <- data_frame_to_string(data)
   
   ## Reattach attributes
@@ -395,7 +393,8 @@ data_frame_to_string <- function(data)
       utils::write.table(data, 
                          sep = ",",
                          col.names = TRUE,
-                         row.names = FALSE)
+                         row.names = FALSE,
+                         na = "")
     ),
     collapse = "\n"
   )
