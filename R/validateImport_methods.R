@@ -442,7 +442,8 @@ validate_import_email <- function(x, field_name, logfile)
     field_name = field_name,
     indices = w,
     message = paste0("Value(s) are not valid e-mail addresses.\n",
-                     "Values not imported.")
+                     "Values not imported."),
+    logfile = logfile
   )
   
   x[w] <- NA
