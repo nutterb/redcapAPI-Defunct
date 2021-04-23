@@ -32,12 +32,14 @@
 #' @references
 #' Please refer to your institution's API documentation.
 #' 
+#' @export
 
 deleteRecords <- function(rcon, records, arms = NULL, ...){
   UseMethod("deleteArms")
 }
 
 #' @rdname deleteRecords
+#' @export
 
 deleteRecords.redcapDbConnection <- function(rcon, records, arms = NULL, ...){
   message("Please accept my apologies.  The deleteArms method for redcapDbConnection objects\n",
@@ -45,6 +47,7 @@ deleteRecords.redcapDbConnection <- function(rcon, records, arms = NULL, ...){
 }
 
 #' @rdname deleteRecords
+#' @export
 
 deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
                                            error_handling = getOption("redcap_error_handling")){

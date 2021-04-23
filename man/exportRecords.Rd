@@ -7,27 +7,71 @@
 \alias{exportRecords_offline}
 \title{Export Records from a REDCap Database}
 \usage{
-exportRecords(rcon, factors = TRUE, fields = NULL, forms = NULL,
-  records = NULL, events = NULL, labels = TRUE, dates = TRUE,
-  survey = TRUE, dag = TRUE, checkboxLabels = FALSE,
-  colClasses = NA, ...)
+exportRecords(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...
+)
 
-\method{exportRecords}{redcapDbConnection}(rcon, factors = TRUE,
-  fields = NULL, forms = NULL, records = NULL, events = NULL,
-  labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ...)
+\method{exportRecords}{redcapDbConnection}(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...
+)
 
-\method{exportRecords}{redcapApiConnection}(rcon, factors = TRUE,
-  fields = NULL, forms = NULL, records = NULL, events = NULL,
-  labels = TRUE, dates = TRUE, survey = TRUE, dag = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ..., batch.size = -1,
+\method{exportRecords}{redcapApiConnection}(
+  rcon,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  records = NULL,
+  events = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  survey = TRUE,
+  dag = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...,
+  batch.size = -1,
   bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling"),
-  form_complete_auto = TRUE)
+  form_complete_auto = TRUE
+)
 
-exportRecords_offline(dataFile, metaDataFile, factors = TRUE,
-  fields = NULL, forms = NULL, labels = TRUE, dates = TRUE,
-  checkboxLabels = FALSE, colClasses = NA, ..., meta_data)
+exportRecords_offline(
+  dataFile,
+  metaDataFile,
+  factors = TRUE,
+  fields = NULL,
+  forms = NULL,
+  labels = TRUE,
+  dates = TRUE,
+  checkboxLabels = FALSE,
+  colClasses = NA,
+  ...,
+  meta_data
+)
 }
 \arguments{
 \item{rcon}{A REDCap connection object as created by \code{redcapConnection}.}
