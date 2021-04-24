@@ -1,10 +1,10 @@
-#' @name redcap_error
+#' @name redcapError
 #' @title Handle Errors from the REDCap API
 #' 
 #' @description Determine the proper way to handle errors returned from the API.
 #'   Not all errors should be fatal.  See Details for more
 #'   
-#' @param x Object returned by \code{\link[httr]{POST}}.
+#' @param response A \code{response} object returned by \code{\link[httr]{POST}}.
 #' @param error_handling Direction for how to handle errors.  May be either 
 #'   \code{"null"} or \code{"error"}. See Details.
 #' 
@@ -45,12 +45,34 @@
 #' @author Benjamin Nutter
 #' 
 
-redcap_error <- function(x, error_handling)
-{
-  handle <- c("ERROR: The value of the parameter \"content\" is not valid",
-              "ERROR: You cannot export arms for classic projects",
-              "ERROR: You cannot export events for classic projects",
-              "ERROR: You cannot export form/event mappings for classic projects")
-  if (as.character(x) %in% handle && error_handling == "null") return(NULL)
-  else stop(paste0(x$status_code, ": ", as.character(x)))
+redcapError <- function(response, error_handling = getOption("redcap_error_handling", "null")){
+  # Argument Validation ---------------------------------------------
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = response, 
+                          classes = "response",
+                          add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"), 
+                                        add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  # Functional Code -------------------------------------------------
+  
+  if (response$status_code != 200){
+    
+    handle <- c("ERROR: The value of the parameter \"content\" is not valid",
+                "ERROR: You cannot export arms for classic projects",
+                "ERROR: You cannot export events for classic projects",
+                "ERROR: You cannot export form/event mappings for classic projects")
+    if (as.character(response) %in% handle && error_handling == "null"){
+      return(NULL)
+    } else {
+      stop(paste0(response$status_code, ": ", as.character(response)))
+    } 
+  }
+  
+  invisible(TRUE)
 }

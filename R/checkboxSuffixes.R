@@ -1,4 +1,4 @@
-#' @name checkbox_suffixes 
+#' @name checkboxSuffixes 
 #' @title Checkbox Suffixes
 #' 
 #' @description Checkbox variables return one vector of data for each option defined
@@ -12,12 +12,12 @@
 #' 
 #' @export
 
-checkbox_suffixes <- function(fields, meta_data, version)
+checkboxSuffixes <- function(fields, meta_data, version)
 {
   name_suffix <- sapply(X = fields, 
                         FUN = manual_checkbox_suffixes, 
                         meta_data)
-
+  
   label_suffix <- 
     sapply(X = fields,
            FUN = manual_checkbox_label_suffixes,
@@ -27,8 +27,7 @@ checkbox_suffixes <- function(fields, meta_data, version)
        label_suffix = unlist(label_suffix))
 }
 
-#***********************************************
-#* Unexported methods
+# Unexported methods ------------------------------------------------
 
 #* Get full variable names (appends ___[option] to checkboxes)
 manual_checkbox_suffixes <- function(x, meta_data)
@@ -40,14 +39,17 @@ manual_checkbox_suffixes <- function(x, meta_data)
                  replacement = "", 
                  x = meta_data$select_choices_or_calculations[meta_data$field_name %in% x], 
                  perl = TRUE)
+    
     #* Split by "|" then remove any commas or spaces
     opts <- strsplit(x = opts, 
                      split = "\\|")[[1]]
     opts <- tolower(gsub(pattern = ",| ", 
-                 replacement = "", 
-                 x = opts))
+                         replacement = "", 
+                         x = opts))
     #* Assemble labels
-    x <- paste(x, opts, sep="___")
+    x <- paste(x, 
+               opts, 
+               sep="___")
   }
   x
 }
@@ -59,13 +61,17 @@ manual_checkbox_label_suffixes <- function(x, meta_data)
   if (meta_data$field_type[meta_data$field_name %in% x] == "checkbox"){
     #* Select choices
     opts <- meta_data$select_choices_or_calculations[meta_data$field_name %in% x]
+    
     #* Remove choice numbers, split, then remove spaces
     opts <- gsub("\\d,", "", opts)
     opts <- strsplit(x = opts,
                      split = "[|]")[[1]]
     opts <- gsub("(^ *| *$)", "", opts)
+    
     #* Assemble labels
-    paste0(meta_data$field_label[meta_data$field_name %in% x], ": ", opts)
+    paste0(meta_data$field_label[meta_data$field_name %in% x], 
+           ": ", 
+           opts)
   }
   else 
   {

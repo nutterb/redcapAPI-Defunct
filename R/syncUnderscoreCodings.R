@@ -68,7 +68,7 @@ syncUnderscoreCodings <- function(records, meta_data, export = TRUE){
                     meta_data)
   codings <- lapply(X = codings,
                     FUN = function(x) sub("^.+___", "", x))
-
+  
   metaUnderscore <- any(sapply(codings, function(x) any(grepl("_", x))))
   
   #* If there are no underscores in checkbox codings, return meta_data.
@@ -111,13 +111,13 @@ syncUnderscoreCodings <- function(records, meta_data, export = TRUE){
                                                 args = strsplit(x, ", ")))
   newCoding <- lapply(X = newCoding, 
                       FUN = function(x)
-                        { 
-                          x[, 1] <- gsub(pattern = "_", 
-                                         replacement = "", 
-                                         x = x[,1])
-                          return(x)
-                        }
-                      )
+                      { 
+                        x[, 1] <- gsub(pattern = "_", 
+                                       replacement = "", 
+                                       x = x[,1])
+                        return(x)
+                      }
+  )
   newCoding <- lapply(X = newCoding, 
                       FUN = apply, 
                       MARGIN = 1, 

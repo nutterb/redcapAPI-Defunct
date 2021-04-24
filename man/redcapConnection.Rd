@@ -2,92 +2,66 @@
 % Please edit documentation in R/redcapConnection.R
 \name{redcapConnection}
 \alias{redcapConnection}
+\alias{redcap_connection}
+\alias{print.redcapApiConnection}
 \title{Connect to a REDCap Database}
 \usage{
-redcapConnection(
-  url = getOption("redcap_api_url"),
-  token,
-  conn,
-  project,
-  config = httr::config()
-)
+redcapConnection(url = getOption("redcap_api_url"), token, config = list())
+
+redcap_connection(url = getOption("redcap_api_url"), token, config = list())
+
+\method{print}{redcapApiConnection}(x, ...)
 }
 \arguments{
-\item{url}{URL for a REDCap database API.  Check your institution's REDCap 
-documentation for this address.  Either \code{url} or \code{conn} must 
-be specified.}
+\item{url}{\code{character(1)} The URL for a REDCap API connection.
+Check your institution's REDCap documentation for this address.}
 
-\item{token}{REDCap API token}
+\item{token}{\code{character(1)} REDCap API token. It is expected that 
+this will be exactly 32 characters (after removing leading and 
+trailing whitespace)}
 
-\item{conn}{The database connection to be used. If used, \code{project}
-must also be used.}
-
-\item{project}{The project ID in the REDCap tables.}
-
-\item{config}{A list to be passed to \code{httr::POST}.  This allows the 
+\item{config}{\code{list} of configuration parameters to pass to 
+\code{\link[httr]{config}}. This allows the 
 user to set additional configurations for the API calls, such as 
-certificates, ssl version, etc. For the majority of users, this does 
-not need to be altered.  See Details for more about this argument's 
-purpose and the \code{redcapAPI} wiki for specifics on its use.}
+certificates, ssl version, etc.}
+
+\item{x}{A \code{redcapApiConnection} object to be printed.}
+
+\item{...}{Additional arguments to pass to other methods.}
 }
 \description{
 Creates an object of class \code{redcapApiConnection} for 
-using the REDCap API [or a direct connection through an SQL server]
+using the REDCap API
 }
 \details{
-For convenience, you may consider using 
-\code{options(redcap_api_url=[your URL here])} in your RProfile.
 To obtain an API token for a project, do the following:\cr
 Enter the 'User Right' section of a project\cr
 Select a user\cr
-Check the box for 'API Data Export' or 'API Data Import,' as appropriate.  A full tutorial on 
-configuring REDCap to use the API can be found at \url{https://github.com/nutterb/redcapAPI/wiki}
+Check the box for 'API Data Export' or 'API Data Import,' as appropriate. 
 
 Tokens are specific to a project, and a token must be created for each 
 project for which you wish to use the API.
 
-The \code{config} argument is passed to the \code{httr::POST} argument of 
-the same name.  The most likely reason for using this argument is that the 
-certificate files bundled in \code{httr} have fallen out of date.  
-Hadley Wickham is pretty good about keeping those certificates up 
-to date, so most of the time this problem can be resolved by updating 
-\code{httr} to the most recent version.  If that doesn't work, a 
-certificate file can be manually passed via the \code{config} argument.  
-The \code{redcapAPI} wiki has a more detailed tutorial on how to 
-find and pass an SSL certificate to the API call 
-(\url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
-
 Additional Curl option can be set in the \code{config} argument.  See the documentation
-for \code{httr::config} and \code{httr:httr_options} for more Curl options.
+for \code{\link[httr]{config}} and \code{\link[httr]{httr_options}} for more Curl options.
 }
-\examples{
-\dontrun{
-rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
+\section{Functional Requirements}{
 
-options(redcap_api_url=[YOUR_REDCAP_URL])
-rcon <- redcapConnection(token=[API_TOKEN])
-
-exportRecords(rcon)
+\enumerate{
+ \item Return an object of class \code{redcapApiConnection}
+ \item Leading and trailing white space are removed from \code{token}
+ \item Throw an error if \code{url} is not a \code{character(1)}
+ \item Throw an error if \code{token} is not a \code{character(1)}
+ \item Throw an error if \code{token} does not have either 32 or 64 characters
+ \item Throw an error if \code{config} is not a \code{list}
+}
 }
 
-}
 \references{
 This functionality were originally developed by Jeffrey Horner in the 
 \code{redcap} package.
 \url{https://github.com/vubiostat/redcap}
-
-A tutorial on configuring the REDCap user rights for the API is found at 
-\url{https://github.com/nutterb/redcapAPI/wiki/Setting-the-User-Rights-to-Grant-API-Access}
-
-A tutorial on requesting and obtaining your API token is found at
-\url{https://github.com/nutterb/redcapAPI/wiki/Finding-Your-REDCap-API-Token}
-
-A tutorial on finding your API url is found at
-\url{https://github.com/nutterb/redcapAPI/wiki/Finding-your-REDCap-API-URL}
-
-A tutorial for finding and using alternate SSL certificates is found at 
-\url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}
 }
 \author{
-Jeffrey Horner
+Jeffrey Horner, Benjamin Nutter
 }

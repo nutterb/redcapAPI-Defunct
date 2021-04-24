@@ -14,12 +14,13 @@
 #'   will be returned, regardless of whether it is included in \code{fields} or 
 #'   not.  Be careful to use the form names in the second column of the data 
 #'   dictionary, and not the display names shown on the webpage.
-#' @param ... Arguments to be passed to other methods.
 #' @param error_handling An option for how to handle errors returned by the API.
-#'   see \code{\link{redcap_error}}
-#' @param drop_utf8 \code{logical(1)}. In some cases, UTF-8 characters can 
-#'   pose problems for exporting the data dictionary.  Set this to \code{TRUE}
-#'   to replace any UTF-8 characters with empty characters.
+#'   see \code{\link{redcapError}}. One of \code{c("null", "error")}.
+#' @param config Additional controls to be passed to other \code{\link[httr]{config}}.
+#'   These will be appended to the controls given in \code{rcon}.
+#' @param api_param \code{list} Additional API parameters to pass into the
+#'   body of the API call. This provides users to execute calls with options
+#'   that may not otherwise be supported by \code{redcapAPI}.
 #' 
 #' @details A record of this export is placed in the REDCap logging page, 
 #' but the file that is exported is not stored in the database.
@@ -30,10 +31,6 @@
 #' @section REDCap Version:
 #' 5.8.2+ (and earlier, but we don't know how much earlier)
 #' 
-#' @section Known REDCap Limitations: 
-#' The API doesn't respond to the \code{fields} and \code{forms} arguments.  It
-#' always returns the full data dictionary.
-#' 
 #' @author Jeffrey Horner
 #' 
 #' @references
@@ -42,68 +39,107 @@
 #' 
 #' Please refer to your institution's API documentation.
 #' 
-#' Additional details on API parameters are found on the package wiki at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+#' @section Functional Requirements:
+#' \enumerate{
+#'  \item Return a data frame with the meta data.
+#'  \item Throw an error if \code{fields} is not a \code{character}
+#'  \item Throw an error if \code{forms} is not a \code{character}
+#'  \item Throw an error if \code{error_handling} is not one of \code{c("null", "error")}
+#' }
 #' 
 #' @export
 
-exportMetaData <- function(rcon, ...) UseMethod("exportMetaData")
-
-#' @rdname exportMetaData
-#' @export
-
-exportMetaData.redcapDbConnection <- 
-  function(rcon, ...)
-  {
-    message("Please accept my apologies.  The exportMetaData method for redcapDbConnection objects\n",
-            "has not yet been written.  Please consider using the API.")
-}
-
-#' @rdname exportMetaData
-#' @export
-
-exportMetaData.redcapApiConnection <-
-function(rcon, fields=NULL, forms=NULL,
-         error_handling = getOption("redcap_error_handling"), ...,
-         drop_utf8 = FALSE)
-{
+exportMetaData <- function(rcon, 
+                           fields = character(0), 
+                           forms = character(0), 
+                           error_handling = getOption("redcap_error_handling", "null"), 
+                           config = list(), 
+                           api_param = list()){
+  # Argument Validation ---------------------------------------------
   coll <- checkmate::makeAssertCollection()
   
-  checkmate::assert_class(x = rcon,
-                          classes = "redcapApiConnection",
+  checkmate::assert_class(x = rcon, 
+                          classes = "redcapApiConnection", 
                           add = coll)
   
-  massert(~ fields + forms,
-          fun = checkmate::assert_character,
-          fixed = list(null.ok = TRUE,
-                       add = coll))
+  checkmate::assert_character(x = fields, 
+                              add = coll)
   
-  checkmate::assert_logical(x = drop_utf8,
-                            len = 1,
-                            add = coll)
+  checkmate::assert_character(x = forms,
+                              add = coll)
+  
+  error_handling <- checkmate::matchArg(x = error_handling, 
+                                        choices = c("null", "error"))
+  
+  checkmate::assert_list(x = config, 
+                         add = coll)
+  
+  checkmate::assert_list(x = api_param, 
+                         add = coll)
   
   checkmate::reportAssertions(coll)
   
-  body <- list(token = rcon$token,
-               content = "metadata",
-               format = "csv",
-               returnFormat = "csv")
+  # Functional Code -------------------------------------------------
 
-  if (!is.null(fields)) body[['fields']] <- fields
-  if (!is.null(forms)) body[['forms']] <- forms
- 
-  x <- httr::POST(url = rcon$url, 
-                  body = body, 
-                  config = rcon$config)
-
-  if (x$status_code != 200) return(redcap_error(x, error_handling))
+  # Build the body object -------------------------------------------
   
-  x <- as.character(x)
-  if (drop_utf8)
-  {
-    x <- iconv(x, "utf8", "ASCII", sub = "")
-  }
-  utils::read.csv(text = x, 
+  body <- .exportMetaData_makeBodyList(fields = fields, 
+                                       forms = forms, 
+                                       api_param = api_param)
+  
+  # Make the API Call -----------------------------------------------
+  
+  response <- makeApiCall(rcon = rcon, 
+                          body = body, 
+                          config = config)
+  
+  redcapError(response, 
+              error_handling = error_handling)
+  
+  # Return Data Frame -----------------------------------------------
+  
+  utils::read.csv(text = as.character(response), 
                   stringsAsFactors = FALSE, 
                   na.strings = "")
 }
+
+# UNEXPORTED METHODS ------------------------------------------------
+
+.exportMetaData_makeBodyList <- function(fields, forms, api_param){
+  body <- list(content = "metadata", 
+               format = "csv", 
+               returnFormat = "csv")
+  
+  if (length(fields) > 0){
+    fields <- vectorToApiBodyList(fields, "fields")
+    body <- c(body, fields)
+  }
+  
+  if (length(forms) > 0){
+    forms <- vectorToApiBodyList(forms, "forms")
+    body <- c(body, forms)
+  }
+  
+  if (length(api_param) > 0){
+    body <- c(body, api_param)
+  }
+  
+  body
+}
+
+# ALIASES -----------------------------------------------------------
+
+#' @rdname exportMetaData
+#' @export
+
+export_meta_data <- exportMetaData
+
+#' @rdname exportMetaData
+#' @export
+
+exportDataDictionary <- exportMetaData
+
+#' @rdname exportMetaData
+#' @export
+
+export_data_dictionary <- exportMetaData

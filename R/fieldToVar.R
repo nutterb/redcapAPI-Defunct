@@ -1,5 +1,4 @@
 #' @name fieldToVar
-#' @importFrom chron times
 #' 
 #' @title Convert a REDCap Data Field to an R Vector
 #' @description Converts a field exported from REDCap into a valid R vector
@@ -53,11 +52,11 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
     #   meta_data$field_type[meta_data$field_name == field_base]
     field_type[field_type == "text" & 
                  !is.na(field_text_type)] <- field_text_type
-
+    
     field_type <- gsub(pattern = "_(dmy|mdy|ymd)$", 
                        replacement = "_",
                        x = field_type)
-
+    
     
     records[[i]] <- 
       switch(field_type,
@@ -67,7 +66,7 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                    as.POSIXct(records[[i]], format = "%Y-%m-%d") 
                  else 
                    records[[i]]
-                },
+               },
              "datetime_" = 
                {
                  if (dates) 
@@ -123,35 +122,29 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
              "yesno" = makeRedcapYN(records[[i]], 
                                     factors),
              "truefalse" = 
-              {
-                if (factors) 
-                  as.logical(records[[i]])
-                else
-                  records[[i]]
-              },
+               {
+                 if (factors) 
+                   as.logical(records[[i]])
+                 else
+                   records[[i]]
+               },
              "checkbox" = 
-              {
-                makeRedcapCheckbox(x = records[[i]],
-                                   suffix = gsub("^.+___", "", names(records)[i]),
-                                   coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
-                                   factors = factors,
-                                   checkboxLabels = checkboxLabels)
-              },
+               {
+                 makeRedcapCheckbox(x = records[[i]],
+                                    suffix = gsub("^.+___", "", names(records)[i]),
+                                    coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
+                                    factors = factors,
+                                    checkboxLabels = checkboxLabels)
+               },
              "form_complete" = 
-             {
-               makeRedcapFactor(x = records[[i]],
-                                coding = "0, Incomplete | 1, Unverified | 2, Complete",
-                                factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base])
-             },
+               {
+                 makeRedcapFactor(x = records[[i]],
+                                  coding = "0, Incomplete | 1, Unverified | 2, Complete",
+                                  factors, 
+                                  var_name = meta_data$field_name[meta_data$field_name == field_base])
+               },
              records[[i]]
       ) # End switch
   } # End for loop
   records
 }    
-
-
-
-  
-
-    

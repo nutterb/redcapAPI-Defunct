@@ -1,35 +1,112 @@
 context("redcapConnection.R")
 
-if (file.exists("local-token.Rdata")){
-  load("local-token.Rdata")
-} else {
-  url <- "https://redcap.notaplace.net/redcap/api/"
-  token_case_01 <- "NOTaREALtoken1234567890123456789"
-}
+# Functional Requirement 1 ------------------------------------------
 
 test_that(
-  "Create a redcapApiConnection object",
-  expect_equal(
-    class(redcapConnection(url = url,
-                           token = token_case_01)),
-    "redcapApiConnection"
-  )
-)
-
-test_that(
-  "Cast an error if url is missing",
+  "Return an object of class `redcapApiConnection`",
   {
-    expect_error(
-      redcapConnection(token = token)
+    expect_equal(
+      class(redcapConnection(url = "https://some_url.com/api", 
+                     token = "abcdefghijklmnopqrstuvwxyz123456")),
+      "redcapApiConnection"
     )
   }
 )
 
+# Functional Requirement 2 ------------------------------------------
+
 test_that(
-  "Cast an error if token is missing",
+  "Leading and trailing white space are removed from `token`",
+  expect_equal(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = " abcdefghijklmnopqrstuvwxyz123456 ")$token,
+    "abcdefghijklmnopqrstuvwxyz123456"
+  )
+)
+
+
+# Functional Requirement 3 ------------------------------------------
+
+test_that(
+  "Throw an error if `url` is not a `character(1)`", 
+  expect_error(
+    redcapConnection(url = 123, 
+                     token = "abcdefghijklmnopqrstuvwxyz123456"), 
+  )
+)
+
+test_that(
+  "Throw an error if `url` is not a `character(1)`", 
+  expect_error(
+    redcapConnection(url = c("url1", "url2"), 
+                     token = "abcdefghijklmnopqrstuvwxyz123456"), 
+  )
+)
+
+
+# Functional Requirement 4 ------------------------------------------
+
+test_that(
+  "Throw an error if `token` is not a `character(1)`", 
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = c(TRUE, FALSE)), 
+  )
+)
+
+test_that(
+  "Throw an error if `url` is not a `character(1)`", 
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = c("abcdefghijklmnopqrstuvwxyz123456", 
+                               "abcdefghijklmnopqrstuvwxyz123456")), 
+  )
+)
+
+# Functional Requirement 5 ------------------------------------------
+
+test_that(
+  "Throw an error if `token` does not have either 32 or 64 characters",
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = "abcdefghijklmnopqrstuvwxyz1234567")
+  )
+)
+
+test_that(
+  "Throw an error if `token` does not have either 32 or 64 characters",
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = "abcdefghijklmnopqrstuvwxyz12345")
+  )
+)
+
+test_that(
+  "Throw an error if `token` does not have either 32 or 64 characters",
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = "abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz1234567")
+  )
+)
+
+test_that(
+  "Throw an error if `token` does not have either 32 or 64 characters",
+  expect_error(
+    redcapConnection(url = "https://some_url.com/api", 
+                     token = "abcdefghijklmnopqrstuvwxyz123456abcdefghijklmnopqrstuvwxyz12345")
+  )
+)
+
+
+# Functional Requirement 6 ------------------------------------------
+
+test_that(
+  "Throw an error if `config` is not a `list`", 
   {
     expect_error(
-      redcapConnection(url = url)
+      redcapConnection(url = "https://some_url.com/api", 
+                       token = "abcdefghijklmnopqrstuvwxyz123456",
+                       config = "this is not a list")
     )
   }
 )

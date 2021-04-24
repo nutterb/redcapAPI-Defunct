@@ -1,7 +1,7 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.3.1
+Version: 3.0.0
 Authors@R: c(
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
            role = c("aut", "ctb", "cre")),
@@ -27,16 +27,11 @@ Depends:
 Imports:
     checkmate,
     chron,
-    DBI,
     httr,
     labelVector,
-    lubridate,
-    readr,
-    stringr,
-    tidyr
 LazyLoad: yes
-URL: https://github.com/nutterb/redcapAPI/wiki,
-    https://github.com/nutterb/redcapAPI,
+URL: https://github.com/nutterb/redcapAPI,
     https://projectredcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues
 RoxygenNote: 7.1.1
+Encoding: UTF-8

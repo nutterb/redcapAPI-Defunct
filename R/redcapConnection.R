@@ -1,105 +1,105 @@
 #' @name redcapConnection
-#' @export redcapConnection
-#' 
 #' @title Connect to a REDCap Database
-#' @description Creates an object of class \code{redcapApiConnection} for 
-#' using the REDCap API [or a direct connection through an SQL server]
 #' 
-#' @param url URL for a REDCap database API.  Check your institution's REDCap 
-#'   documentation for this address.  Either \code{url} or \code{conn} must 
-#'   be specified.
-#' @param token REDCap API token
-#' @param conn The database connection to be used. If used, \code{project}
-#'   must also be used.
-#' @param project The project ID in the REDCap tables.
-#' @param config A list to be passed to \code{httr::POST}.  This allows the 
+#' @description Creates an object of class \code{redcapApiConnection} for 
+#' using the REDCap API
+#' 
+#' @param url \code{character(1)} The URL for a REDCap API connection.
+#'   Check your institution's REDCap documentation for this address.
+#' @param token \code{character(1)} REDCap API token. It is expected that 
+#'   this will be exactly 32 characters (after removing leading and 
+#'   trailing whitespace)
+#' @param config \code{list} of configuration parameters to pass to 
+#'   \code{\link[httr]{config}}. This allows the 
 #'   user to set additional configurations for the API calls, such as 
-#'   certificates, ssl version, etc. For the majority of users, this does 
-#'   not need to be altered.  See Details for more about this argument's 
-#'   purpose and the \code{redcapAPI} wiki for specifics on its use.
+#'   certificates, ssl version, etc.
+#' @param x A \code{redcapApiConnection} object to be printed. 
+#' @param ... Additional arguments to pass to other methods.
 #'   
-#' @details
-#' For convenience, you may consider using 
-#' \code{options(redcap_api_url=[your URL here])} in your RProfile.
-#' To obtain an API token for a project, do the following:\cr
+#' @details To obtain an API token for a project, do the following:\cr
 #' Enter the 'User Right' section of a project\cr
 #' Select a user\cr
-#' Check the box for 'API Data Export' or 'API Data Import,' as appropriate.  A full tutorial on 
-#' configuring REDCap to use the API can be found at \url{https://github.com/nutterb/redcapAPI/wiki}
+#' Check the box for 'API Data Export' or 'API Data Import,' as appropriate. 
 #' 
 #' Tokens are specific to a project, and a token must be created for each 
 #' project for which you wish to use the API.
 #' 
-#' The \code{config} argument is passed to the \code{httr::POST} argument of 
-#' the same name.  The most likely reason for using this argument is that the 
-#' certificate files bundled in \code{httr} have fallen out of date.  
-#' Hadley Wickham is pretty good about keeping those certificates up 
-#' to date, so most of the time this problem can be resolved by updating 
-#' \code{httr} to the most recent version.  If that doesn't work, a 
-#' certificate file can be manually passed via the \code{config} argument.  
-#' The \code{redcapAPI} wiki has a more detailed tutorial on how to 
-#' find and pass an SSL certificate to the API call 
-#' (\url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
-#' 
 #' Additional Curl option can be set in the \code{config} argument.  See the documentation
-#' for \code{httr::config} and \code{httr:httr_options} for more Curl options.
+#' for \code{\link[httr]{config}} and \code{\link[httr]{httr_options}} for more Curl options.
 #' 
-#' @author Jeffrey Horner
+#' @author Jeffrey Horner, Benjamin Nutter
 #' 
 #' @references 
 #' This functionality were originally developed by Jeffrey Horner in the 
 #' \code{redcap} package.
 #' \url{https://github.com/vubiostat/redcap}
 #' 
-#' A tutorial on configuring the REDCap user rights for the API is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Setting-the-User-Rights-to-Grant-API-Access}
-#' 
-#' A tutorial on requesting and obtaining your API token is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-Your-REDCap-API-Token}
-#' 
-#' A tutorial on finding your API url is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-your-REDCap-API-URL}
-#' 
-#' A tutorial for finding and using alternate SSL certificates is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}
-#' 
-#' @examples
-#' \dontrun{
-#' rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
-#' 
-#' options(redcap_api_url=[YOUR_REDCAP_URL])
-#' rcon <- redcapConnection(token=[API_TOKEN])
-#' 
-#' exportRecords(rcon)
+#' @section Functional Requirements:
+#' \enumerate{
+#'  \item Return an object of class \code{redcapApiConnection}
+#'  \item Leading and trailing white space are removed from \code{token}
+#'  \item Throw an error if \code{url} is not a \code{character(1)}
+#'  \item Throw an error if \code{token} is not a \code{character(1)}
+#'  \item Throw an error if \code{token} does not have either 32 or 64 characters
+#'  \item Throw an error if \code{config} is not a \code{list}
 #' }
 #' 
+#' @export
 
-redcapConnection <-
-function(url=getOption('redcap_api_url'),token,conn,project, 
-         config=httr::config())
-{
-   if (is.na(url) && missing(conn))
-      stop("Need one of url or conn")
-   if (!is.na(url))
-   {
-      if (missing(token))
-         stop("Need an API token")
-      return(
-         structure(
-            list(url=url,token=token, config=config),
-            class='redcapApiConnection'
-         )
-      )
-   }
-   else
-   {
-      if (missing(project))
-         stop("Need a project_id specified in project variable")
-      return(
-         structure(
-            list(conn=conn,project=project),
-            class='redcapDbConnection'
-         )
-      )
-   }
+redcapConnection <- function(url = getOption("redcap_api_url"), 
+                             token, 
+                             config = list()){
+  # Argument Validation ---------------------------------------------
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_character(x = url, 
+                              len = 1, 
+                              add = coll)
+  
+  checkmate::assert_character(x = token, 
+                              len = 1, 
+                              add = coll)
+  
+  checkmate::assert_list(x = config,
+                         add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  token <- trimws(token)
+  
+  if (!nchar(token) %in% c(32, 64)){
+    coll$push(
+      sprintf("`token` must have either 32 or 64 characters. (It currently has %s characters)", 
+              nchar(token))
+    )
+  }
+  
+  checkmate::reportAssertions(coll)
+  
+  # Functional Code -------------------------------------------------
+  structure(list(url = url, 
+                 token = token, 
+                 config = config), 
+            class = "redcapApiConnection")
+}
+
+# ALIASES -----------------------------------------------------------
+
+#' @rdname redcapConnection
+#' @export
+
+redcap_connection <- redcapConnection
+
+# PRINT METHOD ------------------------------------------------------
+
+#' @rdname redcapConnection
+#' @export
+
+print.redcapApiConnection <- function(x, ...){
+  cat("REDCap API Connection", 
+      sprintf("URL:     %s", x$url), 
+      "Token:   Shhh...it's a secret", 
+      "Config:", 
+      sep = "\n")
+  print(x$config)
 }

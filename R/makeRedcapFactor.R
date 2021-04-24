@@ -12,7 +12,7 @@ makeRedcapFactor <- function(x, coding, factors, var_name)
     coding <- regmatches(coding, regexpr(",", coding), invert = TRUE)
     coding <- do.call("rbind", coding)
     coding <- trimws(coding)
-
+    
     if (factors)
     {
       x <- factor(x,
@@ -70,13 +70,13 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
     use_labels <-
       if (!factors && !checkboxLabels)
         c("0", "1")
-      else if (!factors && checkboxLabels)
-        c("", coding[1])
-      else if (factors && !checkboxLabels)
-        c("Unchecked", "Checked")
-      else if (factors && checkboxLabels) 
-        c("", coding[2])
-      
+    else if (!factors && checkboxLabels)
+      c("", coding[1])
+    else if (factors && !checkboxLabels)
+      c("Unchecked", "Checked")
+    else if (factors && checkboxLabels) 
+      c("", coding[2])
+    
     
     if (!factors){
       if (checkboxLabels)
@@ -109,4 +109,3 @@ makeRedcapCheckbox <- function(x, suffix, coding, factors, checkboxLabels)
   }
   x
 }
-
