@@ -6,14 +6,36 @@
 #'   \code{exportRecords} needs these suffixes in order to retrieve all of the 
 #'   variables and to apply the correct labels.
 #'   
-#' @param fields The current field names of interest
-#' @param meta_data The meta data data frame.
-#' @param version The REDCap version number.
+#' @param fields \code{character} The current field names of interest
+#' @param meta_data \code{data.frame}. The meta data data frame.
+#' @param version \code{character(1)} The REDCap version number.
+#' 
+#' @section Functional Requirements:
+#' \enumerate{
+#'  \item Return a list with two vectors of names and labels.
+#'  \item Throw an error if \code{fields} is not a \code{character}
+#'  \item Throw an error if \code{meta_data} is not a \code{data.frame}
+#'  \item Throw an error if \code{version} is not a \code{character(1)}
+#' }
 #' 
 #' @export
 
 checkboxSuffixes <- function(fields, meta_data, version)
 {
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_character(x = fields, 
+                              add = coll)
+  
+  checkmate::assert_data_frame(x = meta_data, 
+                               add = coll)
+  
+  checkmate::assert_character(x = version, 
+                              len = 1, 
+                              add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
   name_suffix <- sapply(X = fields, 
                         FUN = manual_checkbox_suffixes, 
                         meta_data)

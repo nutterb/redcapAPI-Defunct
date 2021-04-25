@@ -28,8 +28,9 @@ Imports:
     checkmate,
     chron,
     httr,
-    labelVector,
+    labelVector
 LazyLoad: yes
+LazyData: true
 URL: https://github.com/nutterb/redcapAPI,
     https://projectredcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues

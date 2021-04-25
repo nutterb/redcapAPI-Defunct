@@ -9,6 +9,16 @@
 #' 
 #' @author Benjamin Nutter with thanks to Philip Chase for showing me how 
 #'   these need to be formatted.
+#'   
+#' @section Functional Requirements: 
+#' \enumerate{
+#'  \item Return a named list. 
+#'  \item The name of each element in the list starts with the value of \code{parameter_name}
+#'  \item Throw an error if \code{x} is not an atomic vector
+#'  \item Throw an error if \code{parameter_name} is not a \code{character(1)}
+#' }
+#'
+#' @export
 
 vectorToApiBodyList <- function(vector, parameter_name){
   # Argument Validation ---------------------------------------------

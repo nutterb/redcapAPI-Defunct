@@ -7,11 +7,11 @@
 checkboxSuffixes(fields, meta_data, version)
 }
 \arguments{
-\item{fields}{The current field names of interest}
+\item{fields}{\code{character} The current field names of interest}
 
-\item{meta_data}{The meta data data frame.}
+\item{meta_data}{\code{data.frame}. The meta data data frame.}
 
-\item{version}{The REDCap version number.}
+\item{version}{\code{character(1)} The REDCap version number.}
 }
 \description{
 Checkbox variables return one vector of data for each option defined
@@ -19,3 +19,13 @@ Checkbox variables return one vector of data for each option defined
   \code{exportRecords} needs these suffixes in order to retrieve all of the 
   variables and to apply the correct labels.
 }
+\section{Functional Requirements}{
+
+\enumerate{
+ \item Return a list with two vectors of names and labels.
+ \item Throw an error if \code{fields} is not a \code{character}
+ \item Throw an error if \code{meta_data} is not a \code{data.frame}
+ \item Throw an error if \code{version} is not a \code{character(1)}
+}
+}
+

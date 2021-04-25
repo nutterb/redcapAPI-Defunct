@@ -62,71 +62,79 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
       switch(field_type,
              "date_" = 
                {
-                 if (dates) 
+                 if (dates){
                    as.POSIXct(records[[i]], format = "%Y-%m-%d") 
-                 else 
+                 } else { 
                    records[[i]]
+                 }
                },
              "datetime_" = 
                {
-                 if (dates) 
+                 if (dates) { 
                    as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M") 
-                 else 
+                 } else { 
                    records[[i]]
+                 }
                },
              "datetime_seconds_" = 
                {
-                 if (dates) 
+                 if (dates){ 
                    as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M:%S") 
-                 else 
+                 } else { 
                    records[[i]]
+                 }
                },
              "time_mm_ss" = 
                {
-                 if (dates) 
+                 if (dates) {
                    chron::times(ifelse(!is.na(records[[i]]), 
                                        paste0("00:", records[[i]]), 
                                        records[[i]]), 
                                 format=c(times="h:m:s"))
-                 else 
+                 } else { 
                    records[[i]]
+                 }
                },
              "time" = 
                {
-                 if (dates)
+                 if (dates) {
                    chron::times(gsub("(^\\d{2}:\\d{2}$)", "\\1:00", records[[i]]), 
                                 format=c(times="h:m:s"))
-                 else 
+                 } else { 
                    records[[i]]
+                 }
                },
              "float" = suppressWarnings(as.numeric(records[[i]])),
              "number" = suppressWarnings(as.numeric(records[[i]])),
              "calc" = suppressWarnings(as.numeric(records[[i]])),
              "int" = suppressWarnings(as.integer(records[[i]])),
              "integer" = suppressWarnings(as.numeric(records[[i]])),
-             "select" = 
+             "select" = {
                makeRedcapFactor(x = records[[i]],
                                 coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
                                 factors = factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
-             "radio" = 
+                                var_name = meta_data$field_name[meta_data$field_name == field_base])
+             },
+             "radio" ={ 
                makeRedcapFactor(x = records[[i]],
                                 coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
                                 factors = factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
+                                var_name = meta_data$field_name[meta_data$field_name == field_base])
+             },
              "dropdown" = 
                makeRedcapFactor(x = records[[i]],
                                 coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
                                 factors = factors, 
-                                var_name = meta_data$field_name),
+                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
              "yesno" = makeRedcapYN(records[[i]], 
                                     factors),
              "truefalse" = 
                {
-                 if (factors) 
+                 if (factors) { 
                    as.logical(records[[i]])
-                 else
+                 } else {
                    records[[i]]
+                 }
                },
              "checkbox" = 
                {
@@ -138,10 +146,12 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                },
              "form_complete" = 
                {
+                 vname <- meta_data$form_name[meta_data$field_name == field_base]
+                 vname <- sprintf("%s_complete", vname)
                  makeRedcapFactor(x = records[[i]],
                                   coding = "0, Incomplete | 1, Unverified | 2, Complete",
                                   factors, 
-                                  var_name = meta_data$field_name[meta_data$field_name == field_base])
+                                  var_name = field_base)
                },
              records[[i]]
       ) # End switch

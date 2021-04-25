@@ -260,15 +260,15 @@ exportRecords <- function(rcon,
   checkmate::reportAssertions(coll)
   
   # Functional Code -------------------------------------------------
-  
+
   version <- .exportRecords_getVersion(bundle = bundle, 
                                        rcon = rcon)
-  
+
   field_names <- .exportRecords_finalizeFieldNames(fields = fields, 
                                                    forms = forms, 
                                                    MetaData = MetaData, 
                                                    form_complete_auto = form_complete_auto)
-  
+
   body <- .exportRecords_makeApiBodyObject(survey = survey, 
                                            dag = dag, 
                                            field_names = field_names, 
@@ -298,26 +298,12 @@ exportRecords <- function(rcon,
                            dates = dates,
                            checkboxLabels = checkboxLabels)
   
-  # Add Labels to Data ----------------------------------------------
+  RedcapData <- .exportRecords_addLabelToData(RedcapData = RedcapData, 
+                                              MetaData = MetaData, 
+                                              field_names = field_names, 
+                                              labels = labels, 
+                                              version = version)
   
-  if (labels){
-    suffixed <-
-      checkboxSuffixes(
-        # The subset prevents `[form]_complete` fields from
-        # being included here.
-        fields = field_names[field_names %in% MetaData$field_name],
-        meta_data = MetaData,
-        version = version)
-
-    RedcapData[,suffixed$name_suffix] <-
-      mapply(nm = suffixed$name_suffix,
-             lab = suffixed$label_suffix,
-             FUN = function(nm, lab){
-               labelVector::set_label(RedcapData[[nm]], lab)
-             },
-             SIMPLIFY = FALSE)
-  }
-
   RedcapData
   
 }
@@ -602,6 +588,28 @@ exportRecords <- function(rcon,
   
   #* 6. Combine tables and return
   do.call("rbind", batch_list)
+}
+
+.exportRecords_addLabelToData <- function(RedcapData, MetaData, field_names, labels, version){
+  if (labels){
+    suffixed <-
+      checkboxSuffixes(
+        # The subset prevents `[form]_complete` fields from
+        # being included here.
+        fields = field_names[field_names %in% MetaData$field_name],
+        meta_data = MetaData,
+        version = version)
+    
+    RedcapData[,suffixed$name_suffix] <-
+      mapply(nm = suffixed$name_suffix,
+             lab = suffixed$label_suffix,
+             FUN = function(nm, lab){
+               labelVector::set_label(RedcapData[[nm]], lab)
+             },
+             SIMPLIFY = FALSE)
+  }
+  
+  RedcapData
 }
 
 # ALIASES -----------------------------------------------------------
