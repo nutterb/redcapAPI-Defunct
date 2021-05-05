@@ -1,7 +1,7 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.3
+Version: 2.3.1
 Authors@R: c(
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
            role = c("aut", "ctb", "cre")),
@@ -39,4 +39,4 @@ URL: https://github.com/nutterb/redcapAPI/wiki,
     https://github.com/nutterb/redcapAPI,
     https://projectredcap.org
 BugReports: https://github.com/nutterb/redcapAPI/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1

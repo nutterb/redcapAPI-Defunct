@@ -377,7 +377,7 @@ validate_import_select_dropdown_radio <- function(x, field_name, field_choice, l
   x <- as.character(x)
   mapping <- strsplit(field_choice, "[|]")
   mapping <- unlist(mapping)
-  mapping <- stringr::str_split_fixed(mapping, ", ", 2)
+  mapping <- stringr::str_split_fixed(mapping, ",", 2)
   mapping <- trimws(mapping)
   
   #* Return labeled values to coded values
@@ -442,7 +442,8 @@ validate_import_email <- function(x, field_name, logfile)
     field_name = field_name,
     indices = w,
     message = paste0("Value(s) are not valid e-mail addresses.\n",
-                     "Values not imported.")
+                     "Values not imported."),
+    logfile = logfile
   )
   
   x[w] <- NA

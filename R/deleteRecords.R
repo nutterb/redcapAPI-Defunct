@@ -32,19 +32,22 @@
 #' @references
 #' Please refer to your institution's API documentation.
 #' 
+#' @export
 
 deleteRecords <- function(rcon, records, arms = NULL, ...){
-  UseMethod("deleteArms")
+  UseMethod("deleteRecords")
 }
 
 #' @rdname deleteRecords
+#' @export
 
 deleteRecords.redcapDbConnection <- function(rcon, records, arms = NULL, ...){
-  message("Please accept my apologies.  The deleteArms method for redcapDbConnection objects\n",
+  message("Please accept my apologies.  The deleteRecords method for redcapDbConnection objects\n",
           "has not yet been written.  Please consider using the API.")
 }
 
 #' @rdname deleteRecords
+#' @export
 
 deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
                                            error_handling = getOption("redcap_error_handling")){
@@ -66,11 +69,14 @@ deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
   
   body <- list(token = rcon$token,
                content = "record",
-               action = "delete",
-               records = paste0(records, collapse = ","))
+               action = "delete")
   
-  print(body[["records"]])
+  records <- lapply(records, 
+                      identity)
+  names(records) <- sprintf("records[%s]", records)
   
+  body <- c(body, records)
+
   if (!is.null(arms))
     body[["arms"]] <- paste0(arms, collapse = ",")
   

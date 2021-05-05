@@ -378,7 +378,7 @@ exportRecords.redcapApiConnection <-
                   checkboxLabels = checkboxLabels)
 
   if (labels){
-    x[suffixed$name_suffix] <-
+    x[,suffixed$name_suffix] <-
       mapply(nm = suffixed$name_suffix,
              lab = suffixed$label_suffix,
              FUN = function(nm, lab){
