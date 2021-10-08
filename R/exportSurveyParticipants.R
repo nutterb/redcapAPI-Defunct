@@ -17,7 +17,7 @@
 #' @export
 
 exportSurveyParticipants <- function(rcon, instrument, event, ...){
-  UseMethod("importArms")
+  UseMethod("exportSurveyParticipants")
 }
 
 #' @rdname exportSurveyParticipants
