@@ -14,12 +14,10 @@
 #'   that may not otherwise be supported by \code{redcapAPI}.
 #'   
 #' @section REDCap API Documentation:
-#' This method allows you to export a list of the data collection instruments 
-#' for a project. This includes their unique instrument name as seen in the 
-#' second column of the Data Dictionary, as well as each instrument's 
-#' corresponding instrument label, which is seen on a project's left-hand 
-#' menu when entering data. The instruments will be ordered according to their 
-#' order in the project.
+#' This method allows you to export some of the basic attributes of a given 
+#' REDCap project, such as the project's title, if it is longitudinal, if 
+#' surveys are enabled, the time the project was created and moved to 
+#' production, etc.
 #' 
 #' @section REDCap Version:
 #' 5.8.2+ 
