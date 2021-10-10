@@ -7,6 +7,11 @@
 exportReports(
   rcon,
   report_id,
+  factors = TRUE,
+  labels = TRUE,
+  dates = TRUE,
+  checkboxLabels = FALSE,
+  bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling", "error"),
   config = list(),
   api_param = list()
@@ -17,6 +22,25 @@ exportReports(
 
 \item{report_id}{\code{character(1)} or \code{numeric(1)} giving the report 
 ID to download.}
+
+\item{factors}{\code{logical(1)}.  Determines if categorical data from the 
+database is 
+returned as numeric codes or labelled factors. See 'Checkbox Variables'
+for more on how this interacts with the \code{checkboxLabels} argument.}
+
+\item{labels}{\code{logical(1)}.  Determines if the variable labels are applied to 
+the data frame.}
+
+\item{dates}{\code{logical(1)} Determines if date variables are converted to POSIXct 
+format during the download.}
+
+\item{checkboxLabels}{Logical. Determines the format of labels in checkbox 
+variables.  If \code{FALSE} labels are applies as "Unchecked"/"Checked".  
+If \code{TRUE}, they are applied as ""/"[field_labe]" where [field_label] 
+is the label assigned to the level in the data dictionary. This option 
+is only available after REDCap version 6.0.}
+
+\item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
 
 \item{error_handling}{An option for how to handle errors returned by the API.
 see \code{\link{redcapError}}}
@@ -32,37 +56,37 @@ that may not otherwise be supported by \code{redcapAPI}.}
 \description{
 This method allows you to export the data set of a report created on a project's 'Data Exports, Reports, and Stats' page.
 }
-\section{REDCap API Documentation}{
+\details{
+A record of exports through the API is recorded in the Logging section of 
+the project.
 
-Please be aware that Data Export user rights will be applied to this API 
-request. For example, if you have 'No Access' data export rights in the 
-project, then the API report export will fail and return an error. And 
-if you have 'De-Identified' or 'Remove all tagged Identifier fields' data 
-export rights, then some data fields might be removed and filtered out 
-of the data set returned from the API. To make sure that no data is 
-unnecessarily filtered out of your API request, you should have 
-'Full Data Set' export rights in the project.
+Reports are exported based on their id number, which can be looked up in 
+the Reports page of a project
+}
+\section{REDCap API Documentation (6.5.0)}{
 
-Also, please note the the 'Export Reports' method does not make use of 
-the 'type' (flat/eav) parameter, which can be used in the 'Export Records'
-method. All data for the 'Export Reports' method is thus exported in flat
-format. If the 'type' parameter is supplied in the API request, it will 
-be ignored.
+This function allows you to export the data set of a report created on a project's 
+"Data Exports, Reports, and Stats" page.
+
+Note about export rights (6.0.0+): Please be aware that Data Export user rights will be 
+applied to this API request. For example, if you have "No Access" data export rights 
+in the project, then the API report export will fail and return an error. And if you 
+have "De-Identified" or "Remove all tagged Identifier fields" data export rights, 
+then some data fields *might* be removed and filtered out of the data set returned 
+from the API. To make sure that no data is unnecessarily filtered out of your API 
+request, you should have "Full Data Set" export rights in the project.
 }
 
 \section{REDCap Version}{
 
-5.8.2+
+6.0.0+
 }
 
 \section{Known REDCap Limitations}{
 
-None.
+None
 }
 
-\references{
-Please refer to your institution's API documentation.
-}
 \author{
 Benjamin Nutter
 }

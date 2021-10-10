@@ -29,38 +29,44 @@ that may not otherwise be supported by \code{redcapAPI}.}
 Returns a data frame
 
 \itemize{
-  \item{username} 
-  \item{email}
-  \item{firstname} 
-  \item{lastname}
-  \item{expiration} 
-  \item{data_access_group} 
-  \item{design}
-  \item{user_rights} 
-  \item{data_access_groups} 
-  \item{data_export}
-  \item{reports}
-  \item{stats_and_charts} 
-  \item{manage_survey_participants} 
-  \item{calendar}
-  \item{data_import_tool}
-  \item{data_comparison_tool} 
-  \item{logging}
-  \item{file_repository} 
-  \item{data_quality_create} 
-  \item{data_quality_execute} 
-  \item{api_export}
-  \item{api_import} 
-  \item{mobile_app} 
-  \item{mobile_app_download_data} 
-  \item{record_create} 
-  \item{record_rename} 
-  \item{record_delete}
-  \item{lock_records_customization} 
-  \item{lock_records}
-  \item{lock_records_all_forms} 
-  \item{forms}
+  \item{\code{username} user name} 
+  \item{\code{email} user e-mail}
+  \item{\code{firstname} first name} 
+  \item{\code{lastname} last name}
+  \item{\code{expiration} user rights expiration date/time} 
+  \item{\code{data_access_group} Data access group of which user is a member} 
+  \item{\code{data_access_group_id} The data access group ID number}
+  \item{\code{design} user has design rights}
+  \item{\code{user_rights} user can edit user rights} 
+  \item{\code{data_access_groups} user can modify data access groups} 
+  \item{\code{data_export} user can export data}
+  \item{\code{reports} user can modify reports}
+  \item{\code{stats_and_charts} user can modify stats and charts} 
+  \item{\code{manage_survey_participants} user can manage survey participants} 
+  \item{\code{calendar} user has calendar rights}
+  \item{\code{data_import_tool} user has rights to the data import tool}
+  \item{\code{data_comparison_tool} user has rights to the data comparison tool} 
+  \item{\code{logging} user has access to logging}
+  \item{\code{file_repository} user has rights for the file repository} 
+  \item{\code{data_quality_create} user can create data quality rules} 
+  \item{\code{data_quality_execute} user can execute data quality rules} 
+  \item{\code{api_export} user has API export privileges}
+  \item{\code{api_import} user has API import privileges} 
+  \item{\code{mobile_app} user has mobile app privileges} 
+  \item{\code{mobile_app_download_data} user has mobile app data download privileges} 
+  \item{\code{record_create} user can create records} 
+  \item{\code{record_rename} user can rename records} 
+  \item{\code{record_delete} user can delete records}
+  \item{\code{lock_records_customization} user can customize locking records}  
+  \item{\code{lock_records} user can lock records}
+  \item{\code{lock_records_all_forms} user can lock records across all forms} 
+  \item{\code{forms} character value with the users access to each form. 0 
+    indicates no access, and 1 indicates access}
 }
+
+The \code{forms} column is used to create a column for each form as a 
+logical flag indicating the user's access. This is a \code{redcapAPI} 
+feature and is not returned by the API itself.
 }
 \description{
 This method allows you to export the list of users for a 
