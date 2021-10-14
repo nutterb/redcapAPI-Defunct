@@ -2,9 +2,19 @@
 % Please edit documentation in R/deleteRecords.R
 \name{deleteRecords}
 \alias{deleteRecords}
+\alias{delete_records}
 \title{Delete Records From a Project}
 \usage{
 deleteRecords(
+  rcon,
+  records,
+  arms = numeric(0),
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+delete_records(
   rcon,
   records,
   arms = numeric(0),
