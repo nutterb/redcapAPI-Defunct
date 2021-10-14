@@ -2,9 +2,17 @@
 % Please edit documentation in R/exportProjectInfo.R
 \name{exportProjectInfo}
 \alias{exportProjectInfo}
+\alias{export_project_info}
 \title{Export Project Information}
 \usage{
 exportProjectInfo(
+  rcon,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_project_info(
   rcon,
   error_handling = getOption("redcap_error_handling", "error"),
   config = list(),

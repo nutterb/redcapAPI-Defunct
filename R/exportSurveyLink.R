@@ -109,4 +109,7 @@ exportSurveyLink <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportSurveyLink
+#' @export
+
 export_survey_link <- exportSurveyLink

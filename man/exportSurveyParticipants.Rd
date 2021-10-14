@@ -2,9 +2,19 @@
 % Please edit documentation in R/exportSurveyParticipants.R
 \name{exportSurveyParticipants}
 \alias{exportSurveyParticipants}
+\alias{export_survey_participants}
 \title{Export Survey Participants}
 \usage{
 exportSurveyParticipants(
+  rcon,
+  instrument,
+  event = character(0),
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_survey_participants(
   rcon,
   instrument,
   event = character(0),

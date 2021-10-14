@@ -77,4 +77,7 @@ exportVersion <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportVersion
+#' @export
+
 export_version <- exportVersion

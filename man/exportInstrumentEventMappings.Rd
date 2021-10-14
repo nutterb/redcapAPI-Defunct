@@ -2,9 +2,18 @@
 % Please edit documentation in R/exportInstrumentEventMappings.R
 \name{exportInstrumentEventMappings}
 \alias{exportInstrumentEventMappings}
+\alias{export_instrument_event_mappings}
 \title{Export Instrument-Event Mappings}
 \usage{
 exportInstrumentEventMappings(
+  rcon,
+  arms = numeric(0),
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_instrument_event_mappings(
   rcon,
   arms = numeric(0),
   error_handling = getOption("redcap_error_handling", "error"),

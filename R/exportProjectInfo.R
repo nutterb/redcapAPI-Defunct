@@ -125,4 +125,7 @@ exportProjectInfo <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportProjectInfo
+#' @export
+
 export_project_info <- exportProjectInfo

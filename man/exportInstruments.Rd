@@ -2,9 +2,17 @@
 % Please edit documentation in R/exportInstruments.R
 \name{exportInstruments}
 \alias{exportInstruments}
+\alias{export_instruments}
 \title{Export Instruments}
 \usage{
 exportInstruments(
+  rcon,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_instruments(
   rcon,
   error_handling = getOption("redcap_error_handling", "error"),
   config = list(),

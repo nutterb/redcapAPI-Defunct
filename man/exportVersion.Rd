@@ -2,9 +2,17 @@
 % Please edit documentation in R/exportVersion.R
 \name{exportVersion}
 \alias{exportVersion}
+\alias{export_version}
 \title{Exports the REDCap Version Number}
 \usage{
 exportVersion(
+  rcon,
+  error_handling = getOption("redcap_error_handling", "null"),
+  config = list(),
+  api_param = list()
+)
+
+export_version(
   rcon,
   error_handling = getOption("redcap_error_handling", "null"),
   config = list(),

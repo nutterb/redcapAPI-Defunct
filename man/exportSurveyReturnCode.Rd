@@ -2,9 +2,21 @@
 % Please edit documentation in R/exportSurveyReturnCode.R
 \name{exportSurveyReturnCode}
 \alias{exportSurveyReturnCode}
+\alias{export_survey_return_code}
 \title{Export a Survey Return Code for a Participant}
 \usage{
 exportSurveyReturnCode(
+  rcon,
+  record,
+  instrument = character(0),
+  event = character(0),
+  repeat_instance = 1,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_survey_return_code(
   rcon,
   record,
   instrument = character(0),

@@ -76,4 +76,7 @@ exportRepeatingInstrumentsAndEvents <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportRepeatingInstrumentsAndEvents
+#' @export
+
 export_repeating_instruments_and_events <- exportRepeatingInstrumentsAndEvents

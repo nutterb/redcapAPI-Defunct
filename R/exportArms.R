@@ -106,4 +106,7 @@ exportArms <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportArms
+#' @export
+
 export_arms <- exportArms

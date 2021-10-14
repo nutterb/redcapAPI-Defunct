@@ -2,9 +2,23 @@
 % Please edit documentation in R/exportFiles.R
 \name{exportFiles}
 \alias{exportFiles}
+\alias{export_files}
 \title{Exports a File attached to a Record}
 \usage{
 exportFiles(
+  rcon,
+  record,
+  field,
+  event = character(0),
+  dir = character(0),
+  filePrefix = TRUE,
+  error_handling = getOption("redcap_error_handling", "error"),
+  bundle = getOption("redcap_bundle"),
+  config = list(),
+  api_param = list()
+)
+
+export_files(
   rcon,
   record,
   field,

@@ -219,4 +219,7 @@ exportFiles <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportFiles
+#' @export
+
 export_files <- exportFiles

@@ -121,4 +121,7 @@ exportSurveyParticipants <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportSurveyParticipants
+#' @export
+
 export_survey_participants <- exportSurveyParticipants

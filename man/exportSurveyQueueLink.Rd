@@ -2,9 +2,18 @@
 % Please edit documentation in R/exportSurveyQueueLink.R
 \name{exportSurveyQueueLink}
 \alias{exportSurveyQueueLink}
+\alias{export_survey_queue_link}
 \title{Export a Survey Queue Link for a Participant}
 \usage{
 exportSurveyQueueLink(
+  rcon,
+  record,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_survey_queue_link(
   rcon,
   record,
   error_handling = getOption("redcap_error_handling", "error"),

@@ -82,4 +82,7 @@ exportInstruments <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportInstruments
+#' @export
+
 export_instruments <- exportInstruments

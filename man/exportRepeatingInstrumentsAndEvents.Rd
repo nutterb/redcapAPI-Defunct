@@ -2,9 +2,17 @@
 % Please edit documentation in R/exportRepeatingInstrumentsAndEvents.R
 \name{exportRepeatingInstrumentsAndEvents}
 \alias{exportRepeatingInstrumentsAndEvents}
+\alias{export_repeating_instruments_and_events}
 \title{Export Repeating Instruments and Events}
 \usage{
 exportRepeatingInstrumentsAndEvents(
+  rcon,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_repeating_instruments_and_events(
   rcon,
   error_handling = getOption("redcap_error_handling", "error"),
   config = list(),

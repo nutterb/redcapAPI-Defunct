@@ -200,8 +200,17 @@ exportProjectXml <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportProjectXml
+#' @export
+
 exportProjectXML <- exportProjectXml
 
+#' @rdname exportProjectXml
+#' @export
+
 export_project_xml <- exportProjectXml
+
+#' @rdname exportProjectXml
+#' @export
 
 export_project_XML <- exportProjectXml

@@ -2,9 +2,17 @@
 % Please edit documentation in R/exportUsers.R
 \name{exportUsers}
 \alias{exportUsers}
+\alias{export_users}
 \title{Export Users}
 \usage{
 exportUsers(
+  rcon,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_users(
   rcon,
   error_handling = getOption("redcap_error_handling", "error"),
   config = list(),

@@ -2,9 +2,18 @@
 % Please edit documentation in R/exportArms.R
 \name{exportArms}
 \alias{exportArms}
+\alias{export_arms}
 \title{Export the Arms for a Project}
 \usage{
 exportArms(
+  rcon,
+  arms = numeric(0),
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_arms(
   rcon,
   arms = numeric(0),
   error_handling = getOption("redcap_error_handling", "error"),

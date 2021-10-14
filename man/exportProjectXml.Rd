@@ -2,9 +2,66 @@
 % Please edit documentation in R/exportProjectXml.R
 \name{exportProjectXml}
 \alias{exportProjectXml}
+\alias{exportProjectXML}
+\alias{export_project_xml}
+\alias{export_project_XML}
 \title{Export Project XML Data}
 \usage{
 exportProjectXml(
+  rcon,
+  filepath,
+  return_metadata_only = FALSE,
+  records = character(0),
+  fields = character(0),
+  events = character(0),
+  export_survey_fields = FALSE,
+  export_data_access_groups = FALSE,
+  filter_logic = character(0),
+  export_files = FALSE,
+  meta_data = NULL,
+  event_list = NULL,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+exportProjectXML(
+  rcon,
+  filepath,
+  return_metadata_only = FALSE,
+  records = character(0),
+  fields = character(0),
+  events = character(0),
+  export_survey_fields = FALSE,
+  export_data_access_groups = FALSE,
+  filter_logic = character(0),
+  export_files = FALSE,
+  meta_data = NULL,
+  event_list = NULL,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_project_xml(
+  rcon,
+  filepath,
+  return_metadata_only = FALSE,
+  records = character(0),
+  fields = character(0),
+  events = character(0),
+  export_survey_fields = FALSE,
+  export_data_access_groups = FALSE,
+  filter_logic = character(0),
+  export_files = FALSE,
+  meta_data = NULL,
+  event_list = NULL,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_project_XML(
   rcon,
   filepath,
   return_metadata_only = FALSE,

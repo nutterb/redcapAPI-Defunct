@@ -101,4 +101,7 @@ exportInstrumentEventMappings <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportInstrumentEventMappings
+#' @export
+
 export_instrument_event_mappings <- exportInstrumentEventMappings

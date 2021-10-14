@@ -2,9 +2,19 @@
 % Please edit documentation in R/exportFieldNames.R
 \name{exportFieldNames}
 \alias{exportFieldNames}
+\alias{export_field_names}
 \title{Export the Export Field Names for a Project}
 \usage{
 exportFieldNames(
+  rcon,
+  fields = character(0),
+  bundle = NULL,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_field_names(
   rcon,
   fields = character(0),
   bundle = NULL,

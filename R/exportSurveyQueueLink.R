@@ -87,4 +87,7 @@ exportSurveyQueueLink <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportSurveyQueueLink
+#' @export
+
 export_survey_queue_link <- exportSurveyQueueLink

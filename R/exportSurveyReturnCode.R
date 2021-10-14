@@ -110,4 +110,7 @@ exportSurveyReturnCode <- function(rcon,
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportSurveyReturnCode
+#' @export
+
 export_survey_return_code <- exportSurveyReturnCode

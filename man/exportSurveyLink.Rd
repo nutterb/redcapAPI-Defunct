@@ -2,9 +2,21 @@
 % Please edit documentation in R/exportSurveyLink.R
 \name{exportSurveyLink}
 \alias{exportSurveyLink}
+\alias{export_survey_link}
 \title{Export a Survey Link for a Participant}
 \usage{
 exportSurveyLink(
+  rcon,
+  record,
+  instrument = character(0),
+  event = character(0),
+  repeat_instance = 1,
+  error_handling = getOption("redcap_error_handling", "error"),
+  config = list(),
+  api_param = list()
+)
+
+export_survey_link(
   rcon,
   record,
   instrument = character(0),

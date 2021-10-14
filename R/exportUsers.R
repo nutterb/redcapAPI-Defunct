@@ -180,4 +180,7 @@ make_instrument_access_columns <- function(user_form_access){
 
 # Aliases -----------------------------------------------------------
 
+#' @rdname exportUsers 
+#' @export
+
 export_users <- exportUsers

@@ -163,4 +163,7 @@ exportFieldNames <- function(rcon,
 
 # ALIASES -----------------------------------------------------------
 
+#' @rdname exportFieldNames
+#' @export
+
 export_field_names <- exportFieldNames
