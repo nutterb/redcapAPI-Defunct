@@ -8,7 +8,7 @@
 exportEvents(
   rcon,
   arms = numeric(0),
-  error_handling = getOption("redcap_error_handling"),
+  error_handling = getOption("redcap_error_handling", "error"),
   config = list(),
   api_param = list()
 )
@@ -16,7 +16,7 @@ exportEvents(
 export_events(
   rcon,
   arms = numeric(0),
-  error_handling = getOption("redcap_error_handling"),
+  error_handling = getOption("redcap_error_handling", "error"),
   config = list(),
   api_param = list()
 )
