@@ -97,3 +97,10 @@ deleteRecords <- function(rcon,
     as.numeric(as.character(response))
   }
 }
+
+# Aliases -----------------------------------------------------------
+
+#' @rdname deleteRecords
+#' @export
+
+delete_records <- deleteRecords
