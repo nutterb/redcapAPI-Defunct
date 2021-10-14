@@ -54,7 +54,7 @@ deleteRecords <- function(rcon,
   if (!checkmate::test_integerish(x = records) && 
       !checkmate::test_character(x = records)){
     coll$push(sprintf("`records` must be either `integerish` or `character`, but is a %s", 
-                      class(arms)))
+                      class(records)))
   }
   
   checkmate::assert_integerish(x = arms, 
