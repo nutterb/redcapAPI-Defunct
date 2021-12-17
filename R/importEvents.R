@@ -91,6 +91,10 @@ importEvents <- function(rcon,
   
   coll <- checkmate::makeAssertCollection()
   
+  checkmate::assert_class(x = rcon, 
+                          classes = "redcapApiConnection", 
+                          add = coll)
+  
   checkmate::assert_data_frame(x = events, 
                                add = coll)
   

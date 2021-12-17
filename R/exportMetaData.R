@@ -88,7 +88,7 @@ exportMetaData <- function(rcon,
                                        api_param = api_param)
   
   # Make the API Call -----------------------------------------------
-  
+
   response <- makeApiCall(rcon = rcon, 
                           body = body, 
                           config = config)
