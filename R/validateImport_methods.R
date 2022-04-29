@@ -272,7 +272,7 @@ validate_import_time_mm_ss <- function(x, field_name, field_min, field_max, logf
 validate_import_numeric <- function(x, field_name, field_min, field_max, logfile)
 {
   suppressWarnings(num_check <- as.numeric(x))
-  w <- which(is.na(num_check) & !is.na(x))
+  w <- which(is.na(num_check) & !is.na(num_check))
   
   suppressWarnings({
     if (!is.numeric(x)) x <- as.numeric(x)
