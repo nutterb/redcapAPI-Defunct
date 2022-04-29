@@ -385,7 +385,7 @@ validate_import_select_dropdown_radio <- function(x, field_name, field_choice, l
     x[x==mapping[i, 2]] <- mapping[i, 1]  
   }
 
-  w <- which(!x %in% mapping[, 1] & !is.na(x))
+  w <- which(!x %in% mapping[, 1] & !x %in% c('', NA))
   
   print_validation_message(
     field_name,
