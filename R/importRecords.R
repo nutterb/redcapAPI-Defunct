@@ -187,8 +187,7 @@ importRecords.redcapApiConnection <- function(rcon, data,
   w.remove <- 
     which(names(data) %in% 
             c("redcap_survey_identifier",
-              paste0(unique(meta_data$form_name), "_timestamp"),
-              "redcap_data_access_group"))
+              paste0(unique(meta_data$form_name), "_timestamp")))
   if (length(w.remove)) data <- data[-w.remove]
   
   unrecognized_names <- !(names(data) %in% c(with_complete_fields, "redcap_event_name", "redcap_repeat_instrument", "redcap_repeat_instance"))
