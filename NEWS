@@ -1,9 +1,11 @@
+
 ## Changes in Version 2.2 (no scheduled date)
 * BREAKING CHANGE: The `dev_allocate` and `prod_allocate` elements of the 
   object returned by `allocationTable` have been named `dev_allocation` and 
   `prod_allocation`, respectively.  
 * Bug fix: `importRecords` now handles data with repeating forms correctly.
 * New feature: UTF-8 Characters may be stripped from the data dictionary.
+* Bug fix: Unmapped suffixes do not cause crashes, only warnings.
 
 ## Change up to Version 2.1 (2018-03-03)
 * Bug fix: Add `[form]_complete` fields
