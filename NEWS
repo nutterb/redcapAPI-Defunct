@@ -1,4 +1,7 @@
-## Changes in Version 2.2 (no scheduled date)
+## Changes in Versino 2.3
+* Bug fix: Unmapped suffixes do not cause crashes, only warnings.
+
+## Changes in Version 2.2
 * BREAKING CHANGE: The `dev_allocate` and `prod_allocate` elements of the 
   object returned by `allocationTable` have been named `dev_allocation` and 
   `prod_allocation`, respectively.  

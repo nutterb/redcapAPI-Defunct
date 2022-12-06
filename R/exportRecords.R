@@ -382,7 +382,11 @@ exportRecords.redcapApiConnection <-
       mapply(nm = suffixed$name_suffix,
              lab = suffixed$label_suffix,
              FUN = function(nm, lab){
-               labelVector::set_label(x[[nm]], lab)
+               if(is.null(x[[nm]])){
+                  warning("Missing field for suffix ", nm)
+               } else {
+                  labelVector::set_label(x[[nm]], lab)
+               }
              },
              SIMPLIFY = FALSE)
   }

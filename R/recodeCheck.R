@@ -84,7 +84,11 @@ recodeCheck <- function(df, vars,
     mapply(nm = checkbox,
            lab = var.label,
            FUN = function(nm, lab){
-             labelVector::set_label(df[[nm]], lab)
+             if(is.null(df[[nm]])){
+               warning("Missing field for suffix ", nm)
+             } else {
+               labelVector::set_label(df[[nm]], lab)
+             }
            },
            SIMPLIFY = FALSE)
   
