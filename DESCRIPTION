@@ -39,4 +39,5 @@ URL: https://github.com/vubiostat/redcapAPI/wiki,
     https://github.com/vubiostat/redcapAPI,
     https://projectredcap.org
 BugReports: https://github.com/vubiostat/redcapAPI/issues
+Encoding: UTF-8
 RoxygenNote: 7.2.3
