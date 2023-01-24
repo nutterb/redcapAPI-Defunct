@@ -81,7 +81,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record = NULL,
   if (is.null(bundle$events)) 
     events_list <- exportEvents(rcon)
   
-  if (class(events_list) == "data.frame")
+  if (inherits(events_list,"data.frame"))
   {
     if (!event %in% events_list$unique_event_name) 
       coll$push(paste0("'", event, "' is not a valid event name in this project."))

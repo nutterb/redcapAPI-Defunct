@@ -1,4 +1,8 @@
-## Changes in Versino 2.3
+## Change in Ownership 2.3.3
+
+Transfer from Benjamin Nutter to VUMC Biostatistics. 
+
+## Changes in Version 2.3
 * Bug fix: Unmapped suffixes do not cause crashes, only warnings.
 
 ## Changes in Version 2.2

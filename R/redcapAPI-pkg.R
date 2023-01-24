@@ -29,7 +29,7 @@
 #' \code{redcapAPI} wouldn't be possible without the efforts of Jeffrey 
 #' Horner, Will Gray, and Jeremy Stevens at 
 #' Vanderbilt University.  Their work in developing the \code{redcap} 
-#' package (\url{http://github.com/vubiostat/redcap}) 
+#' package (\url{http://github.com/vubiostat/redcapAPI}) 
 #' was invaluable in helping me understand the API.  A few of their functions 
 #' (\code{redcapConnection}, 
 #' \code{fieldToVar}, \code{exportMetaData}, and \code{exportRecords}) are 

@@ -1,17 +1,19 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.3.2
+Version: 2.3.3
 Authors@R: c(
+    person("Shawn", "Garbett", email = "shawn.garbett@vumc.org",
+           role = c("aut", "ctb")),
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
-           role = c("aut", "ctb", "cre")),
+           role = c("ctb", "cre")),
     person("Stephen", "Lane", role = "ctb"),
     person("Will", "Beasley", role = "ctb"),
     person("Jeffrey", "Horner", role = "ctb"),
     person("Will", "Gray", role = "ctb"),
     person("Jeremy", "Stephens", role = "ctb"), 
     person("Marcus", "Lehr", role = "ctb", email = "marcus.j.lehr@gmail.com"))
-Maintainer: Benjamin Nutter <benjamin.nutter@gmail.com>
+Maintainer: Shawn Garbett <shawn.garbett@vumc.org>
 Description: Access data stored in 'REDCap' databases using the Application
     Programming Interface (API).  'REDCap' (Research Electronic Data CAPture;
     <https://projectredcap.org>) is
@@ -27,16 +29,14 @@ Depends:
 Imports:
     checkmate,
     chron,
-    DBI,
     httr,
     labelVector,
     lubridate,
-    readr,
     stringr,
     tidyr
 LazyLoad: yes
-URL: https://github.com/nutterb/redcapAPI/wiki,
-    https://github.com/nutterb/redcapAPI,
+URL: https://github.com/vubiostat/redcapAPI/wiki,
+    https://github.com/vubiostat/redcapAPI,
     https://projectredcap.org
-BugReports: https://github.com/nutterb/redcapAPI/issues
-RoxygenNote: 7.1.1
+BugReports: https://github.com/vubiostat/redcapAPI/issues
+RoxygenNote: 7.2.3
