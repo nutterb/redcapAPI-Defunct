@@ -248,21 +248,6 @@ Users who are exporting de-identified data will have to settle for using unbatch
 calls to the API (ie, \code{batch.size = -1})
 }
 
-\references{
-Please refer to your institution's API documentation.
-
-Additional details on API parameters are found on the package wiki at
-\url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-
-This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
-\url{https://github.com/vubiostat/redcap}
-
-See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
-\url{https://github.com/OuhscBbmc/REDCapR}
-
-Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
-create a list of arbitrary length.
-}
 \author{
 Jeffrey Horner
 }

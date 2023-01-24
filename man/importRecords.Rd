@@ -94,13 +94,7 @@ See the documentation for \code{\link{validateImport}} for detailed
 explanations of the validation.
 }
 \references{
-\url{http://stackoverflow.com/questions/12393004/parsing-back-to-messy-api-strcuture/12435389#12435389}\cr
-\url{https://github.com/etb/my-R-code/blob/master/R-pull-and-push-from-and-to-REDCap.R}\cr
-See also the REDCap API documentation
-Please refer to your institution's API documentation.
-
-Additional details on API parameters are found on the package wiki at
-\url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+See the REDCap API documentation at your institution's REDCap documentation.
 }
 \seealso{
 \code{\link{validateImport}}

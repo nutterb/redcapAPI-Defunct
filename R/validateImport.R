@@ -73,13 +73,12 @@
 #' @references
 #' See the REDCap Help and FAQ page's section on 'Text Validation Types'
 #' 
-#' Validating e-mail addresses
-#' \url{http://www.regular-expressions.info/email.html}
-#' 
-
 validateImport <- function(data, meta_data, logfile = "")
 {
   coll <- checkmate::makeAssertCollection()
+  
+  # Validating e-mail addresses taken from
+  # \url{http://www.regular-expressions.info/email.html}
   
   checkmate::assert_data_frame(x = data,
                                add = coll)

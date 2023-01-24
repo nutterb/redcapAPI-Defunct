@@ -33,9 +33,9 @@ API documentation will address the
 features specific to your version of REDCap.
 
 \code{redcapAPI} wouldn't be possible without the efforts of Jeffrey 
-Horner, Will Gray, and Jeremy Stevens at 
-Vanderbilt University.  Their work in developing the \code{redcap} 
-package (\url{http://github.com/vubiostat/redcapAPI}) 
+Horner, Will Gray, and Jeremy Stephens at 
+Vanderbilt University. Their work in developing the original \code{redcap} 
+package.
 was invaluable in helping me understand the API.  A few of their functions 
 (\code{redcapConnection}, 
 \code{fieldToVar}, \code{exportMetaData}, and \code{exportRecords}) are 

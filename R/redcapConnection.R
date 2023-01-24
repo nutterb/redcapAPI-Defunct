@@ -46,23 +46,6 @@
 #' 
 #' @author Jeffrey Horner
 #' 
-#' @references 
-#' This functionality were originally developed by Jeffrey Horner in the 
-#' \code{redcap} package.
-#' \url{https://github.com/vubiostat/redcap}
-#' 
-#' A tutorial on configuring the REDCap user rights for the API is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Setting-the-User-Rights-to-Grant-API-Access}
-#' 
-#' A tutorial on requesting and obtaining your API token is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-Your-REDCap-API-Token}
-#' 
-#' A tutorial on finding your API url is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-your-REDCap-API-URL}
-#' 
-#' A tutorial for finding and using alternate SSL certificates is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}
-#' 
 #' @examples
 #' \dontrun{
 #' rcon <- redcapConnection(url=[YOUR_REDCAP_URL], token=[API_TOKEN])
