@@ -14,7 +14,11 @@
 #' @param checkboxLabels Logical, determines if checkbox variables are labeled as
 #'   "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}
 #' @param handlers List, Specify type conversion overrides for specific REDCap field types. 
-#'   E.g., \code{handlers=list(date_ = as.Date)}
+#'   E.g., \code{handlers=list(date_ = as.Date)}. For datetime specifications the
+#'   datetime ordering directive from the tail is dropped. The following field
+#'   types are supported: date_, datetime_, datetime_seconds_, time_mm_ss, time,
+#'   float,number, calc, int, integer, select, radio, dropdown, yesno, truefalse,
+#'   checkbox, and form_complete.
 #' @details This function is called internally by \code{exportRecords} and 
 #'   \code{exportReports}.  it is not available to the user.
 #'   
