@@ -147,7 +147,8 @@ exportReports.redcapApiConnection <- function(rcon, report_id, factors = TRUE, l
                   meta_data = meta_data, 
                   factors = factors, 
                   dates = dates, 
-                  checkboxLabels = checkboxLabels)
+                  checkboxLabels = checkboxLabels,
+                  ...)
   
   
   if (labels) 

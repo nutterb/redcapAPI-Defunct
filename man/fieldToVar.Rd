@@ -9,7 +9,9 @@ fieldToVar(
   meta_data,
   factors = TRUE,
   dates = TRUE,
-  checkboxLabels = FALSE
+  checkboxLabels = FALSE,
+  handlers = list(),
+  ...
 )
 }
 \arguments{
@@ -26,6 +28,9 @@ variables are converted to factors}
 
 \item{checkboxLabels}{Logical, determines if checkbox variables are labeled as
 "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}}
+
+\item{handlers}{List, Specify type conversion overrides for specific REDCap field types. 
+E.g., \code{handlers=list(date_ = as.Date)}}
 }
 \description{
 Converts a field exported from REDCap into a valid R vector

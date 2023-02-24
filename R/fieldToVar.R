@@ -13,7 +13,8 @@
 #' @param dates Logical, determines if date variables are converted to POSIXct format
 #' @param checkboxLabels Logical, determines if checkbox variables are labeled as
 #'   "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}
-#' 
+#' @param handlers List, Specify type conversion overrides for specific REDCap field types. 
+#'   E.g., \code{handlers=list(date_ = as.Date)}
 #' @details This function is called internally by \code{exportRecords} and 
 #'   \code{exportReports}.  it is not available to the user.
 #'   
@@ -21,7 +22,7 @@
 
 
 fieldToVar <- function(records, meta_data, factors = TRUE, 
-                       dates = TRUE, checkboxLabels = FALSE, handlers=list())
+                       dates = TRUE, checkboxLabels = FALSE, handlers=list(), ...)
   
 { 
   for (i in seq_along(records))
@@ -60,9 +61,9 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                        replacement = "_",
                        x = field_type)
     
-    records[[i]] <- if(field_type %in% names(handlers))
+    records[[i]] <- if(field_type %in% names(handlers)) {
                       handlers[[field_type]](records[[i]]) 
-                    else
+                    } else {
                       switch(field_type,
                              "date_" = 
                                {
@@ -149,6 +150,7 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                              },
                              records[[i]]
                       ) # End switch
+                    }
   } # End for loop
   records
 }    
