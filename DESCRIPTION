@@ -36,6 +36,7 @@ Imports:
     stringr,
     tidyr
 LazyLoad: yes
+Suggests: testthat (>= 3.0.0), getPass, keyring
 URL: https://github.com/vubiostat/redcapAPI,https://projectredcap.org
 BugReports: https://github.com/vubiostat/redcapAPI/issues
 Encoding: UTF-8

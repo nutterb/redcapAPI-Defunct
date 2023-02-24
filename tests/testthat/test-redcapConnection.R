@@ -1,35 +1,18 @@
-context("redcapConnection.R")
+context("redcapConnection")
 
-if (file.exists("local-token.Rdata")){
-  load("local-token.Rdata")
-} else {
-  url <- "https://redcap.notaplace.net/redcap/api/"
-  token_case_01 <- "NOTaREALtoken1234567890123456789"
-}
+skip_on_cran() # Do not RUN on CRAN, requires a custom build REDCap database.
 
-test_that(
-  "Create a redcapApiConnection object",
+test_that("redcapApiConnection can be created",
   expect_equal(
-    class(redcapConnection(url = url,
-                           token = token_case_01)),
+    class(redcapConnection(url = url, token = API_KEY)),
     "redcapApiConnection"
   )
 )
 
-test_that(
-  "Cast an error if url is missing",
-  {
-    expect_error(
-      redcapConnection(token = token)
-    )
-  }
+test_that("redcapConnection throws an error if url is missing",
+  expect_error(redcapConnection(token = API_KEY))
 )
 
-test_that(
-  "Cast an error if token is missing",
-  {
-    expect_error(
-      redcapConnection(url = url)
-    )
-  }
+test_that("redcapConnection throws an  error if token is missing",
+  expect_error(redcapConnection(url = url))
 )
