@@ -19,6 +19,8 @@
 #'   types are supported: date_, datetime_, datetime_seconds_, time_mm_ss, time,
 #'   float,number, calc, int, integer, select, radio, dropdown, yesno, truefalse,
 #'   checkbox, and form_complete.
+#' @param ..., additional arguments that are ignored. 
+#'   
 #' @details This function is called internally by \code{exportRecords} and 
 #'   \code{exportReports}.  it is not available to the user.
 #'   
