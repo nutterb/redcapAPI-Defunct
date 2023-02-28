@@ -1,7 +1,5 @@
 context("allocationTable")
 
-skip_on_cran()
-
 rcon <- redcapConnection(url, API_KEY)
 
 test_that("allocation table can be generated",{

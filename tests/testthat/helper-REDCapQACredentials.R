@@ -8,7 +8,7 @@
 # This package cannot depend on `rccola` without creating 
 # a circular dependency so minimal code is copyied locally
 # 
-# To duplicate our test database see: inst/redcap/*
+# To duplicate our test database see: inst/extdata
 #
 # Create a keyring with
 #   keyring::keyring_create('TestRedcapAPI', 'YOURPASSWORDHERE')
@@ -17,7 +17,6 @@
 # To remove invalid password/API_KEY
 #   keyring::key_delete('TestRedcapAPI', 'TestRedcapAPI', 'TestRedcapAPI')
 
-skip_on_cran()
   
 url <- "https://redcap.vanderbilt.edu/api/" # Our institutions REDCap instance
 if(!exists("password"))

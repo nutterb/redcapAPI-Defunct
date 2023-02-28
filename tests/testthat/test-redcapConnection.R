@@ -1,7 +1,5 @@
 context("redcapConnection")
 
-skip_on_cran() # Do not RUN on CRAN, requires a custom build REDCap database.
-
 test_that("redcapApiConnection can be created",
   expect_equal(
     class(redcapConnection(url = url, token = API_KEY)),
