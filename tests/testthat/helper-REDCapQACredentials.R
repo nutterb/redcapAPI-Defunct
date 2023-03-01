@@ -12,7 +12,7 @@
 #
 # Create a keyring with
 # 
-#   options(keyring_backend=backend_file) # Because MACOS is so irritating
+#   options(keyring_backend=keyring::backend_file) # Because MACOS is so irritating
 #   keyring::keyring_create('TestRedcapAPI', 'YOURPASSWORDHERE')
 #   keyring::key_set_with_value('TestRedcapAPI', username='TestRedcapAPI', keyring='TestRedcapAPI', password='YOURAPIKEYHERE')
 # To remove invalid password/API_KEY
