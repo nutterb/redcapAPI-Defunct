@@ -7,8 +7,7 @@ redcapAPI
 ======
 
 *NOTE*: Ownership transfer of this package to VUMC Biostatistics is complete.
-Existing
-ickets in the older git repo will be transitioned over the next couple months.
+Existing tickets in the older git repo will be transitioned over the next couple months.
 
 The research community owes a big thanks to [Benjamin Nutter](https://github.com/nutterb/redcapAPI)
 for his years of service keeping this package current.
