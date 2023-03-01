@@ -102,6 +102,15 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
                                  else 
                                    records[[i]]
                                },
+                             "time_hh_mm_ss" = 
+                               {
+                                 if (dates) 
+                                   chron::times(ifelse(!is.na(records[[i]]),
+                                                       records[[i]]), 
+                                                format=c(times="h:m:s"))
+                                 else 
+                                   records[[i]]
+                               },
                              "time" = 
                                {
                                  if (dates)

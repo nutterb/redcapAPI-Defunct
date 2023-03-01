@@ -26,7 +26,7 @@ test_that("dates = TRUE returns class POSIXt for date_dmy", expect_is(rec_dt$dat
 test_that("dates = TRUE returns class POSIXt for date_mdy", expect_is(rec_dt$date_mdy, "POSIXt"))
 test_that("dates = TRUE returns class POSIXt for date_ymd", expect_is(rec_dt$date_ymd, "POSIXt"))
 
-test_that("dates = TRUE returns class times for time_hhmmss", expect_is(rec_dt$time_hhmmss, "times")) # fieldToVar returns hour, min, seconds as 'character'
+test_that("dates = TRUE returns class times for time_hhmmss", expect_is(rec_dt$time_hhmmss, "times"))
 test_that("dates = TRUE returns class times for time_hhmm", expect_is(rec_dt$time_hhmm, "times"))
 test_that("dates = TRUE returns class times for time_mmss", expect_is(rec_dt$time_mmss, "times"))
 
