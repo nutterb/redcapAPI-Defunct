@@ -82,16 +82,43 @@ test_that("dates = FALSE returns class character for date_dmy", expect_is(rec_df
 test_that("dates = FALSE returns class character for date_mdy", expect_is(rec_df$date_mdy, "character"))
 test_that("dates = FALSE returns class character for date_ymd", expect_is(rec_df$date_ymd, "character"))
 
-test_that("dates = FALSE returns class Date for time_hhmmss", expect_is(rec_df$time_hhmmss, "character"))
-test_that("dates = FALSE returns class Date for time_hhmm", expect_is(rec_df$time_hhmm, "character"))
-test_that("dates = FALSE returns class Date for time_mmss", expect_is(rec_df$time_mmss, "character"))
+test_that("dates = FALSE returns class character for time_hhmmss", expect_is(rec_df$time_hhmmss, "character"))
+test_that("dates = FALSE returns class character for time_hhmm", expect_is(rec_df$time_hhmm, "character"))
+test_that("dates = FALSE returns class character for time_mmss", expect_is(rec_df$time_mmss, "character"))
 
-test_that("dates = FALSE returns class Date for datetime_dmy_hm", expect_is(rec_df$datetime_dmy_hm, "character"))
-test_that("dates = FALSE returns class Date for datetime_mdy_hm", expect_is(rec_df$datetime_mdy_hm, "character"))
-test_that("dates = FALSE returns class Date for datetime_ymd_hm", expect_is(rec_df$datetime_ymd_hm, "character"))
+test_that("dates = FALSE returns class character for datetime_dmy_hm", expect_is(rec_df$datetime_dmy_hm, "character"))
+test_that("dates = FALSE returns class character for datetime_mdy_hm", expect_is(rec_df$datetime_mdy_hm, "character"))
+test_that("dates = FALSE returns class character for datetime_ymd_hm", expect_is(rec_df$datetime_ymd_hm, "character"))
 
-test_that("dates = FALSE returns class Date for datetime_dmy_hms", expect_is(rec_df$datetime_dmy_hms, "character"))
-test_that("dates = FALSE returns class Date for datetime_mdy_hms", expect_is(rec_df$datetime_mdy_hms, "character"))
-test_that("dates = FALSE returns class Date for datetime_ymd_hms", expect_is(rec_df$datetime_ymd_hms, "character"))
+test_that("dates = FALSE returns class character for datetime_dmy_hms", expect_is(rec_df$datetime_dmy_hms, "character"))
+test_that("dates = FALSE returns class character for datetime_mdy_hms", expect_is(rec_df$datetime_mdy_hms, "character"))
+test_that("dates = FALSE returns class character for datetime_ymd_hms", expect_is(rec_df$datetime_ymd_hms, "character"))
 
+test_that("dates = FALSE returns '2023-02-24' for date_dmy first rec",
+          expect_true(rec_df$date_dmy[1] == "2023-02-24"))
+test_that("dates = FALSE returns '2023-02-24' for date_mdy first rec",
+          expect_true(rec_df$date_mdy[1] == "2023-02-24"))
+test_that("dates = FALSE returns '2023-02-24' for date_ymd first rec",
+          expect_true(rec_df$date_ymd[1] == "2023-02-24"))
+
+test_that("dates = FALSE returns '12:04:55' for time_hhmmss first rec",
+          expect_true(rec_df$time_hhmmss[1] == "12:04:55"))
+test_that("dates = FALSE returns '12:04' for time_hhmm first rec",
+          expect_true(rec_df$time_hhmm[1] == "12:04"))
+test_that("dates = FALSE returns '02:45' for time_mmss first rec",
+          expect_true(rec_df$time_mmss[1] == "02:45"))
+
+test_that("dates = FALSE returns '2023-02-24 12:04' for datetime_dmy_hm first rec",
+          expect_true(rec_df$datetime_dmy_hm[1] == "2023-02-24 12:04"))
+test_that("dates = FALSE returns '2023-02-24 12:04' for datetime_mdy_hm first rec",
+          expect_true(rec_df$datetime_mdy_hm[1] == "2023-02-24 12:04"))
+test_that("dates = FALSE returns '2023-02-24 12:04' for datetime_ymd_hm first rec",
+          expect_true(rec_df$datetime_ymd_hm[1] == "2023-02-24 12:04"))
+
+test_that("dates = FALSE returns 2023-02-24 12:40:50 for datetime_dmy_hms first rec",
+          expect_true(rec_df$datetime_dmy_hms[1] == "2023-02-24 12:40:50"))
+test_that("dates = FALSE returns 2023-02-24 12:40:50 for datetime_mdy_hms first rec",
+          expect_true(rec_df$datetime_mdy_hms[1] == "2023-02-24 12:40:50"))
+test_that("dates = FALSE returns 2023-02-24 12:40:50 for datetime_ymd_hms first rec",
+          expect_true(rec_df$datetime_ymd_hms[1] == "2023-02-24 12:40:50"))
 
