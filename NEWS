@@ -1,3 +1,7 @@
+## Changes in Version 2.4.0
+
+* Added handlers overrides for type conversion based on REDCap field type.
+
 ## Change in Ownership 2.3.3
 
 Transfer from Benjamin Nutter to VUMC Biostatistics. 
