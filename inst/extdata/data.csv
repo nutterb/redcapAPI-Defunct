@@ -1,0 +1,2 @@
+record_id,date_dmy,date_mdy,date_ymd,datetime_dmy_hm,datetime_mdy_hm,datetime_ymd_hm,datetime_dmy_hms,datetime_mdy_hms,datetime_ymd_hms,time_hhmmss,time_hhmm,time_mmss,fieldtovar_datetimes_complete,treatment,randomization_complete
+1,2023-02-24,2023-02-24,2023-02-24,"2023-02-24 12:04","2023-02-24 12:04","2023-02-24 12:04","2023-02-24 12:40:50","2023-02-24 12:40:50","2023-02-24 12:40:50",12:04:55,12:04,02:45,2,,0

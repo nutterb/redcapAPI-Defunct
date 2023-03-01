@@ -1,15 +1,16 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.3.3
+Version: 2.4.3
 Authors@R: c(
     person("Shawn", "Garbett", email = "shawn.garbett@vumc.org",
-           role = c("aut", "ctb")),
+           comment = c(ORCID="0000-0003-4079-5621"),
+           role = c("cre","ctb")),
     person("Benjamin", "Nutter", email = "benjamin.nutter@gmail.com", 
-           role = c("ctb", "cre")),
+           role = c("ctb", "aut")),
     person("Stephen", "Lane", role = "ctb"),
     person("Will", "Beasley", role = "ctb"),
-    person("Jeffrey", "Horner", role = "ctb"),
+    person("Jeffrey", "Horner", role = "aut"),
     person("Will", "Gray", role = "ctb"),
     person("Jeremy", "Stephens", role = "ctb"), 
     person("Marcus", "Lehr", role = "ctb", email = "marcus.j.lehr@gmail.com"))
@@ -20,7 +21,7 @@ Description: Access data stored in 'REDCap' databases using the Application
     a web application for building and managing online surveys and databases
     developed at Vanderbilt University.  The API allows users to access data
     and project meta data (such as the data dictionary) from the web
-    programmatically.  The 'redcapAPI' package facilitates the process of
+    programmatically. The 'redcapAPI' package facilitates the process of
     accessing data with options to prepare an analysis-ready data set
     consistent with the definitions in a database's data dictionary.
 License: GPL-2
@@ -35,6 +36,7 @@ Imports:
     stringr,
     tidyr
 LazyLoad: yes
+Suggests: testthat (>= 3.0.0), getPass, keyring
 URL: https://github.com/vubiostat/redcapAPI,https://projectredcap.org
 BugReports: https://github.com/vubiostat/redcapAPI/issues
 Encoding: UTF-8

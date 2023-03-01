@@ -360,7 +360,8 @@ exportRecords.redcapApiConnection <-
                   meta_data = meta_data,
                   factors = factors,
                   dates = dates,
-                  checkboxLabels = checkboxLabels)
+                  checkboxLabels = checkboxLabels,
+                  ...)
 
   if (labels){
     x[,suffixed$name_suffix] <-
