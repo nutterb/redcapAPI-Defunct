@@ -38,6 +38,44 @@ test_that("dates = TRUE returns class Date for datetime_dmy_hms", expect_is(rec_
 test_that("dates = TRUE returns class Date for datetime_mdy_hms", expect_is(rec_dt$datetime_mdy_hms, "POSIXt"))
 test_that("dates = TRUE returns class Date for datetime_ymd_hms", expect_is(rec_dt$datetime_ymd_hms, "POSIXt"))
 
+test_that("dates = TRUE returns 2023-02-24 for date_dmy in first rec",
+          expect_true(rec_dt$date_dmy[1] == as.POSIXct("2023-02-24")))
+test_that("dates = TRUE returns 2023-02-24 for date_mdy in first rec",
+          expect_true(rec_dt$date_mdy[1] == as.POSIXct("2023-02-24")))
+test_that("dates = TRUE returns 2023-02-24 for date_ymd in first rec",
+          expect_true(rec_dt$date_ymd[1] == as.POSIXct("2023-02-24")))
+
+test_that("dates = TRUE returns 12:04:55 for time_hhmmss in first rec",
+          expect_true(rec_dt$time_hhmmss[1] ==
+                       chron::times("12:04:55", format=c(times="h:m:s"))))
+test_that("dates = TRUE returns 12:04:55 for time_hhmm in first rec",
+          expect_true(rec_dt$time_hhmm[1] ==
+                       chron::times("12:04:00", format=c(times="h:m:s"))))
+test_that("dates = TRUE returns 12:04:55 for time_mmss in first rec",
+          expect_true(rec_dt$time_mmss[1] ==
+                       chron::times("00:02:45", format=c(times="h:m:s"))))
+
+test_that("dates = TRUE returns 2023-02-24 12:04 for datetime_dmy_hm in first rec",
+          expect_true(rec_dt$datetime_dmy_hm[1] == 
+                        as.POSIXct("2023-02-24 12:04", format="%Y-%m-%d %H:%M")))
+test_that("dates = TRUE returns 2023-02-24 12:04 for datetime_mdy_hm in first rec",
+          expect_true(rec_dt$datetime_mdy_hm[1] == 
+                        as.POSIXct("2023-02-24 12:04", format="%Y-%m-%d %H:%M")))
+test_that("dates = TRUE returns 2023-02-24 12:04 datetime_ymd_hm in first rec",
+          expect_true(rec_dt$datetime_ymd_hm[1] == 
+                        as.POSIXct("2023-02-24 12:04", format="%Y-%m-%d %H:%M")))
+
+test_that("dates = TRUE returns 2023-02-24 12:40:50 for datetime_dmy_hms in first rec",
+          expect_true(rec_dt$datetime_dmy_hms[1] ==
+                        as.POSIXct("2023-02-24 12:40:50", format="%Y-%m-%d %H:%M:%S")))
+test_that("dates = TRUE returns 2023-02-24 12:40:50 for datetime_mdy_hms in first rec",
+          expect_true(rec_dt$datetime_mdy_hms[1] ==
+                        as.POSIXct("2023-02-24 12:40:50", format="%Y-%m-%d %H:%M:%S")))
+test_that("dates = TRUE returns 2023-02-24 12:40:50 for datetime_ymd_hms in first rec",
+          expect_true(rec_dt$datetime_ymd_hms[1] ==
+                        as.POSIXct("2023-02-24 12:40:50", format="%Y-%m-%d %H:%M:%S")))
+
+
 # pull data for tests with dates = false
 rec_df <- exportRecords(rcon, dates = FALSE)
 test_that("dates = FALSE returns class character for date_dmy", expect_is(rec_df$date_dmy, "character"))
