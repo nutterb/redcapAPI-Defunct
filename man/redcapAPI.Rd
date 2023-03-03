@@ -18,7 +18,7 @@ As much as possible, I've tried to adequately document \code{redcapAPI}.
 Some topics did not seem well-suited to documenting in the typical R 
 help files.  Additional tips and discussion are available at the 
 package wiki at
-\url{https://github.com/nutterb/redcapAPI/wiki}.  These topics include 
+\url{https://github.com/vubiostat/redcapAPI/wiki}.  These topics include 
 "Getting started with \code{redcapAPI}", 
 "Setting Rights to Grant API Access", "Export data from REDCap" and a 
 detailed description of the REDCap API 

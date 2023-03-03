@@ -41,7 +41,7 @@ To obtain an API token for a project, do the following:\cr
 Enter the 'User Right' section of a project\cr
 Select a user\cr
 Check the box for 'API Data Export' or 'API Data Import,' as appropriate.  A full tutorial on 
-configuring REDCap to use the API can be found at \url{https://github.com/nutterb/redcapAPI/wiki}
+configuring REDCap to use the API can be found at \url{https://github.com/vubiostat/redcapAPI/wiki}
 
 Tokens are specific to a project, and a token must be created for each 
 project for which you wish to use the API.
@@ -55,7 +55,7 @@ to date, so most of the time this problem can be resolved by updating
 certificate file can be manually passed via the \code{config} argument.  
 The \code{redcapAPI} wiki has a more detailed tutorial on how to 
 find and pass an SSL certificate to the API call 
-(\url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
+(\url{https://github.com/vubiostat/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
 
 Additional Curl option can be set in the \code{config} argument.  See the documentation
 for \code{httr::config} and \code{httr:httr_options} for more Curl options.

@@ -1,7 +1,7 @@
 Package: redcapAPI
 Type: Package
 Title: Interface to 'REDCap'
-Version: 2.4.0
+Version: 2.4.1
 Authors@R: c(
     person("Shawn", "Garbett", email = "shawn.garbett@vumc.org",
            comment = c(ORCID="0000-0003-4079-5621"),

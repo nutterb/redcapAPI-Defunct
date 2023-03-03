@@ -98,7 +98,7 @@ Please refer to your institution's API documentation
 (https://YOUR_REDCAP_URL/redcap/api/help)
 
 Additional details on API parameters are found on the package wiki at
-\url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+\url{https://github.com/vubiostat/redcapAPI/wiki/REDCap-API-Parameters}
 }
 \author{
 Stephen Lane
