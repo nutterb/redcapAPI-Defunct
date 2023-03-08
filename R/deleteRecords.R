@@ -75,7 +75,7 @@ deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
                       identity)
   names(records) <- sprintf("records[%s]", records)
   
-  body <- c(body, records)
+  body <- c(body, vectorToApiBodyList(records, "records"))
 
   if (!is.null(arms))
     body[["arms"]] <- paste0(arms, collapse = ",")

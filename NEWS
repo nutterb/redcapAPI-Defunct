@@ -1,3 +1,7 @@
+## Changes in Versino 2.4.1
+
+Fixed bug in delete records.
+
 ## Changes in Version 2.4.0
 
 * Added handlers overrides for type conversion based on REDCap field type.
