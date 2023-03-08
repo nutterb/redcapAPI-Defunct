@@ -6,10 +6,12 @@ test_that("records can be deleted",{
   rec <- exportRecords(rcon)
   
   rows <- nrow(rec)
+  
+  rec <- rec[1,]
   rec$record_id <- "delete.me"
   importRecords(rcon = rcon, data=rec)
   
-  deleteRecords(rcon, rec$record_id)
+  deleteRecords(rcon, "delete.me")
   
   rec <- exportRecords(rcon)
   
