@@ -1,6 +1,7 @@
 ## Changes in Version 2.4.2
 
-Fixed bug in delete records.
+* Fixed bug in delete records.
+* Fixed bug date handling for NA in date conversion of time_hh_mm_ss
 
 ## Changes in Version 2.4.0
 
