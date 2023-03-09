@@ -74,8 +74,8 @@ deleteRecords.redcapDbConnection <- function(rcon, records, arms = NULL, ...){
 #' @export
 
 deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
-                                           error_handling = getOption("redcap_error_handling")){
-
+                                              error_handling = getOption("redcap_error_handling")){
+  
   coll <- checkmate::makeAssertCollection()
   
   checkmate::assert_atomic(x = records,
@@ -89,26 +89,31 @@ deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
   
   checkmate::reportAssertions(coll)
   
-  if (!is.character(records)) records <- as.character(records)
+  if (!is.character(records)){
+    records <- as.character(records)
+  }
   
   body <- list(token = rcon$token,
                content = "record",
                action = "delete")
   
-  records <- lapply(records, 
-                      identity)
-  names(records) <- sprintf("records[%s]", records)
+  body <- c(body, 
+            vectorToApiBodyList(vector = records, 
+                                parameter_name = "records"))
   
-  body <- c(body, vectorToApiBodyList(records, "records"))
-
-  if (!is.null(arms))
-    body[["arms"]] <- paste0(arms, collapse = ",")
+  if (!is.null(arms)){
+    body <- c(body, 
+              vecteorToApiBodyList(vector = arms, 
+                                   parameter_name = "arms"))
+  }
   
   x <- httr::POST(url = rcon$url, 
                   body = body, 
                   config = rcon$config)
   
-  if (x$status_code != 200) return(redcap_error(x, error_handling))
+  if (x$status_code != 200){
+    return(redcap_error(x, error_handling))
+  } 
   
   as.character(x)
 }
