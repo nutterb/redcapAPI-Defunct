@@ -1,3 +1,27 @@
+# Helper function
+
+vectorToApiBodyList <- function(vector, parameter_name){
+  # Argument Validation ---------------------------------------------
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_atomic(x = vector, 
+                           add = coll)
+  
+  checkmate::assert_character(x = parameter_name, 
+                              len = 1, 
+                              add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  # Functional Code -------------------------------------------------
+  rv <- lapply(vector, identity)
+  names(rv) <- sprintf("%s[%s]", 
+                       parameter_name, 
+                       seq_along(rv))
+  rv
+}
+
+
 #' @name deleteRecords
 #' @title Delete Records From a Project
 #' 
