@@ -4,14 +4,13 @@ rcon <- redcapConnection(url = url, token = API_KEY)
 
 test_that("records can be deleted",{
   rec <- exportRecords(rcon)
-  
   rows <- nrow(rec)
   
-  rec <- rec[1,]
-  rec$record_id <- "delete.me"
+  rec <- rbind(rec[1,], rec[1,])
+  rec$record_id <- c("delete.me", "delete.too")
   importRecords(rcon = rcon, data=rec)
   
-  deleteRecords(rcon, "delete.me")
+  deleteRecords(rcon, c("delete.me", "delete.too"))
   
   rec <- exportRecords(rcon)
   
