@@ -21,7 +21,7 @@
 #' Please refer to your institution's API documentation.
 #' 
 #' Additional details on API parameters are found on the package wiki at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
+#' \url{https://github.com/vubiostat/redcapAPI/wiki/REDCap-API-Parameters}
 #'  
 #' @export
 
@@ -81,7 +81,7 @@ deleteFiles.redcapApiConnection <- function(rcon, record = NULL,
   if (is.null(bundle$events)) 
     events_list <- exportEvents(rcon)
   
-  if (class(events_list) == "data.frame")
+  if (inherits(events_list,"data.frame"))
   {
     if (!event %in% events_list$unique_event_name) 
       coll$push(paste0("'", event, "' is not a valid event name in this project."))

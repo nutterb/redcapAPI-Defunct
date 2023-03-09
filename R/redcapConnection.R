@@ -25,7 +25,7 @@
 #' Enter the 'User Right' section of a project\cr
 #' Select a user\cr
 #' Check the box for 'API Data Export' or 'API Data Import,' as appropriate.  A full tutorial on 
-#' configuring REDCap to use the API can be found at \url{https://github.com/nutterb/redcapAPI/wiki}
+#' configuring REDCap to use the API can be found at \url{https://github.com/vubiostat/redcapAPI/wiki}
 #' 
 #' Tokens are specific to a project, and a token must be created for each 
 #' project for which you wish to use the API.
@@ -39,29 +39,12 @@
 #' certificate file can be manually passed via the \code{config} argument.  
 #' The \code{redcapAPI} wiki has a more detailed tutorial on how to 
 #' find and pass an SSL certificate to the API call 
-#' (\url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
+#' (\url{https://github.com/vubiostat/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}).
 #' 
 #' Additional Curl option can be set in the \code{config} argument.  See the documentation
 #' for \code{httr::config} and \code{httr:httr_options} for more Curl options.
 #' 
 #' @author Jeffrey Horner
-#' 
-#' @references 
-#' This functionality were originally developed by Jeffrey Horner in the 
-#' \code{redcap} package.
-#' \url{https://github.com/vubiostat/redcap}
-#' 
-#' A tutorial on configuring the REDCap user rights for the API is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Setting-the-User-Rights-to-Grant-API-Access}
-#' 
-#' A tutorial on requesting and obtaining your API token is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-Your-REDCap-API-Token}
-#' 
-#' A tutorial on finding your API url is found at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Finding-your-REDCap-API-URL}
-#' 
-#' A tutorial for finding and using alternate SSL certificates is found at 
-#' \url{https://github.com/nutterb/redcapAPI/wiki/Manually-Setting-an-SSL-Certificate-File}
 #' 
 #' @examples
 #' \dontrun{

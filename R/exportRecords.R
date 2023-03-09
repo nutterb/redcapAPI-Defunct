@@ -147,21 +147,6 @@
 #' 
 #' @author Jeffrey Horner
 #' 
-#' @references
-#' Please refer to your institution's API documentation.
-#' 
-#' Additional details on API parameters are found on the package wiki at
-#' \url{https://github.com/nutterb/redcapAPI/wiki/REDCap-API-Parameters}
-#' 
-#' This functionality were originally developed by Jeffrey Horner in the \code{redcap} package.
-#' \url{https://github.com/vubiostat/redcap}
-#' 
-#' See also \code{read_redcap_oneshot} in the \code{REDCapR} package by Will Beasley.
-#' \url{https://github.com/OuhscBbmc/REDCapR}
-#' 
-#' Borrowed code from http://stackoverflow.com/a/8099431/1017276 to 
-#' create a list of arbitrary length.
-#' 
 #' @export
 
 exportRecords <-
@@ -375,7 +360,8 @@ exportRecords.redcapApiConnection <-
                   meta_data = meta_data,
                   factors = factors,
                   dates = dates,
-                  checkboxLabels = checkboxLabels)
+                  checkboxLabels = checkboxLabels,
+                  ...)
 
   if (labels){
     x[,suffixed$name_suffix] <-

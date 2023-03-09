@@ -13,14 +13,23 @@
 #' @param dates Logical, determines if date variables are converted to POSIXct format
 #' @param checkboxLabels Logical, determines if checkbox variables are labeled as
 #'   "Checked" or using the checkbox label.  Only applicable when \code{factors = TRUE}
-#' 
+#' @param handlers List, Specify type conversion overrides for specific REDCap field types. 
+#'   E.g., \code{handlers=list(date_ = as.Date)}. For datetime specifications the
+#'   datetime ordering directive from the tail is dropped. The following field
+#'   types are supported: date_, datetime_, datetime_seconds_, time_mm_ss, time,
+#'   float,number, calc, int, integer, select, radio, dropdown, yesno, truefalse,
+#'   checkbox, and form_complete.
+#' @param ..., additional arguments that are ignored. 
+#'   
 #' @details This function is called internally by \code{exportRecords} and 
 #'   \code{exportReports}.  it is not available to the user.
 #'   
 #' @author Jeffrey Horner
 
+
 fieldToVar <- function(records, meta_data, factors = TRUE, 
-                       dates = TRUE, checkboxLabels = FALSE)
+                       dates = TRUE, checkboxLabels = FALSE, handlers=list(), ...)
+  
 { 
   for (i in seq_along(records))
   {
@@ -57,95 +66,105 @@ fieldToVar <- function(records, meta_data, factors = TRUE,
     field_type <- gsub(pattern = "_(dmy|mdy|ymd)$", 
                        replacement = "_",
                        x = field_type)
-
     
-    records[[i]] <- 
-      switch(field_type,
-             "date_" = 
-               {
-                 if (dates) 
-                   as.POSIXct(records[[i]], format = "%Y-%m-%d") 
-                 else 
-                   records[[i]]
-                },
-             "datetime_" = 
-               {
-                 if (dates) 
-                   as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M") 
-                 else 
-                   records[[i]]
-               },
-             "datetime_seconds_" = 
-               {
-                 if (dates) 
-                   as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M:%S") 
-                 else 
-                   records[[i]]
-               },
-             "time_mm_ss" = 
-               {
-                 if (dates) 
-                   chron::times(ifelse(!is.na(records[[i]]), 
-                                       paste0("00:", records[[i]]), 
-                                       records[[i]]), 
-                                format=c(times="h:m:s"))
-                 else 
-                   records[[i]]
-               },
-             "time" = 
-               {
-                 if (dates)
-                   chron::times(gsub("(^\\d{2}:\\d{2}$)", "\\1:00", records[[i]]), 
-                                format=c(times="h:m:s"))
-                 else 
-                   records[[i]]
-               },
-             "float" = suppressWarnings(as.numeric(records[[i]])),
-             "number" = suppressWarnings(as.numeric(records[[i]])),
-             "calc" = suppressWarnings(as.numeric(records[[i]])),
-             "int" = suppressWarnings(as.integer(records[[i]])),
-             "integer" = suppressWarnings(as.numeric(records[[i]])),
-             "select" = 
-               makeRedcapFactor(x = records[[i]],
-                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
-                                factors = factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
-             "radio" = 
-               makeRedcapFactor(x = records[[i]],
-                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
-                                factors = factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
-             "dropdown" = 
-               makeRedcapFactor(x = records[[i]],
-                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
-                                factors = factors, 
-                                var_name = meta_data$field_name),
-             "yesno" = makeRedcapYN(records[[i]], 
-                                    factors),
-             "truefalse" = 
-              {
-                if (factors) 
-                  as.logical(records[[i]])
-                else
-                  records[[i]]
-              },
-             "checkbox" = 
-              {
-                makeRedcapCheckbox(x = records[[i]],
-                                   suffix = gsub("^.+___", "", names(records)[i]),
-                                   coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
-                                   factors = factors,
-                                   checkboxLabels = checkboxLabels)
-              },
-             "form_complete" = 
-             {
-               makeRedcapFactor(x = records[[i]],
-                                coding = "0, Incomplete | 1, Unverified | 2, Complete",
-                                factors, 
-                                var_name = meta_data$field_name[meta_data$field_name == field_base])
-             },
-             records[[i]]
-      ) # End switch
+    records[[i]] <- if(field_type %in% names(handlers)) {
+                      handlers[[field_type]](records[[i]]) 
+                    } else {
+                      switch(field_type,
+                             "date_" = 
+                               {
+                                 if (dates) 
+                                   as.POSIXct(records[[i]], format = "%Y-%m-%d") 
+                                 else 
+                                   records[[i]]
+                                },
+                             "datetime_" = 
+                               {
+                                 if (dates) 
+                                   as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M") 
+                                 else 
+                                   records[[i]]
+                               },
+                             "datetime_seconds_" = 
+                               {
+                                 if (dates) 
+                                   as.POSIXct(records[[i]], format = "%Y-%m-%d %H:%M:%S") 
+                                 else 
+                                   records[[i]]
+                               },
+                             "time_mm_ss" = 
+                               {
+                                 if (dates) 
+                                   chron::times(ifelse(!is.na(records[[i]]), 
+                                                       paste0("00:", records[[i]]), 
+                                                       records[[i]]), 
+                                                format=c(times="h:m:s"))
+                                 else 
+                                   records[[i]]
+                               },
+                             "time_hh_mm_ss" = 
+                               {
+                                 if (dates) 
+                                   chron::times(records[[i]], 
+                                                format=c(times="h:m:s"))
+                                 else 
+                                   records[[i]]
+                               },
+                             "time" = 
+                               {
+                                 if (dates)
+                                   chron::times(gsub("(^\\d{2}:\\d{2}$)", "\\1:00", records[[i]]), 
+                                                format=c(times="h:m:s"))
+                                 else 
+                                   records[[i]]
+                               },
+                             "float" = suppressWarnings(as.numeric(records[[i]])),
+                             "number" = suppressWarnings(as.numeric(records[[i]])),
+                             "calc" = suppressWarnings(as.numeric(records[[i]])),
+                             "int" = suppressWarnings(as.integer(records[[i]])),
+                             "integer" = suppressWarnings(as.numeric(records[[i]])),
+                             "select" = 
+                               makeRedcapFactor(x = records[[i]],
+                                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
+                                                factors = factors, 
+                                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
+                             "radio" = 
+                               makeRedcapFactor(x = records[[i]],
+                                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
+                                                factors = factors, 
+                                                var_name = meta_data$field_name[meta_data$field_name == field_base]),
+                             "dropdown" = 
+                               makeRedcapFactor(x = records[[i]],
+                                                coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
+                                                factors = factors, 
+                                                var_name = meta_data$field_name),
+                             "yesno" = makeRedcapYN(records[[i]], 
+                                                    factors),
+                             "truefalse" = 
+                              {
+                                if (factors) 
+                                  as.logical(records[[i]])
+                                else
+                                  records[[i]]
+                              },
+                             "checkbox" = 
+                              {
+                                makeRedcapCheckbox(x = records[[i]],
+                                                   suffix = gsub("^.+___", "", names(records)[i]),
+                                                   coding = meta_data$select_choices_or_calculations[meta_data$field_name == field_base],
+                                                   factors = factors,
+                                                   checkboxLabels = checkboxLabels)
+                              },
+                             "form_complete" = 
+                             {
+                               makeRedcapFactor(x = records[[i]],
+                                                coding = "0, Incomplete | 1, Unverified | 2, Complete",
+                                                factors, 
+                                                var_name = meta_data$field_name[meta_data$field_name == field_base])
+                             },
+                             records[[i]]
+                      ) # End switch
+                    }
   } # End for loop
   records
 }    

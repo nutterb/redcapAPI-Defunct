@@ -78,9 +78,6 @@ with a period then anywhere from 2 to 6 letters.
 }
 \references{
 See the REDCap Help and FAQ page's section on 'Text Validation Types'
-
-Validating e-mail addresses
-\url{http://www.regular-expressions.info/email.html}
 }
 \author{
 Benjamin Nutter
