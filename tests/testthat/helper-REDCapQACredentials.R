@@ -30,3 +30,8 @@ if(!exists("API_KEY"))
   keyring::keyring_unlock('TestRedcapAPI', password)
   API_KEY <- keyring::key_get('TestRedcapAPI', 'TestRedcapAPI', 'TestRedcapAPI')
 }
+
+if(!exists("API_KEY_TEST_BRANCHING_LOGIC")){
+  keyring::keyring_unlock('Test Branching Logic', password)
+  API_KEY_TEST_BRANCHING_LOGIC <- keyring::key_get('Test Branching Logic', 'Test Branching Logic', 'Test Branching Logic')
+}
