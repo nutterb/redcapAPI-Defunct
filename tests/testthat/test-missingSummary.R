@@ -1,17 +1,22 @@
 context("missingSummary")
 
 rcon <- redcapConnection(url = url, 
-                         token = API_KEY_TEST_BRANCHING_LOGIC)
+                         token = API_KEY)
 
 # Desired output when `excludeMissingForms = TRUE` ------------------
 
 DesiredOutput <- 
   structure(
     list(
-      record_id = structure(c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
-                              "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
+      record_id = structure(c("10", "11", "12", "13", "14", "15", "16", "17", "18", "19", 
+                              "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"), 
                             label = "Record ID", 
-                            class = c("labelled", "character")), 
+                            class = c("labelled", "character")),
+      redcap_event_name = c("event_1_arm_1", "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", 
+                            "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", 
+                            "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", 
+                            "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", 
+                            "event_1_arm_1", "event_1_arm_1", "event_1_arm_1", "event_1_arm_1"),
       n_missing = c(1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 5), 
       missing = c("no_prereq_number", "", "", "", "one_prereq_non_checkbox", "", "one_prereq_checkbox", 
                   "", "two_prereq_and", "", "two_prereq_or", "", "two_prereq_and_one_check", 
@@ -27,6 +32,7 @@ DesiredOutput <-
 test_that(
   "Return an error if `rcon` is not a redcapConnection object",
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(mtcars),
       "no applicable method for 'missingSummary'"
@@ -37,6 +43,7 @@ test_that(
 test_that(
   "Return an error if `excludeMissingForms` is not logical", 
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(rcon, 
                      excludeMissingForms = "TRUE"), 
@@ -48,6 +55,7 @@ test_that(
 test_that(
   "Return an error if `excludeMissingForms` is not length 1", 
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(rcon, 
                      excludeMissingForms = c(TRUE, FALSE)), 
@@ -57,23 +65,27 @@ test_that(
 )
 
 test_that(
-  "Return an error if `batch.size` is not integerish",
+  "Return an error if exportRecordsArgs is not a list.",
+  # * return an error if exportRecordsArgs is not a named list.
+  # * return an error if exportRecordsArgs has elements that are not arguments to exportRecords.
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(rcon, 
-                     batch.size = 1.3), 
-      "Variable 'batch.size': Must be of type 'integerish'"
+                     exportRecordsArgs = "branching_logic"), 
+      "'exportRecordsArgs': Must be of type 'list'"
     )
   }
 )
 
 test_that(
-  "Return an error if `batch.size` is not length 1",
+  "Return an error if exportRecordsArgs is not a named list.",
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(rcon, 
-                     batch.size = c(-1, -2)),
-      "Variable 'batch.size': Must have length 1, but has length 2"
+                     exportRecordsArgs = list("branching_logic")), 
+      "'exportRecordsArgs': Must have names"
     )
   }
 )
@@ -81,6 +93,7 @@ test_that(
 test_that(
   "Return an error if `fixed_fields` is not a character vector",
   {
+    local_reproducible_output(width = 200)
     expect_error(
       missingSummary(rcon, 
                      fixed_fields = 1:3), 
@@ -94,8 +107,12 @@ test_that(
 test_that(
   "Missing values are correctly identified around branching logic",
   {
+    local_reproducible_output(width = 200)
     expect_identical(
-      missingSummary(rcon), 
+      missingSummary(rcon,
+                     exportRecordsArgs = list(fields = "record_id", 
+                                              records = as.character(10:29), 
+                                              forms = "branching_logic")), 
       DesiredOutput
     )
   }

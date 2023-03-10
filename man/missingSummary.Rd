@@ -25,8 +25,8 @@ missingSummary(
   rcon,
   excludeMissingForms = TRUE,
   ...,
-  batch.size = -1,
   fixed_fields = REDCAP_SYSTEM_FIELDS,
+  exportRecordsArgs = list(),
   bundle = getOption("redcap_bundle"),
   error_handling = getOption("redcap_error_handling")
 )
@@ -55,7 +55,10 @@ also includes any fields identified in \code{REDCAP_SYSTEM_FIELDS}, which
 are fields that REDCap adds to exports to identify arms, events, etc. 
 see \link{\code{constants}}.}
 
-\item{batch.size}{\code{integeris(1)} Batch size parameter for \code{exportRecords}}
+\item{exportRecordsArgs}{named \code{list} with arguments to pass to \code{exportRecords}. 
+This allows for testing specific forms, events, and/or records. Internally, any 
+setting you make for \code{factors, labels, dates, survey}, or \code{dag} 
+arguments will be ignored.}
 
 \item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
 

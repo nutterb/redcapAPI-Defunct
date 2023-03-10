@@ -6,7 +6,6 @@
 #' 
 #' @param rcon A \code{redcapConnection} object.
 #' @param bundle A \code{redcapBundle} object as created by \code{exportBundle}.
-#' @param batch.size \code{integeris(1)} Batch size parameter for \code{exportRecords}
 #' @param records \code{character(1)} A filename pointing to the raw records download from REDCap
 #' @param meta_data \code{character(1)} A filename pointing to the data dictionary download from REDCap
 #' @param excludeMissingForms \code{logical(1)} If all of the fields in a form are missing, would 
@@ -20,6 +19,10 @@
 #'   also includes any fields identified in \code{REDCAP_SYSTEM_FIELDS}, which
 #'   are fields that REDCap adds to exports to identify arms, events, etc. 
 #'   see \link{\code{constants}}.
+#' @param exportRecordsArgs named \code{list} with arguments to pass to \code{exportRecords}. 
+#'   This allows for testing specific forms, events, and/or records. Internally, any 
+#'   setting you make for \code{factors, labels, dates, survey}, or \code{dag} 
+#'   arguments will be ignored.
 #'   
 #' @details The intention of this function is to generate a list of subject
 #'   events that are missing and could potentially be values that should have
@@ -43,8 +46,8 @@
 # * return an error if rcon is not a redcapConnection object
 # * return an error if excludeMissingForms is not logical
 # * return an error if excludeMissingForms is not length 1.
-# * return an error if batch.size is not integerish
-# * return an error if batch.size is not length 1
+# * return an error if exportRecordsArgs is not a list. 
+# * return an error if exportRecordsArgs is not a named list.
 # * return an error if fixed_fields is not a character vector
 #
 # Needs to be able to identify missing values where
@@ -84,8 +87,8 @@ missingSummary.redcapDbConnection <- function(rcon,
 missingSummary.redcapApiConnection <- function(rcon, 
                                                excludeMissingForms = TRUE, 
                                                ...,
-                                               batch.size = -1,
                                                fixed_fields = REDCAP_SYSTEM_FIELDS,
+                                               exportRecordsArgs = list(),
                                                bundle = getOption("redcap_bundle"),
                                                error_handling = getOption("redcap_error_handling")){
   coll <- checkmate::makeAssertCollection()
@@ -98,12 +101,12 @@ missingSummary.redcapApiConnection <- function(rcon,
                             len = 1, 
                             add = coll)
   
-  checkmate::assert_integerish(x = batch.size, 
-                               len = 1, 
-                               add = coll)
-  
   checkmate::assert_character(x = fixed_fields, 
                               add = coll)
+  
+  checkmate::assert_list(x = exportRecordsArgs, 
+                         names = "named", 
+                         add = coll)
   
   error_handling <- checkmate::matchArg(x = error_handling,
                                         choices = c("null", "error"),
@@ -114,13 +117,22 @@ missingSummary.redcapApiConnection <- function(rcon,
   # Import the records ----------------------------------------------
   # records will be used to store the results of tests for missingness
   # records_orig will be used to conduct the tests
-  records_orig <- exportRecords(rcon, 
-                                factors = FALSE, 
-                                labels = TRUE,
-                                dates = FALSE, 
-                                survey = FALSE, 
-                                dag = TRUE,
-                                batch.size = batch.size)
+  exportRecordsArgs <- exportRecordsArgs[!names(exportRecordsArgs) %in% c("factors", 
+                                                                          "labels", 
+                                                                          "dates", 
+                                                                          "survey", 
+                                                                          "dag", 
+                                                                          "rcon")]
+  exportRecordsArgs <- c(exportRecordsArgs, 
+                         list(rcon = rcon, 
+                              factors = FALSE, 
+                              labels = TRUE, 
+                              dates = FALSE, 
+                              survey = FALSE, 
+                              dag = TRUE))
+  
+  records_orig <- do.call("exportRecords", 
+                          exportRecordsArgs)
   
   # Import the Meta Data --------------------------------------------
   meta_data <- exportMetaData(rcon)
@@ -263,6 +275,7 @@ missingSummary_offline <- function(records,
   # Get the `[form]_complete` fields.
   form_names <- unique(meta_data$form_name)
   form_complete_names <- paste0(form_names, "_complete")
+  form_complete_names <- form_complete_names[form_complete_names %in% names(records)]
   
   for (i in seq_len(nrow(records))){
     # For each record, find the fields associated with the forms
