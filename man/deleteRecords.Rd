@@ -6,14 +6,14 @@
 \alias{deleteRecords.redcapApiConnection}
 \title{Delete Records From a Project}
 \usage{
-deleteRecords(rcon, records, arms = NULL, ...)
+deleteRecords(rcon, records, arm = NULL, ...)
 
-\method{deleteRecords}{redcapDbConnection}(rcon, records, arms = NULL, ...)
+\method{deleteRecords}{redcapDbConnection}(rcon, records, arm = NULL, ...)
 
 \method{deleteRecords}{redcapApiConnection}(
   rcon,
   records,
-  arms = NULL,
+  arm = NULL,
   ...,
   error_handling = getOption("redcap_error_handling")
 )
@@ -24,7 +24,7 @@ deleteRecords(rcon, records, arms = NULL, ...)
 
 \item{records}{a vector of record names to be deleted.}
 
-\item{arms}{\code{integerish}, the arm number of the arm in which the 
+\item{arm}{\code{integerish}, the arm number of the arm in which the 
 record(s) should be deleted. (This can only be used if the project is 
 longitudinal with more than one arm.) NOTE: If the arm parameter is not 
 provided, the specified records will be deleted from all arms in which 

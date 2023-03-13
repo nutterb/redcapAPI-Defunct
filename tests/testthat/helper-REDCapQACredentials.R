@@ -18,7 +18,6 @@
 # To remove invalid password/API_KEY
 #   keyring::key_delete('TestRedcapAPI', 'TestRedcapAPI', 'TestRedcapAPI')
 
-options(keyring_backend=keyring::backend_file) # Because MACOS is so irritating 
 url <- "https://redcap.vanderbilt.edu/api/" # Our institutions REDCap instance
 if(!exists("password"))
 {
