@@ -3,6 +3,24 @@ context("missingSummary")
 rcon <- redcapConnection(url = url, 
                          token = API_KEY)
 
+# Tests to perform
+# * return an error if rcon is not a redcapConnection object
+# * return an error if excludeMissingForms is not logical
+# * return an error if excludeMissingForms is not length 1.
+# * return an error if exportRecordsArgs is not a list. 
+# * return an error if exportRecordsArgs is not a named list.
+# * return an error if fixed_fields is not a character vector
+#
+# Needs to be able to identify missing values where
+# * missing value with no branching logic
+# * missing value with branching logic from one field (non-checkbox)
+# * missing value with branching logic from a checkbox field
+# * missing value with branching logic from two fields using an AND conjunction
+# * missing value with branching logic from two fields using an OR conjuction
+# * missing value with branching logic from two fields where one is a checkbox field
+# * missing value with branching logic from three fields using both AND and OR conjunctions
+# * missing value with branching logic from a field using an inequality
+# * missing values identified when excludeMissingForms = FALSE
 # Desired output when `excludeMissingForms = TRUE` ------------------
 
 DesiredOutput <- 

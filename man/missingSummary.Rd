@@ -53,7 +53,7 @@ the identifying fields in the output summary. This always includes the record
 identifier (ie, the first field in the data dictionary). By default it 
 also includes any fields identified in \code{REDCAP_SYSTEM_FIELDS}, which
 are fields that REDCap adds to exports to identify arms, events, etc. 
-see \link{\code{constants}}.}
+see \code{\link{constants}}.}
 
 \item{exportRecordsArgs}{named \code{list} with arguments to pass to \code{exportRecords}. 
 This allows for testing specific forms, events, and/or records. Internally, any 
@@ -61,6 +61,9 @@ setting you make for \code{factors, labels, dates, survey}, or \code{dag}
 arguments will be ignored.}
 
 \item{bundle}{A \code{redcapBundle} object as created by \code{exportBundle}.}
+
+\item{error_handling}{An option for how to handle errors returned by the API.
+see \code{\link{redcap_error}}}
 
 \item{records}{\code{character(1)} A filename pointing to the raw records download from REDCap}
 
