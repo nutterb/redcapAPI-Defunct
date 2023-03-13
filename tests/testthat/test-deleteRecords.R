@@ -9,7 +9,7 @@ test_that("records can be deleted",{
   rec <- rbind(rec[1,], rec[1,])
   rec$record_id <- c("delete.me", "delete.too")
   expect_success(importRecords(rcon = rcon, data=rec))
-  expect_success(deleteRecords(rcon, c("delete.me", "delete.too")), NA)
+  expect_success(deleteRecords(rcon, c("delete.me", "delete.too")))
   
   rec <- exportRecords(rcon)
   
