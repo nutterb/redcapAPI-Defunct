@@ -1,5 +1,5 @@
 packageStartupMessage(
-  "Welcome to redcapAPI 2.0.  Please Note:\n",
+  "Welcome to redcapAPI.  Please Note:\n",
   " - redcapDbConnection methods have all been deprecated.\n",
   " - 'exportProjectInfo' has been deprecated and replaced with 'exportBundle'.\n",
   " - 'exportBundle' saves its result to an option. Consider discontinuing\n",
