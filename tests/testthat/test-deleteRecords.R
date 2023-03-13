@@ -24,15 +24,8 @@ test_that("arm restrictions are honored",{
   rec <- exportRecords(rcon)
   rows <- nrow(rec)
   
-  rec <- rbind(rec[1,], rec[1,])
+  rec <- rec[1:2,]
   rec$record_id <- c("delete.me", "delete.too")
-  
-  # FIXME: Remove when importRecords has better validation or override
-  # This is an overzealous validation for an instrument not used on event_1
-  #rec$prereq_date[2] <- "2023-03-08 CST"
-  #rec$one_prereq_checkbox[2] <- "2023-03-08 CST"
-  #rec$branching_logic_complete <- 'Incomplete'
-  # FIXME: End
   
   rec$redcap_event_name <- c("event_1_arm_1", "event_1_arm_2")
   expect_error(importRecords(rcon = rcon, data=rec), NA)
