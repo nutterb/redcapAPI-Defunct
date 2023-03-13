@@ -29,12 +29,16 @@ test_that("arm restrictions are honored",{
   
   rec$redcap_event_name <- c("event_1_arm_1", "event_1_arm_2")
   expect_error(importRecords(rcon = rcon, data=rec), NA)
+  
+  # Expect deleting from proper arm to work
   expect_error(deleteRecords(rcon, c("delete.me"), arms=1), NA)
-  expect_error(deleteRecords(rcon, c("delete.too"), arms = 1), "delete.too")
+  
+  # Expect an error when deleting from wrong arm
+  expect_error(deleteRecords(rcon, c("delete.too"), arms=1), "delete.too")
   
   rec <- exportRecords(rcon)
   expect_equal(nrow(rec), rows+1)
   
-  # Cleanup
-  deleteRecords(rcon, c("delete.too"))
+  # Delete from proper arm
+  expect_error(deleteRecords(rcon, "delete.too", arms=2), NA)
 })
