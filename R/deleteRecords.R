@@ -103,7 +103,7 @@ deleteRecords.redcapApiConnection <- function(rcon, records, arms = NULL, ...,
   
   if (!is.null(arms)){
     body <- c(body, 
-              vecteorToApiBodyList(vector = arms, 
+              vectorToApiBodyList(vector = arms, 
                                    parameter_name = "arms"))
   }
   
