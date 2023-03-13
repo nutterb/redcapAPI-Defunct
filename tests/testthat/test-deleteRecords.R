@@ -10,6 +10,7 @@ test_that("records can be deleted",{
   rec$record_id <- c("delete.me", "delete.too")
   expect_error(importRecords(rcon = rcon, data=rec),NA)
   expect_error(deleteRecords(rcon, c("delete.me", "delete.too")), NA)
+
   
   rec <- exportRecords(rcon)
   
@@ -42,3 +43,4 @@ test_that("arm restrictions are honored",{
   # Delete from proper arm
   expect_error(deleteRecords(rcon, "delete.too", arm=2), NA)
 })
+
