@@ -19,13 +19,11 @@
 #   keyring::key_delete('TestRedcapAPI', 'TestRedcapAPI', 'TestRedcapAPI')
 
 url <- "https://redcap.vanderbilt.edu/api/" # Our institutions REDCap instance
-if(!exists("password"))
-{
+if(!exists("password")){
   password <- getPass::getPass("Enter Password for keyring 'testRedcapAPI'")
 }
 
-if(!exists("API_KEY"))
-{
+if(!exists("API_KEY")){
   keyring::keyring_unlock('TestRedcapAPI', password)
   API_KEY <- keyring::key_get('TestRedcapAPI', 'TestRedcapAPI', 'TestRedcapAPI')
 }
