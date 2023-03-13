@@ -8,8 +8,8 @@ test_that("records can be deleted",{
   
   rec <- rbind(rec[1,], rec[1,])
   rec$record_id <- c("delete.me", "delete.too")
-  expect_success(importRecords(rcon = rcon, data=rec))
-  expect_success(deleteRecords(rcon, c("delete.me", "delete.too")))
+  expect_error(importRecords(rcon = rcon, data=rec),NA)
+  expect_error(deleteRecords(rcon, c("delete.me", "delete.too")), NA)
   
   rec <- exportRecords(rcon)
   
@@ -35,8 +35,8 @@ test_that("arm restrictions are honored",{
   # FIXME: End
   
   rec$redcap_event_name <- c("event_1_arm_1", "event_1_arm_2")
-  expect_success(importRecords(rcon = rcon, data=rec))
-  expect_success(deleteRecords(rcon, c("delete.me"), arms=1))
+  expect_error(importRecords(rcon = rcon, data=rec), NA)
+  expect_error(deleteRecords(rcon, c("delete.me"), arms=1), NA)
   expect_error(deleteRecords(rcon, c("delete.too"), arms = 1), "delete.too")
   
   rec <- exportRecords(rcon)
