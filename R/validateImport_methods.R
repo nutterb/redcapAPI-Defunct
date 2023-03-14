@@ -527,31 +527,40 @@ validate_import_email <- function(x, field_name, logfile)
 }
 
 # validate_import_phone ---------------------------------------------
+# Tests to perform
+# * valid phone numbers pass
+# * NA passes
+# * phone numbers of more than 10 digits become NA
+# * phone numbers of more than 10 digits produce a message
+# * phone numbers with invalid format become NA
+# * phone numbers with invalid format produce a message
 
 validate_import_phone <- function(x, field_name, logfile)
 {
   x <- as.character(x)
   x <- gsub("[[:punct:][:space:]]", "", x)
   
-  w_long <- which(nchar(x) != 10 & !is.na(x))
+  w_long <- nchar(x) != 10 & !is.na(x)
   
-  w_invalid <- which(grepl("^[2-9][0-8][0-9][2-9][0-9]{6}$", x))
+  w_invalid <- !grepl("^[2-9][0-8][0-9][2-9][0-9]{6}$", x) & !is.na(x)
   
   print_validation_message(
     field_name = field_name,
-    indices = w_long,
+    indices = which(w_long),
     message = paste0("Value(s) are not 10 digit phone numbers.\n",
-                     "Values not imported.")
+                     "Values not imported."), 
+    logfile = logfile
   )
   
   print_validation_message(
     field_name = field_name,
-    indices = w_long,
+    indices = which(w_invalid),
     message = paste0("Value(s) are not valid North American phone numbers.\n",
-                     "Values not imported.")
+                     "Values not imported."), 
+    logfile = logfile
   )
   
-  x[w_long | w_invalid] <- NA
+  x[w_long | w_invalid] <- NA_character_
   x
 }
 

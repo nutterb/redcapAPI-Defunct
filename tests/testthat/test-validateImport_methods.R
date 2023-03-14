@@ -1047,3 +1047,96 @@ test_that(
     )
   }
 )
+
+# validate_import_phone ---------------------------------------------
+
+test_that(
+  "valid phone numbers pass (including NA)", 
+  {
+    phone_punct <- c("(207) 555-1234", 
+                     "207.555.1234", 
+                     "207-555-1234", 
+                     "207 555 1234")
+    # to test all valid phone numbers would be overly tedious. 
+    # we'll just a sample. Change n_size to match your desired rigor
+    n_size <- 10
+    phone_random <- sprintf("%s%s%s %s%s%s %s%s%s%s", 
+                            sample(2:9, n_size, replace = TRUE), 
+                            sample(0:8, n_size, replace = TRUE), 
+                            sample(0:9, n_size, replace = TRUE), 
+                            sample(2:9, n_size, replace = TRUE), 
+                            sample(0:9, n_size, replace = TRUE),
+                            sample(0:9, n_size, replace = TRUE),
+                            sample(0:9, n_size, replace = TRUE),
+                            sample(0:9, n_size, replace = TRUE),
+                            sample(0:9, n_size, replace = TRUE),
+                            sample(0:9, n_size, replace = TRUE))
+    test_phone <- c(phone_punct, phone_random, NA_character_)
+    
+    expect_equal(
+      validate_import_phone(test_phone, 
+                            field_name = "phone", 
+                            logfile = ""),
+      gsub("[[:punct:][:space:]]", "", test_phone)
+    )
+  }
+)
+
+test_that(
+  "phone numbers of more than 10 digits become NA",
+  {
+    expect_equal(
+      validate_import_phone(c("555-555-5555-5", 
+                              "555-555-5555-5555"), 
+                            field_name = "phone", 
+                            logfile = ""), 
+      c(NA_character_, NA_character_)
+    )
+  }
+)
+
+test_that(
+  "phone numbers of more than 10 digits produce a message",
+  {
+    expect_message(
+      validate_import_phone(c("555-555-5555-5", 
+                              "555-555-5555-5555"), 
+                            field_name = "phone", 
+                            logfile = ""), 
+      "are not 10 digit phone numbers"
+    )
+  }
+)
+
+test_that(
+  "phone numbers with invalid format become NA",
+  {
+    # The fives are valid digits. The non-five digits
+    # are placed where those values are not allowed
+    expect_equal(
+      validate_import_phone(c("055-555-5555",
+                              "155-555-5555", 
+                              "595-555-5555", 
+                              "555-155-5555"), 
+                            field_name = "phone", 
+                            logfile = ""), 
+      c(NA_character_, NA_character_, NA_character_, NA_character_)
+    )
+  }
+)
+
+test_that(
+  "phone numbers with invalid format produce a message",
+  {
+    expect_message(
+      validate_import_phone(c("055-555-5555",
+                              "155-555-5555", 
+                              "595-555-5555", 
+                              "555-155-5555"), 
+                            field_name = "phone", 
+                            logfile = ""), 
+      "are not valid North American phone numbers"
+    )
+  }
+)
+
