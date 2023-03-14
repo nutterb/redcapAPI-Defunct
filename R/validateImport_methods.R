@@ -431,7 +431,11 @@ validate_import_truefalse <- function(x, field_name, logfile)
 }
 
 # validate_import_select_dropdown_radio -----------------------------
-
+# Tests to run
+# mapped pairings with numeric and character codes pass
+# NA passes
+# unmapped values are converted to NA
+# unmapped values produce a message
 validate_import_select_dropdown_radio <- function(x, field_name, field_choice, logfile)
 {
   x <- as.character(x)
@@ -446,6 +450,7 @@ validate_import_select_dropdown_radio <- function(x, field_name, field_choice, l
   }
   
   w <- which(!x %in% mapping[, 1] & !x %in% c('', NA))
+  x[w] <- rep(NA_character_, length(w))
   
   print_validation_message(
     field_name,

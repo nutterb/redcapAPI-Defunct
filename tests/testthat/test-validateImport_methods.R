@@ -898,3 +898,97 @@ test_that(
   }
 )
 
+
+# validate_import_select_dropdown_radio -----------------------------
+
+test_that(
+  "mapped pairings with numeric and character codes pass (also NA)",
+  {
+    test_select <- c("-1", "0", "1", "a", "abc", 
+                     "negative one", "zero", "one", "A", "ABC", 
+                     NA_character_)
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_equal(
+      validate_import_select_dropdown_radio(test_select, 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      c("-1", "0", "1", "a", "abc", 
+        "-1", "0", "1", "a", "abc", 
+        NA_character_)
+    )
+  }
+)
+
+test_that(
+  "mapped pairings with numeric and character codes pass (also NA)",
+  {
+    test_select <- c(-1, 0, 1, NA_real_)
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_equal(
+      validate_import_select_dropdown_radio(test_select, 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      c("-1", "0", "1",NA_character_)
+    )
+  }
+)
+
+test_that(
+  "unmapped values are converted to NA (character)", 
+  {
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_equal(
+      validate_import_select_dropdown_radio(c("XYZ", "15"), 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      c(NA_character_, NA_character_)
+    )
+  }
+)
+
+test_that(
+  "unmapped values are converted to NA (numeric)", 
+  {
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_equal(
+      validate_import_select_dropdown_radio(c(pi, 10), 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      c(NA_character_, NA_character_)
+    )
+  }
+)
+
+test_that(
+  "unmapped values produce a message (character)", 
+  {
+    local_reproducible_output(width = 200)
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_message(
+      validate_import_select_dropdown_radio(c("XYZ", "15"), 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      "must be one of '-1', '0', '1', 'a', 'abc', 'negative one', 'zero', 'one', 'A', 'ABC'"
+    )
+  }
+)
+
+test_that(
+  "unmapped values produce a message (numeric)", 
+  {
+    local_reproducible_output(width = 200)
+    mapping <- "-1, negative one | 0, zero | 1, one | a, A | abc, ABC"
+    expect_message(
+      validate_import_select_dropdown_radio(c(pi, 10), 
+                                            field_name = "select", 
+                                            field_choice = mapping, 
+                                            logfile = ""), 
+      "must be one of '-1', '0', '1', 'a', 'abc', 'negative one', 'zero', 'one', 'A', 'ABC'"
+    )
+  }
+)
