@@ -403,6 +403,11 @@ validate_import_yesno <- function(x, field_name, logfile)
 }
 
 # validate_import_truefalse -----------------------------------------
+# Test to run
+# * true, false, yes, no, 0, and 1 are accepted
+# * NA is accepted
+# * other numeric values produce a message
+# * other character values produce a message
 
 validate_import_truefalse <- function(x, field_name, logfile)
 {

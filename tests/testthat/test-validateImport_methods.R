@@ -800,3 +800,101 @@ test_that(
     )
   }
 )
+
+# validate_import_truefalse -----------------------------------------
+
+test_that(
+  "true, false, yes, no, 0, 1, and NA are accepted (character)",
+  {
+    test_true_false <- c("true", "True", "TRUE", "truE", 
+                         "false", "False", "FALSE", "falsE", 
+                         "yes", "Yes", "YES", "yeS", 
+                         "no", "No", "NO", "nO", 
+                         "0", "1", NA_character_)
+    expect_equal(
+      validate_import_truefalse(test_true_false, 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      as.character(c(1, 1, 1, 1, 
+                     0, 0, 0, 0, 
+                     1, 1, 1, 1,
+                     0, 0, 0, 0, 
+                     0, 1, NA_real_))
+    )
+  }
+)
+
+test_that(
+  "0, 1, and NA are accepted (numeric)",
+  {
+    test_true_false <- c(0, 1, NA_real_)
+    expect_equal(
+      validate_import_truefalse(test_true_false, 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      as.character(c(0, 1, NA_real_))
+    )
+  }
+)
+
+test_that(
+  "TRUE, FALSE, and NA are accepted (logical)",
+  {
+    test_true_false <- c(TRUE, FALSE, NA)
+    expect_equal(
+      validate_import_truefalse(test_true_false, 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      as.character(c(1, 0, NA_real_))
+    )
+  }
+)
+
+test_that(
+  "Unacceptable values are converted to NA to prevent writing (character)",
+  {
+    expect_equal(
+      validate_import_truefalse(c("negative", "affirmative"), 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      rep(NA_character_, 2)
+    )
+  }
+)
+
+test_that(
+  "unacceptable values produce a message (character)", 
+  {
+    expect_message(
+      validate_import_truefalse(c("negative", "affirmative"), 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      "must be one of logical or one of `0`, `1`, `No`, `Yes`, `False`, or `True`"
+    )
+  }
+)
+
+test_that(
+  "Unacceptable values are converted to NA to prevent writing (numeric)",
+  {
+    expect_equal(
+      validate_import_truefalse(c(-1, pi, 12), 
+                                field_name = "truefalse", 
+                                logfile = ""), 
+      rep(NA_character_, 3)
+    )
+  }
+)
+
+test_that(
+  "unacceptable values produce a message (numeric)", 
+  {
+    expect_message(
+      validate_import_truefalse(c(-1, pi, 12), 
+                            field_name = "truefalse", 
+                            logfile = ""), 
+      "must be one of logical or one of `0`, `1`, `No`, `Yes`, `False`, or `True`"
+    )
+  }
+)
+
