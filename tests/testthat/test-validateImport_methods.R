@@ -725,3 +725,78 @@ test_that(
     )
   }
 )
+# validate_import_yesno ---------------------------------------------
+
+test_that(
+  "yes, no, 0, 1, and NA are accepted (character)",
+  {
+    test_yes_no <- c("no", "yes", "0", "1", "No", "Yes", "NO", "YEs", "YES", NA_character_)
+    expect_equal(
+      validate_import_yesno(test_yes_no, 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      as.character(c(0, 1, 0, 1, 0, 1, 0, 1, 1, NA_real_))
+    )
+  }
+)
+
+test_that(
+  "0, 1, and NA are accepted (numeric)",
+  {
+    test_yes_no <- c(0, 1, NA_real_)
+    expect_equal(
+      validate_import_yesno(test_yes_no, 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      as.character(c(0, 1, NA_real_))
+    )
+  }
+)
+
+test_that(
+  "Unacceptable values are converted to NA to prevent writing (character)",
+  {
+    expect_equal(
+      validate_import_yesno(c("negative", "affirmative"), 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      rep(NA_character_, 2)
+    )
+  }
+)
+
+test_that(
+  "unacceptable values produce a message (character)", 
+  {
+    expect_message(
+      validate_import_yesno(c("negative", "affirmative"), 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      "must be one of `0`, `1`, `No`, or `Yes`"
+    )
+  }
+)
+
+test_that(
+  "Unacceptable values are converted to NA to prevent writing (numeric)",
+  {
+    expect_equal(
+      validate_import_yesno(c(-1, pi, 12), 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      rep(NA_character_, 3)
+    )
+  }
+)
+
+test_that(
+  "unacceptable values produce a message (numeric)", 
+  {
+    expect_message(
+      validate_import_yesno(c(-1, pi, 12), 
+                            field_name = "yesno", 
+                            logfile = ""), 
+      "must be one of `0`, `1`, `No`, or `Yes`"
+    )
+  }
+)

@@ -375,12 +375,18 @@ validate_import_zipcode <- function(x, field_name, logfile)
 }
 
 # validate_import_yesno ---------------------------------------------
+# Test to run
+# * yes, no, 0, and 1 are accepted
+# * NA is accepted
+# * other numeric values produce a message
+# * other character values produce a message
 
 validate_import_yesno <- function(x, field_name, logfile)
 {
   x <- as.character(x)
   x <- tolower(x)
   w <- which(!x %in% c("no", "yes", "0", "1") & !is.na(x))
+  x[w] <- rep(NA_character_, length(w))
   
   x <- gsub("no", "0", x)
   x <- gsub("yes", "1", x)
