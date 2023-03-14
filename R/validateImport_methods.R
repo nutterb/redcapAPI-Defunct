@@ -351,11 +351,17 @@ validate_import_numeric <- function(x, field_name, field_min, field_max, logfile
 }
 
 # validate_import_zipcode -------------------------------------------
-
+# Tests to run
+# * values in 12345 and 12345-1234 format pass
+# * NA values pass
+# * unacceptable values produce a message
 validate_import_zipcode <- function(x, field_name, logfile)
 {
   x <- as.character(x)
-  w <- which(!grepl("(\\d{5}|\\d{5}-\\d{4})", x) & !is.na(x))
+  x <- trimws(x)
+  w <- which(!grepl("^(\\d{5}|\\d{5}-\\d{4})$", x) & !is.na(x))
+  
+  x[w] <- rep(NA_character_, length(w))
   
   print_validation_message(
     field_name,

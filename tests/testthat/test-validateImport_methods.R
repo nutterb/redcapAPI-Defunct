@@ -671,3 +671,57 @@ test_that(
     )
   }
 )
+
+# validate_import_zipcode -------------------------------------------
+
+test_that(
+  "values in 12345, format or NA pass (from numeric)",
+  {
+    test_zip <- c(48169, NA_real_)
+    expect_equal(
+      validate_import_zipcode(test_zip, 
+                              field_name = "zip", 
+                              logfile = ""), 
+      c("48169", NA_character_)
+    )
+  }
+)
+
+test_that(
+  "values in 12345, 12345-1234 format or NA pass (from character)",
+  {
+    test_zip <- c("48169", "48169-0133", NA_real_)
+    expect_equal(
+      validate_import_zipcode(test_zip, 
+                              field_name = "zip", 
+                              logfile = ""), 
+      c("48169", "48169-0133", NA_real_)
+    )
+  }
+)
+
+test_that(
+  "values not in 12345 or 12345-1234 format are converted to NA (so they won't write)",
+  {
+    test_zip <- c("8169", "48169-01", "48169-abc", "zipcode")
+    expect_equal(
+      validate_import_zipcode(test_zip, 
+                              field_name = "zip", 
+                              logfile = ""),
+      rep(NA_character_, length(test_zip))
+    )
+  }
+)
+
+test_that(
+  "values not in 12345 or 12345-1234 format produce a message",
+  {
+    test_zip <- c("8169", "48169-01", "48169-abc", "zipcode")
+    expect_message(
+      validate_import_zipcode(test_zip, 
+                              field_name = "zip", 
+                              logfile = ""),
+      "must be in the format `12345` or `12345-1234`"
+    )
+  }
+)
