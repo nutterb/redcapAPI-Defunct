@@ -1,4 +1,12 @@
 # validate_import_form_complete -------------------------------------
+# Tests to perform 
+# * The following values are mapped
+#     Incomplete to 0
+#     Unverified to 1
+#     Complete to 2
+# * 0, 1, and 2 are returned unchanged
+# * NA values are silently ignored (no output)
+# * any other value produces a validation message
 
 validate_import_form_complete <- function(x, field_name, logfile)
 {
@@ -12,8 +20,9 @@ validate_import_form_complete <- function(x, field_name, logfile)
   x <- gsub(pattern = "Complete", 
             replacement = "2", 
             x = x)
+  x <- trimws(x)
   
-  w <- which(!grepl("[0-2]", x = x))
+  w <- which((!x %in% 0:2) & !is.na(x))
   x[w] <- NA
   
   print_validation_message(
@@ -28,9 +37,16 @@ validate_import_form_complete <- function(x, field_name, logfile)
 }
 
 # validate_import_date ----------------------------------------------
+# * Date and POSIXct values are returned in YYYY-mm-dd format
+# * map ymd, ymd HMS, mdy, mdy HMS, dmy, and dmy HMS strings to YYYY-mm-dd format
+# * NA values pass silently
+# * Unmappable values return a message
+# * When a date is less than field_min, a message is returned.
+# * When a date is greater than field_max, a message is returned.
 
 validate_import_date <- function(x, field_name, field_min, field_max, logfile)
 {
+  x_orig <- x
   if (!inherits(x, "Date") && !inherits(x, "POSIXct"))
   {
     suppressWarnings(
@@ -40,7 +56,7 @@ validate_import_date <- function(x, field_name, field_min, field_max, logfile)
                                                  "dmy", "dmy HMS"))
     )
   }
-
+  
   w_low <- which(as.POSIXct(x) < as.POSIXct(field_min, origin = "1970-01-01"))
   print_validation_message(
     field_name,
@@ -62,7 +78,7 @@ validate_import_date <- function(x, field_name, field_min, field_max, logfile)
   
   x <- format(x, format = "%Y-%m-%d")
   
-  w <- which(is.na(x))
+  w <- which(is.na(x) & !x_orig %in% c('', NA))
   
   print_validation_message(
     field_name, 
@@ -76,9 +92,15 @@ validate_import_date <- function(x, field_name, field_min, field_max, logfile)
 }
 
 # validate_import_datetime ------------------------------------------
-
+# * Date and POSIXct values are returned in YYYY-mm-dd HH:MM format
+# * map ymd, ymd HMS, mdy, mdy HMS, dmy, and dmy HMS strings to YYYY-mm-dd HH:MM format
+# * NA values pass silently
+# * Unmappable values return a message
+# * When a date is less than field_min, a message is returned.
+# * When a date is greater than field_max, a message is returned.
 validate_import_datetime <- function(x, field_name, field_min, field_max, logfile)
 {
+  x_orig <- x
   if (!inherits(x, "Date") && !inherits(x, "POSIXct"))
   {
     suppressWarnings(
@@ -109,7 +131,7 @@ validate_import_datetime <- function(x, field_name, field_min, field_max, logfil
   
   x <- format(x, format = "%Y-%m-%d %H:%M")
   
-  w <- which(is.na(x))
+  w <- which(is.na(x) & !x_orig %in% c('', NA))
   
   print_validation_message(
     field_name, 
@@ -123,9 +145,15 @@ validate_import_datetime <- function(x, field_name, field_min, field_max, logfil
 }
 
 # validate_import_datetime_seconds ----------------------------------
-
+# * Date and POSIXct values are returned in YYYY-mm-dd HH:MM format
+# * map ymd, ymd HMS, mdy, mdy HMS, dmy, and dmy HMS strings to YYYY-mm-dd HH:MM format
+# * NA values pass silently
+# * Unmappable values return a message
+# * When a date is less than field_min, a message is returned.
+# * When a date is greater than field_max, a message is returned.
 validate_import_datetime_seconds <- function(x, field_name, field_min, field_max, logfile)
 {
+  x_orig <- x
   if (!inherits(x, "Date") && !inherits(x, "POSIXct"))
   {
     suppressWarnings(
@@ -156,7 +184,7 @@ validate_import_datetime_seconds <- function(x, field_name, field_min, field_max
   
   x <- format(x, format = "%Y-%m-%d %H:%M:%S")
   
-  w <- which(is.na(x))
+  w <- which(is.na(x) & !x_orig %in% c('', NA))
   
   print_validation_message(
     field_name, 
@@ -226,7 +254,7 @@ validate_import_time_mm_ss <- function(x, field_name, field_min, field_max, logf
   x[grepl("^\\d{2}:\\d{2}:\\d{2}$", x)] <- 
     sub("^\\d{2}:", "", x[grepl("^\\d{2}:\\d{2}:\\d{2}$", x)])
   
-  w_invalid <- !grepl("^\\d{2}:\\d{2}$", x)
+  w_invalid <- !grepl("^\\d{2}:\\d{2}$", x) & !is.na(x)
   x[w_invalid] <- NA
   
   count_second <- function(t)
@@ -384,7 +412,7 @@ validate_import_select_dropdown_radio <- function(x, field_name, field_choice, l
   for (i in seq_len(nrow(mapping))){
     x[x==mapping[i, 2]] <- mapping[i, 1]  
   }
-
+  
   w <- which(!x %in% mapping[, 1] & !x %in% c('', NA))
   
   print_validation_message(
@@ -412,7 +440,7 @@ validate_import_checkbox <- function(x, field_name, field_choice, logfile)
   checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field_name, "___"))[2], ]
   
   w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice, "") & !is.na(x))
-
+  
   x <- gsub("checked", "1", x)
   x <- gsub("unchecked", "0", x)
   x[x %in% checkChoice] <- 1
