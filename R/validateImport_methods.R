@@ -497,11 +497,21 @@ validate_import_checkbox <- function(x, field_name, field_choice, logfile)
 }
 
 # validate_import_email ---------------------------------------------
+# Tests to run
+# * Common email addresses pass
+# * Invalid e-mail addresses are changed to NA 
+#     - have more than one @
+#     - have no @
+#     - have no suffix
+#     - have a suffix of length one
+#     - have a suffix exceeding length 6
+# * Invalid e-mail addresses produce a message
 
 validate_import_email <- function(x, field_name, logfile)
 {
   x <- as.character(x)
-  w <- which(!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}$", x) & !is.na(x))
+  w <- which((!grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,6}$", x) |
+                grepl("[@].+[@]", x)) & !is.na(x))
   
   print_validation_message(
     field_name = field_name,

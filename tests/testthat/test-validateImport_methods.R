@@ -992,3 +992,58 @@ test_that(
     )
   }
 )
+
+# validate_import_email ---------------------------------------------
+
+test_that(
+  "common email addresses pass", 
+  {
+    email <- c("somebody@domain.net", 
+               "some.body1@domain.org", 
+               "345somebody789@domain.net", 
+               "somebody-else@domain.com", 
+               "salesperson@dash-company.biz", 
+               "percy_jackson@camp-half-blood.edu", 
+               "someone+spam@domain.widget", 
+               "high%shooting@sports.ball", 
+               NA_character_)
+    expect_equal(
+      validate_import_email(email, 
+                            field_name = "email", 
+                            logfile = ""), 
+      email
+    )
+  }
+)
+
+test_that(
+  "Invalid e-mails are changed to NA", 
+  {
+    email <- c("Im@work@nowhere.net", 
+               "no-suffix@junkmail", 
+               "one-length-suffix@email.g", 
+               "long-suffix@email.sunburst")
+    expect_equal(
+      validate_import_email(email, 
+                            field_name = "email", 
+                            logfile = ""),
+      rep(NA_character_, length(email))
+    )
+  }
+)
+
+test_that(
+  "Invalid e-mails are changed to NA", 
+  {
+    email <- c("Im@work@nowhere.net", 
+               "no-suffix@junkmail", 
+               "one-length-suffix@email.g", 
+               "long-suffix@email.sunburst")
+    expect_message(
+      validate_import_email(email, 
+                            field_name = "email", 
+                            logfile = ""),
+      "are not valid e-mail addresses"
+    )
+  }
+)
