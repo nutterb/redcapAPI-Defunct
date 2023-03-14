@@ -141,6 +141,7 @@ test_that(
 test_that(
   "Unmappable values return a message", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_date(c("2023-01-33", "not a date"), 
                            field_name = "date",
@@ -155,6 +156,7 @@ test_that(
 test_that(
   "When a date is less than field_min, a message is returned", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_date(as.Date(c("2023-01-01", "2023-03-01")), 
                            field_name = "date", 
@@ -169,6 +171,7 @@ test_that(
 test_that(
   "When a date is greater than field_max, a message is returned", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_date(as.Date(c("2023-01-01", "2023-03-01")), 
                            field_name = "date", 
@@ -289,6 +292,7 @@ test_that(
 test_that(
   "Unmappable values return a message", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_datetime(c("2023-01-33", "not a date"), 
                                field_name = "datetime",
@@ -303,6 +307,7 @@ test_that(
 test_that(
   "When a date is less than field_min, a message is returned", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_datetime(as.POSIXct(c("2023-01-01", "2023-03-01")), 
                                field_name = "date", 
@@ -317,6 +322,7 @@ test_that(
 test_that(
   "When a date is greater than field_max, a message is returned", 
   {
+    local_reproducible_output(width = 200)
     expect_message(
       validate_import_datetime(as.Date(c("2023-01-01", "2023-03-01")), 
                                field_name = "date", 
@@ -472,6 +478,196 @@ test_that(
                                        field_max = as.POSIXct("2023-02-01"), 
                                        logfile = ""), 
       "after the stated maximum date"
+    )
+  }
+)
+
+# validate_import_time ----------------------------------------------
+
+test_that(
+  "Character forms of HH:MM and HH:MM:SS pass", 
+  {
+    time_test <- c("06:15", "06:15:00")
+    expect_equal(
+      validate_import_time(time_test, 
+                           field_name = "time", 
+                           field_min = NA, 
+                           field_max = NA, 
+                           logfile = ""), 
+      rep("06:15", 2)
+    )
+  }
+)
+
+test_that(
+  "objects of class time pass. Also, NA",
+  {
+    time_test <- chron::as.times(c("06:15:00", NA))
+    expect_equal(
+      validate_import_time(time_test, 
+                           field_name = "time", 
+                           field_min = NA, 
+                           field_max = NA, 
+                           logfile = ""), 
+      c("06:15", NA)
+    )
+  }
+)
+
+test_that(
+  "Times before field_min produce a message",
+  {
+    time_test <- c("06:00", "07:00", "08:00", "09:00")
+    expect_message(
+      validate_import_time(time_test, 
+                           field_name = "time", 
+                           field_min = "07:30", 
+                           field_max = NA, 
+                           logfile = ""), 
+      "are before the stated minimum time"
+    )
+  }
+)
+
+test_that(
+  "Times after field_max produce a message",
+  {
+    time_test <- c("06:00", "07:00", "08:00", "09:00")
+    expect_message(
+      validate_import_time(time_test, 
+                           field_name = "time", 
+                           field_min = NA, 
+                           field_max = "07:30", 
+                           logfile = ""), 
+      "are after the stated maximum time"
+    )
+  }
+)
+
+# validate_import_time_mm_ss ----------------------------------------
+
+test_that(
+  "Character forms of HH:MM and HH:MM:SS pass", 
+  {
+    time_test <- c("06:15", "00:06:15")
+    expect_equal(
+      validate_import_time_mm_ss(time_test, 
+                           field_name = "time", 
+                           field_min = NA, 
+                           field_max = NA, 
+                           logfile = ""), 
+      rep("06:15", 2)
+    )
+  }
+)
+
+test_that(
+  "objects of class time pass. Also, NA",
+  {
+    time_test <- chron::as.times(c("00:06:15", NA))
+    expect_equal(
+      validate_import_time_mm_ss(time_test,
+                                 field_name = "time",
+                                 field_min = NA,
+                                 field_max = NA,
+                                 logfile = ""),
+      c("06:15", NA)
+    )
+  }
+)
+
+test_that(
+  "Times before field_min produce a message",
+  {
+    local_reproducible_output(width = 200)
+    time_test <- c("06:00", "07:00", "08:00", "09:00")
+    expect_message(
+      validate_import_time_mm_ss(time_test,
+                                 field_name = "time",
+                                 field_min = "07:30",
+                                 field_max = NA,
+                                 logfile = ""),
+      "are before the stated minimum time"
+    )
+  }
+)
+
+test_that(
+  "Times after field_max produce a message",
+  {
+    local_reproducible_output(width = 200)
+    time_test <- c("06:00", "07:00", "08:00", "09:00")
+    expect_message(
+      validate_import_time_mm_ss(time_test,
+                                 field_name = "time",
+                                 field_min = NA,
+                                 field_max = "07:30",
+                                 logfile = ""),
+      "are after the stated maximum time"
+    )
+  }
+)
+# validate_import_numeric -------------------------------------------
+
+test_that(
+  "Values that can be coerced to numeric pass (including NA)", 
+  {
+    test_numeric <- c("1.2", pi, NA_character_)
+    expect_equal(
+      validate_import_numeric(test_numeric, 
+                              field_name = "numeric", 
+                              field_min = NA, 
+                              field_max = NA, 
+                              logfile = ""), 
+      c(1.2, pi, NA_real_)
+    )
+  }
+)
+
+test_that(
+  "Values that cannot be coerced to numeric produce a message", 
+  {
+    local_reproducible_output(width = 200)
+    test_numeric <- c("a", "b", pi)
+    expect_message(
+      validate_import_numeric(test_numeric, 
+                              field_name = "numeric", 
+                              field_min = NA, 
+                              field_max = NA, 
+                              logfile = ""), 
+      "must be numeric or coercible to numeric"
+    )
+  }
+)
+
+test_that(
+  "Values less than field_min produce a message", 
+  {
+    local_reproducible_output(width = 200)
+    test_numeric <- 1:5
+    expect_message(
+      validate_import_numeric(test_numeric, 
+                              field_name = "numeric", 
+                              field_min = 3, 
+                              field_max = NA, 
+                              logfile = ""),
+      "are less than the stated minimum"
+    )
+  }
+)
+
+test_that(
+  "Values less than field_min produce a message", 
+  {
+    local_reproducible_output(width = 200)
+    test_numeric <- 1:5
+    expect_message(
+      validate_import_numeric(test_numeric, 
+                              field_name = "numeric", 
+                              field_min = NA, 
+                              field_max = 3, 
+                              logfile = ""),
+      "are greater than the stated maximum"
     )
   }
 )

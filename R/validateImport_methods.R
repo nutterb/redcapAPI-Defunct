@@ -198,7 +198,12 @@ validate_import_datetime_seconds <- function(x, field_name, field_min, field_max
 }
 
 # validate_import_time ----------------------------------------------
-
+# Tests to perform
+# * character forms of HH:MM and HH:MM:SS pass
+# * objects of class time pass
+# * NA passes
+# * times before field_min produce a message
+# * times after field_max produce a message
 validate_import_time <- function(x, field_name, field_min, field_max, logfile)
 {
   x <- as.character(x)
@@ -208,13 +213,13 @@ validate_import_time <- function(x, field_name, field_min, field_max, logfile)
   
   count_minute <- function(t)
   {
-    if (is.na(t)) return(NA)
+    if (is.na(t)) return(NA_real_)
     t <- strsplit(t, ":")
     t <- unlist(t)
     t <- as.numeric(t)
     t[1] * 60 + t[2]
   }
-  
+
   total_min <- vapply(x, count_minute, numeric(1))
   
   print_validation_message(
@@ -246,7 +251,12 @@ validate_import_time <- function(x, field_name, field_min, field_max, logfile)
 }
 
 # validate_import_time_mm_ss ----------------------------------------
-
+# Tests to perform
+# * character forms of HH:MM and HH:MM:SS pass
+# * objects of class time pass
+# * NA passes
+# * times before field_min produce a message
+# * times after field_max produce a message
 validate_import_time_mm_ss <- function(x, field_name, field_min, field_max, logfile)
 {
   x <- as.character(x)
@@ -296,7 +306,12 @@ validate_import_time_mm_ss <- function(x, field_name, field_min, field_max, logf
 }
 
 # validate_import_numeric -------------------------------------------
-
+# Tests to perform
+# * values that can be coerced to numeric pass.
+# * NA passes
+# * Values that cannot be coerced to numeric produce a message
+# * values less than field_min produce a message
+# * values greater than field_max produce a message
 validate_import_numeric <- function(x, field_name, field_min, field_max, logfile)
 {
   suppressWarnings(num_check <- as.numeric(x))
