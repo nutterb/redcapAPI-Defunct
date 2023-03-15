@@ -402,6 +402,10 @@ validate_import_select_dropdown_radio <- function(x, field_name, field_choice, l
 }
 
 # validate_import_checkbox ------------------------------------------
+# Tests to run
+# * 0, 1, Unchecked, Checked, '', NA all pass.
+# * codes and labels pass
+# * Other values produce a message
 
 validate_import_checkbox <- function(x, field_name, field_choice, logfile)
 {
@@ -411,11 +415,11 @@ validate_import_checkbox <- function(x, field_name, field_choice, logfile)
   checkChoice <- trimws(stringr::str_split_fixed(unlist(strsplit(field_choice, "[|]")), ", ", 2))
   checkChoice <- checkChoice[checkChoice[, 1] == unlist(strsplit(field_name, "___"))[2], ]
   
-  w <- which(!x %in% c("Checked", "Unchecked", "0", "1", checkChoice, "") & !is.na(x))
+  w <- which(!x %in% c("checked", "unchecked", "0", "1", tolower(checkChoice), "", NA))
 
-  x <- gsub("checked", "1", x)
-  x <- gsub("unchecked", "0", x)
-  x[x %in% checkChoice] <- 1
+  x <- gsub("^checked$", "1", x)
+  x <- gsub("^unchecked$", "0", x)
+  x[!x %in% c("0", "1") & x %in% tolower(checkChoice)] <- 1
   x[x == ""] <- 0
   x[!x %in% c("0", "1")] <- NA
   
@@ -423,7 +427,8 @@ validate_import_checkbox <- function(x, field_name, field_choice, logfile)
     field_name,
     indices = w,
     message = paste0("Value(s) must be one of '0', '1', 'Checked', 'Unchecked', '",
-                     checkChoice, "', '' (ignoring case).\n",
+                     paste0(checkChoice, collapse = "', '"), 
+                     "', '' (ignoring case).\n",
                      "Values not imported"),
     logfile = logfile
   )

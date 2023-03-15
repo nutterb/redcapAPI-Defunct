@@ -45,6 +45,29 @@
 #'
 #' See the documentation for \code{\link{validateImport}} for detailed
 #' explanations of the validation.
+#' 
+#' @section Limitations:
+#' 
+#' The REDCap API is fairly restrictive about what it will accept as valid data for import. 
+#' \code{importRecords} tries to simplify the process by allowing users to 
+#' submit data in any form recognized by the data dictionary. It is then converted
+#' internally to the 
+#' appropriate text format for import. This means, for example, that a radio button value
+#' where the code \code{1} is mapped to the label \code{Guitar} (defined in the user interface
+#' with "1, Guitar"), the user can provide
+#' either "1" or "Guitar" as a value and \code{importRecords} will translate it to the 
+#' code that the API expects. 
+#' 
+#' While this provides a level of convenience for the user, it has some limitations when
+#' applied to checkbox values. When submitting checkbox values for import, it is strongly 
+#' recommended that you submit either the code "0" (for unchecked), "1" (for checked), or the 
+#' labels "Unchecked" and "Checked". 
+#' 
+#' In particular, when the checkbox labels are defined with a code or label that is "0" or "1"
+#' (for example, "0, checkbox_label" or "check_code, 0"), \code{importRecords} is unable to 
+#' determine if a 0 indicates an unchecked box or if the zero is the label of a checked box. 
+#' When encountering ambiguity, \code{importRecords} will always assume "0" represents an
+#' unchecked box and "1" represents a checked box.
 #'
 #' @author Benjamin Nutter\cr
 #' with thanks to Josh O'Brien and etb (see references)
