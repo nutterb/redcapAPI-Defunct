@@ -1,0 +1,167 @@
+#' @name makeApiCall
+#' @title Make REDCap API Calls
+#' 
+#' @description Constructs and executes API calls to the REDCap API. These
+#'   are left deliberately abstract in order to be flexible enough to 
+#'   support the \code{redcapAPI} functions, but also allow users to 
+#'   execute calls for new REDCap features that are not yet implemented.
+#'   
+#' @param rcon \code{redcapApiConnection} object.
+#' @param body \code{list} List of parameters to be passed to \code{\link[httr]{POST}}'s 
+#'   \code{body} argument
+#' @param config \code{list} A list of options to be passed to \code{\link[httr]{POST}}.
+#'   These will be appended to the \code{config} options included in the 
+#'   \code{rcon} object.
+#'   
+#' @details The intent of this function is to provide an approach to execute
+#'   calls to the REDCap API that is both consistent and flexible. Importantly, 
+#'   this provides a framework for making calls to the API using features that
+#'   the R package doesn't yet support (redcapAPI will always lag behind when 
+#'   REDCap adds new features). 
+#'   
+#'   The API call consists of two components: the "body" and the "config." 
+#'   The body of the call contains all of the arguments being passed to the 
+#'   API. When building body components, be sure to review the documentation. 
+#'   options to the API that require an array need to be built using 
+#'   \code{vectorToApiBodyList}; options that are not an array can be entered
+#'   directly (see examples). 
+#'   
+#'   The config list is a list of parameters to pass to \code{\link[httr]{POST}}. 
+#'   Refer to documentation there for details.
+#'   
+#' @author Benjamin Nutter
+#' 
+#' @references
+#' Please refer to your institution's API documentation.
+#' 
+#' @examples 
+#' \dontrun{
+#'   url <- "Enter your API URL here"
+#'   token <- "Enter your API token here"
+#'   
+#'   rcon <- redcapConnection(url = url, 
+#'                            token = token)
+#'                            
+#'   MetaData <- 
+#'     makeApiCall(rcon = rcon,
+#'                body = list(content = "metadata",
+#'                            format = "csv",
+#'                            returnFormat = "csv"))
+#'   MetaData <- read.csv(text = as.character(MetaData),
+#'                       stringsAsFactors = FALSE,
+#'                        na.strings = "")
+#' 
+#' 
+#' 
+#'   # Call to export Meta Data (Data Dictionary) for specific fields
+#' 
+#'   fields <- vectorToApiBodyList(vector = c("row_purpose", 
+#'                                            "prereq_radio"),
+#'                                 parameter_name = "fields")
+#'   MetaData <-
+#'     makeApiCall(rcon = rcon,
+#'                 body = c(list(content = "metadata",
+#'                               format = "csv",
+#'                               returnFormat = "csv"),
+#'                          fields))
+#'   MetaData <- read.csv(text = as.character(MetaData),
+#'                        stringsAsFactors = FALSE,
+#'                        na.strings = "")
+#' 
+#' 
+#' 
+#'   # Basic call to export records
+#' 
+#'   Records <- makeApiCall(rcon = rcon,
+#'                          body = list(content = "record",
+#'                                      format = "csv",
+#'                                      returnFormat = "csv",
+#'                                      type = "flat"))
+#' 
+#'   Records <- read.csv(text = as.character(Records),
+#'                       stringsAsFactors = FALSE,
+#'                       na.strings = "")
+#' 
+#' 
+#'   # Call to export records for a single form.
+#'   # Note that even though we are interested in a single form, the
+#'   # API requires an array, so we use vectorToApiBodyList
+#' 
+#'   export_form <- vectorToApiBodyList("branching_logic",
+#'                                      parameter_name = "forms")
+#'   Records <- makeApiCall(rcon = rcon,
+#'                          body = c(list(content = "record",
+#'                                        format = "csv",
+#'                                        returnFormat = "csv",
+#'                                        type = "flat"),
+#'                                   export_form))
+#'   Records <- read.csv(text = as.character(Records),
+#'                       stringsAsFactors = FALSE,
+#'                       na.strings = "")
+#' 
+#' 
+#'   # Call to export records with a pipe delimiter.
+#' 
+#'   Records <- makeApiCall(rcon = rcon,
+#'                          body = list(content = "record",
+#'                                      format = "csv",
+#'                                      returnFormat = "csv",
+#'                                      type = "flat",
+#'                                      csvDelimiter = "|"))
+#'   Records <- read.csv(text = as.character(Records),
+#'                       stringsAsFactors = FALSE,
+#'                       na.strings = "",
+#'                       sep = "|")
+#' 
+#' 
+#'   # Call to export records created/modified after 25 Dec 2022 14:00.
+#' 
+#'   Records <- makeApiCall(rcon = rcon,
+#'                          body = list(content = "record",
+#'                                      format = "csv",
+#'                                      returnFormat = "csv",
+#'                                      type = "flat",
+#'                                      dateRangeBegin = "2022-12-25 14:00:00"))
+#' 
+#'   Records <- read.csv(text = as.character(Records),
+#'                       stringsAsFactors = FALSE,
+#'                       na.strings = "")
+#'                       
+#'  
+#' }
+#' 
+#' @export
+
+makeApiCall <- function(rcon, 
+                        body = list(), 
+                        config = list()){
+  # Argument Validation ---------------------------------------------
+  coll <- checkmate::makeAssertCollection()
+  
+  checkmate::assert_class(x = rcon, 
+                          classes = "redcapApiConnection", 
+                          add = coll)
+  
+  checkmate::assert_list(x = body, 
+                         add = coll)
+  
+  checkmate::assert_list(x = config, 
+                         add = coll)
+  
+  checkmate::reportAssertions(coll)
+  
+  # Functional Code -------------------------------------------------
+  
+  httr::POST(
+    url = rcon$url, 
+    body = c(list(token = rcon$token), 
+             body),
+    config = c(rcon$config, 
+               config) 
+  )
+}
+
+# Tests to perform --------------------------------------------------
+# *  Throw an error if \code{rcon} is not a \code{redcapApiConnection}
+# * Throw an error if \code{body} is not a list.
+# *  Throw an error if \code{config} is not a list.
